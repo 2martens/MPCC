@@ -1,5 +1,8 @@
 package de.uni_hamburg.informatik.swt.se2.kino.fachwerte;
 
+import java.util.Calendar;
+import java.util.TimeZone;
+
 /**
  * Stellt einen Tag dar.
  * 
@@ -12,24 +15,40 @@ public final class Tag implements Comparable<Tag>
     private final Datum _datum;
     private final Wochentag _wochentag;
     
+    // Für Gültigkeitsprüfungen und Datumsarithmetik wird intern ein Objekt vom
+    // Typ Calendar verwendet.
+    private static final Calendar CALENDAR = Calendar.getInstance();
+
+    // "Static initializer", initialisiert Klassenvariablen nach der Erzeugung
+    // des Klassenobjekts.
+    static
+    {
+        CALENDAR.setLenient(false);
+        CALENDAR.setTimeZone(TimeZone.getTimeZone("GMT"));
+    }
+    
     /**
      * Initialisiert einen Tag.
      * 
      * @param datum Ein Datum.
-     * @param wochentag Ein Wochentag.
      * 
      * @require datum != null
-     * @require wochentag != null
      * 
      * @ensure getDatum() == datum
-     * @ensure getWochentag() == wochentag
      */
-    public Tag(Datum datum, Wochentag wochentag)
+    public Tag(Datum datum)
     {
         assert datum != null : "Vorbedingung verletzt: datum != null";
-        assert wochentag != null : "Vorbedingung verletzt: wochentag != null";
         _datum = datum;
-        _wochentag = wochentag;
+        Wochentag wochentagVonDatum;
+        synchronized (CALENDAR)
+        {
+            CALENDAR.clear();
+            CALENDAR.set(datum.getJahr(), datum.getMonat() - 1, datum.getTag());
+            int dayOfWeek = CALENDAR.get(Calendar.DAY_OF_WEEK);
+            wochentagVonDatum = getWochentagVonDayOfWeek(dayOfWeek);
+        }
+        _wochentag = wochentagVonDatum;
     }
     
     /**
@@ -95,5 +114,46 @@ public final class Tag implements Comparable<Tag>
     public int hashCode()
     {
         return _datum.hashCode();
+    }
+    
+    /**
+     * Wandelt den int Wert dayOfWeek von Calendar in einen Wochentag-Wert um.
+     * 
+     * @param dayOfWeek Der Tag der Woche (1, 2, ..., 7)
+     * 
+     * @require dayOfWeek >= 1
+     * @require dayOfWeek <= 7
+     */
+    private static Wochentag getWochentagVonDayOfWeek(int dayOfWeek)
+    {
+        assert dayOfWeek >= 1 : "Vorbedingung verletzt: dayOfWeek >= 1";
+        assert dayOfWeek <= 7 : "Vorbedingung verletzt: dayOfWeek <= 7";
+        
+        Wochentag wochentag = null;
+        switch (dayOfWeek)
+        {
+            case 1:
+                wochentag = Wochentag.SONNTAG;
+                break;
+            case 2:
+                wochentag = Wochentag.MONTAG;
+                break;
+            case 3:
+                wochentag = Wochentag.DIENSTAG;
+                break;
+            case 4:
+                wochentag = Wochentag.MITTWOCH;
+                break;
+            case 5:
+                wochentag = Wochentag.DONNERSTAG;
+                break;
+            case 6:
+                wochentag = Wochentag.FREITAG;
+                break;
+            case 7:
+                wochentag = Wochentag.SAMSTAG;
+                break;
+        }
+        return wochentag;
     }
 }

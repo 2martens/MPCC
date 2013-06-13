@@ -22,22 +22,22 @@ public class WocheTest
     public void setUp()
     {
         _wochentageGueltig = new ArrayList<>(7);
-        _wochentageGueltig.add(new Tag(new Datum(13, 6, 2013), Wochentag.DONNERSTAG));
-        _wochentageGueltig.add(new Tag(new Datum(14, 6, 2013), Wochentag.FREITAG));
-        _wochentageGueltig.add(new Tag(new Datum(15, 6, 2013), Wochentag.SAMSTAG));
-        _wochentageGueltig.add(new Tag(new Datum(16, 6, 2013), Wochentag.SONNTAG));
-        _wochentageGueltig.add(new Tag(new Datum(17, 6, 2013), Wochentag.MONTAG));
-        _wochentageGueltig.add(new Tag(new Datum(18, 6, 2013), Wochentag.DIENSTAG));
-        _wochentageGueltig.add(new Tag(new Datum(19, 6, 2013), Wochentag.MITTWOCH));
+        _wochentageGueltig.add(new Tag(new Datum(13, 6, 2013)));
+        _wochentageGueltig.add(new Tag(new Datum(14, 6, 2013)));
+        _wochentageGueltig.add(new Tag(new Datum(15, 6, 2013)));
+        _wochentageGueltig.add(new Tag(new Datum(16, 6, 2013)));
+        _wochentageGueltig.add(new Tag(new Datum(17, 6, 2013)));
+        _wochentageGueltig.add(new Tag(new Datum(18, 6, 2013)));
+        _wochentageGueltig.add(new Tag(new Datum(19, 6, 2013)));
         
         _wochentageUngueltig = new ArrayList<>(7);
-        _wochentageUngueltig.add(new Tag(new Datum(13, 6, 2013), Wochentag.DONNERSTAG));
-        _wochentageUngueltig.add(new Tag(new Datum(13, 6, 2013), Wochentag.DONNERSTAG));
-        _wochentageUngueltig.add(new Tag(new Datum(13, 6, 2013), Wochentag.DONNERSTAG));
-        _wochentageUngueltig.add(new Tag(new Datum(13, 6, 2013), Wochentag.DONNERSTAG));
-        _wochentageUngueltig.add(new Tag(new Datum(13, 6, 2013), Wochentag.DONNERSTAG));
-        _wochentageUngueltig.add(new Tag(new Datum(13, 6, 2013), Wochentag.DONNERSTAG));
-        _wochentageUngueltig.add(new Tag(new Datum(13, 6, 2013), Wochentag.DONNERSTAG));
+        _wochentageUngueltig.add(new Tag(new Datum(13, 6, 2013)));
+        _wochentageUngueltig.add(new Tag(new Datum(13, 6, 2013)));
+        _wochentageUngueltig.add(new Tag(new Datum(13, 6, 2013)));
+        _wochentageUngueltig.add(new Tag(new Datum(13, 6, 2013)));
+        _wochentageUngueltig.add(new Tag(new Datum(13, 6, 2013)));
+        _wochentageUngueltig.add(new Tag(new Datum(13, 6, 2013)));
+        _wochentageUngueltig.add(new Tag(new Datum(13, 6, 2013)));
     }
     
     @Test

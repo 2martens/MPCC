@@ -25,16 +25,15 @@ public class TagTest
     @Test
     public void testKonstruktor()
     {
-        Tag tag = new Tag(_datum1, Wochentag.MONTAG);
+        Tag tag = new Tag(_datum1);
         assertSame(_datum1, tag.getDatum());
-        assertEquals(Wochentag.MONTAG, tag.getWochentag());
     }
     
     @Test
     public void testTageSeit()
     {
-        Tag tag = new Tag(_datum1, Wochentag.FREITAG);
-        Tag tag2 = new Tag(_datum2, Wochentag.SONNTAG);
+        Tag tag = new Tag(_datum1);
+        Tag tag2 = new Tag(_datum2);
         assertEquals(47, tag.tageSeit(tag2));
         assertEquals(-47, tag2.tageSeit(tag));
     }
@@ -42,20 +41,20 @@ public class TagTest
     @Test
     public void testEqualsUndHashCode()
     {
-        Tag tag = new Tag(_datum1, Wochentag.MONTAG);
-        Tag tag1 = new Tag(_datum1, Wochentag.MONTAG);
+        Tag tag = new Tag(_datum1);
+        Tag tag1 = new Tag(_datum1);
         assertTrue(tag.equals(tag1));
         assertTrue(tag.hashCode() == tag1.hashCode());
         
-        Tag tag2 = new Tag(_datum2, Wochentag.MONTAG);
+        Tag tag2 = new Tag(_datum2);
         assertFalse(tag.equals(tag2));
     }
     
     @Test
     public void testCompareTo()
     {
-        Tag tag1 = new Tag(_datum1, Wochentag.FREITAG);
-        Tag tag2 = new Tag(_datum2, Wochentag.SONNTAG);
+        Tag tag1 = new Tag(_datum1);
+        Tag tag2 = new Tag(_datum2);
         assertTrue(tag1.compareTo(tag2) > 0);
         assertTrue(tag2.compareTo(tag1) < 0);
         assertTrue(tag1.compareTo(tag1) == 0);
