@@ -70,9 +70,9 @@ public class KinoTest
         _filmTitel1 = "Underworld Evolution";
         _filmTitel2 = "The New World";
 
-        _film0 = new Film(_filmTitel0, 90, FSK.FSK0, false);
-        _film1 = new Film(_filmTitel1, 108, FSK.FSK16, false);
-        _film2 = new Film(_filmTitel2, 135, FSK.FSK12, true);
+        _film0 = new Film(_filmTitel0, 90, FSK.FSK0, false, false);
+        _film1 = new Film(_filmTitel1, 108, FSK.FSK16, false, false);
+        _film2 = new Film(_filmTitel2, 135, FSK.FSK12, true, true);
 
         _u1 = new Uhrzeit(17, 30);
         _u2 = new Uhrzeit(20, 0);

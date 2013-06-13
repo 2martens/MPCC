@@ -31,8 +31,8 @@ public class VorstellungTest
     public void setUp()
     {
         _kinoA = new Kinosaal("A", 20, 50, _reinigungszeit);
-        _hdR1 = new Film("Der Herr der Ringe - Die Gefhrten", 178, FSK.FSK12,
-                true);
+        _hdR1 = new Film("Der Herr der Ringe - Die Gefährten", 178, FSK.FSK12,
+                true, false);
     }
 
     @Test

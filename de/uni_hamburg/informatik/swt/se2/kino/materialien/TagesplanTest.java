@@ -15,7 +15,7 @@ public class TagesplanTest
 {
     private static final Reinigungszeit _reinigungszeit = new Reinigungszeit(10);
     private static final Datum _datum = new Datum(1, 1, 2010);
-    private static final Film _film = new Film("", 1, FSK.FSK0, false);
+    private static final Film _film = new Film("", 1, FSK.FSK0, false, false);
     private static final Kinosaal _kinosaal = new Kinosaal("Saal 1", 1, 1, _reinigungszeit);
     private static final Kinosaal _kinosaal2 = new Kinosaal("Saal 2", 1, 1, _reinigungszeit);
     private static final Uhrzeit _startzeit = new Uhrzeit(0, 0);

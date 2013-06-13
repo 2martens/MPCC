@@ -55,11 +55,11 @@ public class StartupKinoticketverkauf_Blatt07
         // Filme: Top-5 Deutschland laut kino.de in der Kalenderwoche 20, 2011.
         Film[] filme = {
                 new Film("Pirates of the Caribbean - Fremde Gezeiten", 136,
-                        FSK.FSK12, true),
-                new Film("Fast & Furious Five", 130, FSK.FSK12, true),
-                new Film("Rio", 96, FSK.FSK0, false),
-                new Film("Wasser für die Elefanten", 120, FSK.FSK12, false),
-                new Film("Thor", 115, FSK.FSK12, false) };
+                        FSK.FSK12, true, false),
+                new Film("Fast & Furious Five", 130, FSK.FSK12, true, false),
+                new Film("Rio", 96, FSK.FSK0, false, false),
+                new Film("Wasser für die Elefanten", 120, FSK.FSK12, false, false),
+                new Film("Thor", 115, FSK.FSK12, false, false) };
 
         Uhrzeit nachmittag = new Uhrzeit(17, 30);
         Uhrzeit abend = new Uhrzeit(20, 0);
