@@ -56,4 +56,10 @@ public class WocheTest
         assertFalse(gueltig);
     }
     
+    @Test
+    public void testDieseWoche()
+    {
+        assertNotNull(Woche.dieseWoche());
+    }
+    
 }

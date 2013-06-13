@@ -1,6 +1,9 @@
 package de.uni_hamburg.informatik.swt.se2.kino.fachwerte;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Stellt eine Woche dar.
@@ -12,6 +15,18 @@ import java.util.List;
 public final class Woche
 {
     private final List<Tag> _wochentage;
+    
+    // Für Gültigkeitsprüfungen und Datumsarithmetik wird intern ein Objekt vom
+    // Typ Calendar verwendet.
+    private static final Calendar CALENDAR = Calendar.getInstance();
+
+    // "Static initializer", initialisiert Klassenvariablen nach der Erzeugung
+    // des Klassenobjekts.
+    static
+    {
+        CALENDAR.setLenient(false);
+        CALENDAR.setTimeZone(TimeZone.getTimeZone("GMT"));
+    }
     
     /**
      * Initialisiert eine Woche.
@@ -36,6 +51,48 @@ public final class Woche
     public List<Tag> getWochentage()
     {
         return _wochentage;
+    }
+    
+    /**
+     * Gibt die aktuelle Woche zurück.
+     * 
+     * @ensure result != null
+     */
+    public static Woche dieseWoche()
+    {
+        Woche woche = null;
+        List<Tag> wochentage = new ArrayList<>(7);
+        Tag tag1 = null;
+        synchronized (CALENDAR)
+        {
+            CALENDAR.clear();
+            CALENDAR.setTimeInMillis(System.currentTimeMillis());
+            CALENDAR.setFirstDayOfWeek(Calendar.MONDAY);
+            while (CALENDAR.get(Calendar.DAY_OF_WEEK) > CALENDAR.getFirstDayOfWeek()) {
+                CALENDAR.add(Calendar.DATE, -1);
+            }
+            Datum datum = new Datum(CALENDAR.get(Calendar.DAY_OF_WEEK),
+                    CALENDAR.get(Calendar.MONTH) + 1,
+                    CALENDAR.get(Calendar.YEAR));
+            tag1 = new Tag(datum);
+        }
+        Tag tag2 = new Tag(tag1.getDatum().naechsterTag());
+        Tag tag3 = new Tag(tag2.getDatum().naechsterTag());
+        Tag tag4 = new Tag(tag3.getDatum().naechsterTag());
+        Tag tag5 = new Tag(tag4.getDatum().naechsterTag());
+        Tag tag6 = new Tag(tag5.getDatum().naechsterTag());
+        Tag tag7 = new Tag(tag6.getDatum().naechsterTag());
+        
+        wochentage.add(tag1);
+        wochentage.add(tag2);
+        wochentage.add(tag3);
+        wochentage.add(tag4);
+        wochentage.add(tag5);
+        wochentage.add(tag6);
+        wochentage.add(tag7);
+        
+        woche = new Woche(wochentage);
+        return woche;
     }
     
     /**
