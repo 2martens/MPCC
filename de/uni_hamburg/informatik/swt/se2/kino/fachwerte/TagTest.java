@@ -31,6 +31,15 @@ public class TagTest
     }
     
     @Test
+    public void testTageSeit()
+    {
+        Tag tag = new Tag(_datum1, Wochentag.FREITAG);
+        Tag tag2 = new Tag(_datum2, Wochentag.SONNTAG);
+        assertEquals(47, tag.tageSeit(tag2));
+        assertEquals(-47, tag2.tageSeit(tag));
+    }
+    
+    @Test
     public void testEqualsUndHashCode()
     {
         Tag tag = new Tag(_datum1, Wochentag.MONTAG);

@@ -51,6 +51,19 @@ public final class Tag implements Comparable<Tag>
     {
         return _wochentag;
     }
+    
+    /**
+     * Gibt an, wieviele Tage seit dem gegebenen Tag bis zu diesem Tag vergangen sind.
+     * 
+     * @param tag Der Tag, für den berechnet werden soll, wieviele Tage vergangen sind bis zu diesem.
+     * 
+     * @require tag != null
+     */
+    public int tageSeit(Tag tag)
+    {
+        assert tag != null : "Vorbedingung verletzt: tag != null";
+        return _datum.tageSeit(tag.getDatum());
+    }
 
     /**
      * Vergleicht diesen Tag mit einem anderen Tag.
