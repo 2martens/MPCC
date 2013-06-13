@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Platz;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
 
 /**
  * Ein Kinosaal. Ein Kinosaal hat einen Namen und kennt die Anzahl seiner
@@ -17,6 +18,7 @@ public class Kinosaal
     private String _name;
     private int _anzahlReihen;
     private int _anzahlSitzeProReihe;
+    private Reinigungszeit _reinigungszeit;
 
     /**
      * Initialisiert einen neuen Kinosaal.
@@ -24,24 +26,30 @@ public class Kinosaal
      * @param name der Name des Kinosaals.
      * @param anzahlReihen die Anzahl der Reihen.
      * @param anzahlSitzeProReihe die Anzahl der Sitze Pro Reihe.
+     * @param reinigungszeit Die Reinigungszeit des Kinosaales in Minuten.
      * 
      * @require name != null
      * @require anzahlReihen > 0
      * @require anzahlSitzeProReihe > 0
+     * @require reinigungszeit != null
      * 
      * @ensure getName() == name
      * @ensure getAnzahlReihen() == anzahlReihen
      * @ensure getAnzahlSitzeProReihe() == anzahlSitzeProReihe
+     * @ensure getReinigungszeit() == reinigungszeit
      */
-    public Kinosaal(String name, int anzahlReihen, int anzahlSitzeProReihe)
+    public Kinosaal(String name, int anzahlReihen, 
+            int anzahlSitzeProReihe, Reinigungszeit reinigungszeit)
     {
         assert name != null : "Vorbedingung verletzt: name != null";
         assert anzahlReihen > 0 : "Vorbedingung verletzt: anzahlReihen > 0";
         assert anzahlSitzeProReihe > 0 : "Vorbedingung verletzt: anzahlSitzeProReihe > 0";
+        assert reinigungszeit != null : "Vorbedingung verletzt: reinigungszeit != null";
 
         _name = name;
         _anzahlReihen = anzahlReihen;
         _anzahlSitzeProReihe = anzahlSitzeProReihe;
+        _reinigungszeit = reinigungszeit;
     }
 
     /**
@@ -72,6 +80,16 @@ public class Kinosaal
     public int getAnzahlSitzeProReihe()
     {
         return _anzahlSitzeProReihe;
+    }
+    
+    /**
+     * Gibt die Reinigungszeit des Kinosaales zurück.
+     * 
+     * @ensure result != null
+     */
+    public Reinigungszeit getReinigungszeit()
+    {
+        return _reinigungszeit;
     }
 
     /**
@@ -122,8 +140,8 @@ public class Kinosaal
             Kinosaal saal = (Kinosaal) obj;
             result = getName().equals(saal.getName())
                     && getAnzahlReihen() == saal.getAnzahlReihen()
-                    && getAnzahlSitzeProReihe() == saal
-                            .getAnzahlSitzeProReihe();
+                    && getAnzahlSitzeProReihe() == saal.getAnzahlSitzeProReihe()
+                    && getReinigungszeit().equals(saal.getReinigungszeit());
         }
         return result;
     }
@@ -136,6 +154,7 @@ public class Kinosaal
         result = prime * result + _anzahlReihen;
         result = prime * result + _anzahlSitzeProReihe;
         result = prime * result + ((_name == null) ? 0 : _name.hashCode());
+        result = prime * result + ((_reinigungszeit == null) ? 0 : _reinigungszeit.hashCode());
         return result;
     }
 
