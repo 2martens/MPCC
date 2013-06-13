@@ -13,12 +13,13 @@ public class FilmTest
     @Test
     public void testeKonstruktoren()
     {
-        Film f = new Film("Titel", 90, FSK.FSK16, true);
+        Film f = new Film("Titel", 90, FSK.FSK16, true, true);
 
         assertEquals("Titel", f.getTitel());
         assertEquals(90, f.getLaenge());
         assertEquals(FSK.FSK16, f.getFSK());
         assertTrue(f.hatUeberlaenge());
+        assertTrue(f.is3D());
         assertNotNull(f.toString());
     }
 }
