@@ -73,7 +73,6 @@ public class Vorstellung
         _anzahlVerkauftePlaetze = 0;
     }
     
-    
     /**
      * Erstellt eine neue Vorstellung.
      * 
@@ -172,15 +171,26 @@ public class Vorstellung
     /**
      * Gibt die Reinigungszeit nach der Veranstaltung zurück.
      * 
+     * @require hatReinigungszeit()
+     * 
      * @ensure result != null
      */
     public Reinigungszeit getReinigungszeit()
     {
+        assert hatReinigungszeit() : "Vorbedingung verletzt: hatReinigungszeit()";
         return _reinigungszeit;
     }
     
     /**
-     * Setzt die Reinigungszeit auf den gegeben Wert.
+     * Gibt an, ob diese Veranstaltung eine Reinigungszeit hat.
+     */
+    public boolean hatReinigungszeit()
+    {
+        return _reinigungszeit != null;
+    }
+    
+    /**
+     * Setzt die gegebene Reiningungszeit.
      * 
      * @param reinigungszeit Die Reinigungszeit nach der Veranstaltung.
      * 
