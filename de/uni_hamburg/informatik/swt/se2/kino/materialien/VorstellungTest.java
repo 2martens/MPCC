@@ -26,6 +26,7 @@ public class VorstellungTest
     private Uhrzeit _20_15 = new Uhrzeit(20, 15);
     private Datum _11_07_2008 = new Datum(11, 07, 2008);
     private Reinigungszeit _reinigungszeit = new Reinigungszeit(10);
+    private Werbeblock _werbeblock = new Werbeblock(30, FSK.FSK12);
 
     @Before
     public void setUp()
@@ -39,7 +40,7 @@ public class VorstellungTest
     public void testeKonstruktor()
     {
         Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
-                _11_07_2008, 1230, _reinigungszeit);
+                _11_07_2008, 1230, _reinigungszeit, _werbeblock);
 
         assertSame(_kinoA, v.getKinosaal());
         assertSame(_hdR1, v.getFilm());
@@ -48,6 +49,7 @@ public class VorstellungTest
         assertEquals(_11_07_2008, v.getDatum());
         assertEquals(1230, v.getPreis());
         assertSame(_reinigungszeit, v.getReinigungszeit());
+        assertSame(_werbeblock, v.getWerbeblock());
         assertNotNull(v.toString());
     }
     
@@ -58,6 +60,15 @@ public class VorstellungTest
                 _11_07_2008, 1230);
         v.setReinigungszeit(_reinigungszeit);
         assertSame(_reinigungszeit, v.getReinigungszeit());
+    }
+    
+    @Test
+    public void testSetWerbeblock()
+    {
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
+                _11_07_2008, 1230);
+        v.setWerbeblock(_werbeblock);
+        assertSame(_werbeblock, v.getWerbeblock());
     }
 
     @Test

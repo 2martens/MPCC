@@ -24,6 +24,7 @@ public class Vorstellung
     private Uhrzeit _endzeit;
     private Datum _datum;
     private Reinigungszeit _reinigungszeit;
+    private Werbeblock _werbeblock;
     private int _preis;
     private boolean[][] _verkauft;
     private int _anzahlVerkauftePlaetze;
@@ -106,6 +107,79 @@ public class Vorstellung
         this(kinosaal, film, anfangszeit, endzeit, datum, preis);
         assert reinigungszeit != null : "Vorbedingung verletzt: reinigungszeit != null";
         _reinigungszeit = reinigungszeit;
+    }
+    
+    /**
+     * Erstellt eine neue Vorstellung.
+     * 
+     * @param kinosaal der Kinosaal, in dem die Vorstellung laeuft.
+     * @param film der Film, der in dieser Vorstellung gezeigt wird.
+     * @param anfangszeit die Anfangszeit der Vorstellung.
+     * @param endzeit die Endzeit der Vorstellung.
+     * @param datum das Datum der Vorstellung.
+     * @param preis der Verkaufspreis als int für Karten zu dieser Vorstellung.
+     * @param werbeblock Der Werbeblock vor dem Film.
+     * 
+     * @require kinosaal != null
+     * @require film != null
+     * @require anfangszeit != null
+     * @require endzeit != null
+     * @require datum != null
+     * @require preis >= 0
+     * @require werbeblock != null
+     * 
+     * @ensure getKinosaal() == kinosaal
+     * @ensure getFilm() == film
+     * @ensure getAnfangszeit() == anfangszeit
+     * @ensure getEndzeit() == endzeit
+     * @ensure getDatum() == datum
+     * @ensure getPreis() == preis
+     * @ensure getReinigungszeit() == reinigungszeit
+     */
+    public Vorstellung(Kinosaal kinosaal, Film film, Uhrzeit anfangszeit,
+            Uhrzeit endzeit, Datum datum, int preis, Werbeblock werbeblock)
+    {
+        this(kinosaal, film, anfangszeit, endzeit, datum, preis);
+        assert werbeblock != null : "Vorbedingung verletzt: werbeblock != null";
+        _werbeblock = werbeblock;
+    }
+    
+    /**
+     * Erstellt eine neue Vorstellung.
+     * 
+     * @param kinosaal der Kinosaal, in dem die Vorstellung laeuft.
+     * @param film der Film, der in dieser Vorstellung gezeigt wird.
+     * @param anfangszeit die Anfangszeit der Vorstellung.
+     * @param endzeit die Endzeit der Vorstellung.
+     * @param datum das Datum der Vorstellung.
+     * @param preis der Verkaufspreis als int für Karten zu dieser Vorstellung.
+     * @param reinigungszeit Die Reinigungszeit nach der Veranstaltung.
+     * @param werbeblock Der Werbeblock vor dem Film.
+     * 
+     * @require kinosaal != null
+     * @require film != null
+     * @require anfangszeit != null
+     * @require endzeit != null
+     * @require datum != null
+     * @require preis >= 0
+     * @require reinigungszeit != null
+     * @require werbeblock != null
+     * 
+     * @ensure getKinosaal() == kinosaal
+     * @ensure getFilm() == film
+     * @ensure getAnfangszeit() == anfangszeit
+     * @ensure getEndzeit() == endzeit
+     * @ensure getDatum() == datum
+     * @ensure getPreis() == preis
+     * @ensure getReinigungszeit() == reinigungszeit
+     */
+    public Vorstellung(Kinosaal kinosaal, Film film, Uhrzeit anfangszeit,
+            Uhrzeit endzeit, Datum datum, int preis, 
+            Reinigungszeit reinigungszeit, Werbeblock werbeblock)
+    {
+        this(kinosaal, film, anfangszeit, endzeit, datum, preis, reinigungszeit);
+        assert werbeblock != null : "Vorbedingung verletzt: werbeblock != null";
+        _werbeblock = werbeblock;
     }
 
     /**
@@ -202,6 +276,42 @@ public class Vorstellung
     {
         assert reinigungszeit != null : "Vorbedingung verletzt: reinigungszeit != null";
         _reinigungszeit = reinigungszeit;
+    }
+    
+    /**
+     * Gibt den Werbeblock vor dem Film zurück.
+     * 
+     * @require hatWerbeblock()
+     * 
+     * @ensure result != null
+     */
+    public Werbeblock getWerbeblock()
+    {
+        assert hatWerbeblock() : "Vorbedingung verletzt: hatWerbeblock()";
+        return _werbeblock;
+    }
+    
+    /**
+     * Gibt an, ob diese Veranstaltung einen Werbeblock hat.
+     */
+    public boolean hatWerbeblock()
+    {
+        return _werbeblock != null;
+    }
+    
+    /**
+     * Setzt den gegebenen Werbeblock.
+     * 
+     * @param werbeblock Der Werbeblock vor dem Film.
+     * 
+     * @require werbeblock != null
+     * 
+     * @ensure getWerbeblock() == werbeblock
+     */
+    public void setWerbeblock(Werbeblock werbeblock)
+    {
+        assert werbeblock != null : "Vorbedingung verletzt: werbeblock != null";
+        _werbeblock = werbeblock;
     }
 
     /**
