@@ -13,6 +13,7 @@ import org.junit.Test;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.FSK;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Platz;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
 
 public class KinoTest
@@ -34,6 +35,11 @@ public class KinoTest
     private Uhrzeit _u2;
     private Uhrzeit _u3;
     private Uhrzeit _u4;
+    
+    private Reinigungszeit _rz1;
+    private Reinigungszeit _rz2;
+    private Reinigungszeit _rz3;
+    private Reinigungszeit _rz4;
 
     private Datum _d1;
 
@@ -48,10 +54,15 @@ public class KinoTest
     @Before
     public void setUp()
     {
-        _saal0 = new Kinosaal("Standard", 25, 40);
-        _saal1 = new Kinosaal("Gehoben", 20, 32);
-        _saal2 = new Kinosaal("Luxus", 10, 16);
-        _saal3 = new Kinosaal("Nix", 10, 20);
+        _rz1 = new Reinigungszeit(35);
+        _rz2 = new Reinigungszeit(25);
+        _rz3 = new Reinigungszeit(15);
+        _rz4 = new Reinigungszeit(10);
+        
+        _saal0 = new Kinosaal("Standard", 25, 40, _rz1);
+        _saal1 = new Kinosaal("Gehoben", 20, 32, _rz2);
+        _saal2 = new Kinosaal("Luxus", 10, 16, _rz3);
+        _saal3 = new Kinosaal("Nix", 10, 20, _rz4);
 
         _alleSaele = new Kinosaal[] { _saal0, _saal1, _saal2 };
 

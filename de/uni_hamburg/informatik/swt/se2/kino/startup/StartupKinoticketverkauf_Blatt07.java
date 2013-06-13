@@ -4,6 +4,7 @@ import javax.swing.SwingUtilities;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.FSK;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Film;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kino;
@@ -29,6 +30,7 @@ public class StartupKinoticketverkauf_Blatt07
         final Kino kino = erzeugeKinoMitBeispieldaten();
         SwingUtilities.invokeLater(new Runnable()
         {
+            @Override
             public void run()
             {
                 new KassenWerkzeug(kino);
@@ -41,8 +43,14 @@ public class StartupKinoticketverkauf_Blatt07
      */
     private static Kino erzeugeKinoMitBeispieldaten()
     {
-        final Kinosaal[] saele = { new Kinosaal("Saal 1", 20, 25),
-                new Kinosaal("Saal 2", 16, 20), new Kinosaal("Saal 3", 10, 16) };
+        Reinigungszeit rZeitGross = new Reinigungszeit(30);
+        Reinigungszeit rZeitMittel = new Reinigungszeit(20);
+        Reinigungszeit rZeitKlein = new Reinigungszeit(10);
+        
+        final Kinosaal[] saele = { new Kinosaal("Grosses Kino", 20, 25, rZeitGross),
+                new Kinosaal("Oberes Kino", 16, 20, rZeitMittel), 
+                new Kinosaal("Kleines Kino", 10, 16, rZeitKlein) 
+        };
 
         // Filme: Top-5 Deutschland laut kino.de in der Kalenderwoche 20, 2011.
         Film[] filme = {
