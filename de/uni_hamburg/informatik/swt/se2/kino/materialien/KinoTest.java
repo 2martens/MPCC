@@ -107,6 +107,20 @@ public class KinoTest
                 Arrays.asList(_vorstellungSaal2Film1, _vorstellungSaal2Film2a,
                         _vorstellungSaal2Film2b, _vorstellungSaal1Film0)));
     }
+    
+    @Test
+    public void testSetTagesplan()
+    {
+        Datum datum = Datum.heute();
+        Tagesplan tagesplan = new Tagesplan(datum);
+        Vorstellung v =
+                new Vorstellung(_saal1, _film0, _u1, _u2, datum,
+                900);
+        tagesplan.fuegeVorstellungHinzu(v);
+        assertFalse(tagesplan.equals(_kino.getTagesplan(datum)));
+        _kino.setTagesplan(datum, tagesplan);
+        assertTrue(tagesplan.equals(_kino.getTagesplan(datum)));
+    }
 
     @Test
     public void testeHatKinosaal()

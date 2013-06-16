@@ -102,4 +102,23 @@ public class Kino
         }
         return tagesplan;
     }
+    
+    /**
+     * Setzt den Tagesplan für den angegebenen Tag.
+     * 
+     * @param datum
+     * @param tagesplan
+     * 
+     * @require datum != null
+     * @require tagesplan != null
+     * 
+     * @ensure getTagesplan(datum) == tagesplan
+     */
+    public void setTagesplan(Datum datum, Tagesplan tagesplan)
+    {
+        assert datum != null : "Vorbedingung verletzt: datum != null";
+        assert tagesplan != null : "Vorbedingung verletzt: tagesplan != null";
+        
+        _tagesplaene.put(datum, tagesplan);
+    }
 }
