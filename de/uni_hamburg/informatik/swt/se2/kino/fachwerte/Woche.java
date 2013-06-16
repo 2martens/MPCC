@@ -84,6 +84,42 @@ public final class Woche
     }
     
     /**
+     * Gibt die Woche mit diesem Tag zurück.
+     * 
+     * @param datum Der Tag, für den die Woche zurückgegeben werden soll.
+     * 
+     * @require datum != null
+     * 
+     * @ensure result != null
+     */
+    public static Woche wocheMitDiesemTag(Datum datum)
+    {
+        assert datum != null : "Vorbedingung verletzt: datum != null";
+        
+        Datum startDatum = null;
+        synchronized (CALENDAR)
+        {
+            CALENDAR.clear();
+            CALENDAR.set(datum.getJahr(), datum.getMonat()-1, datum.getTag());
+            CALENDAR.setFirstDayOfWeek(Calendar.MONDAY);
+            int dayOfWeek = CALENDAR.get(Calendar.DAY_OF_WEEK);
+            // CALENDAR-Konstanten handeln
+            if (dayOfWeek == 1)
+            {
+                dayOfWeek += 7;
+            }
+            while (dayOfWeek > CALENDAR.getFirstDayOfWeek()) {
+                CALENDAR.add(Calendar.DATE, -1);
+                dayOfWeek -= 1;
+            }
+            startDatum = new Datum(CALENDAR.get(Calendar.DAY_OF_MONTH),
+                    CALENDAR.get(Calendar.MONTH) + 1,
+                    CALENDAR.get(Calendar.YEAR));
+        }
+        return createWoche(startDatum);
+    }
+    
+    /**
      * Gibt die letzte Woche zurück.
      * 
      * @ensure result != null

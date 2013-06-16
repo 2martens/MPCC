@@ -87,4 +87,10 @@ public class WocheTest
         assertTrue(woche.istInWoche(inWoche));
         assertFalse(woche.istInWoche(nichtInWoche));
     }
+    
+    @Test
+    public void testWocheMitDiesemTag()
+    {
+        assertNotNull(Woche.wocheMitDiesemTag(Datum.heute()));
+    }
 }
