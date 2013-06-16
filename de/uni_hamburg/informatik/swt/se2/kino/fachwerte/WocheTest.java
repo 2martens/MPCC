@@ -62,4 +62,29 @@ public class WocheTest
         assertNotNull(Woche.dieseWoche());
     }
     
+    @Test
+    public void testLetzteWoche()
+    {
+        Woche woche = Woche.dieseWoche();
+        Woche letzteWoche = woche.letzteWoche();
+        assertNotNull(letzteWoche);
+    }
+    
+    @Test
+    public void testNaechsteWoche()
+    {
+        Woche woche = Woche.dieseWoche();
+        Woche naechsteWoche = woche.naechsteWoche();
+        assertNotNull(naechsteWoche);
+    }
+    
+    @Test
+    public void testIstInWoche()
+    {
+        Woche woche = Woche.dieseWoche();
+        Datum inWoche = woche.getWochentage().get(0).getDatum();
+        Datum nichtInWoche = new Datum(1, 1, 1901);
+        assertTrue(woche.istInWoche(inWoche));
+        assertFalse(woche.istInWoche(nichtInWoche));
+    }
 }
