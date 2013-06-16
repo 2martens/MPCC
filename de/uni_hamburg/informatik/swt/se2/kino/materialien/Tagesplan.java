@@ -74,7 +74,7 @@ public class Tagesplan
     public void fuegeVorstellungHinzu(Vorstellung v)
     {
         assert !istVorhanden(v) : "Vorbedingung verletzt: !istVorhanden(v)";
-        assert v.getDatum().equals(_tag) : "Vorbedingung verletzt: v.getDatum().equals(_tag)";
+        assert v.getDatum().equals(_tag) : "Vorbedingung verletzt: die Vorstellung laeuft an dem Tag dieses Tagesplans";
 
         _vorstellungen.add(v);
     }
