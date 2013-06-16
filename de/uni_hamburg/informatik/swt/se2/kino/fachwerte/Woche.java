@@ -60,9 +60,7 @@ public final class Woche
      */
     public static Woche dieseWoche()
     {
-        Woche woche = null;
-        List<Tag> wochentage = new ArrayList<>(7);
-        Tag tag1 = null;
+        Datum datum = null;
         synchronized (CALENDAR)
         {
             CALENDAR.clear();
@@ -78,28 +76,47 @@ public final class Woche
                 CALENDAR.add(Calendar.DATE, -1);
                 dayOfWeek -= 1;
             }
-            Datum datum = new Datum(CALENDAR.get(Calendar.DAY_OF_MONTH),
+            datum = new Datum(CALENDAR.get(Calendar.DAY_OF_MONTH),
                     CALENDAR.get(Calendar.MONTH) + 1,
                     CALENDAR.get(Calendar.YEAR));
-            tag1 = new Tag(datum);
         }
-        Tag tag2 = new Tag(tag1.getDatum().naechsterTag());
-        Tag tag3 = new Tag(tag2.getDatum().naechsterTag());
-        Tag tag4 = new Tag(tag3.getDatum().naechsterTag());
-        Tag tag5 = new Tag(tag4.getDatum().naechsterTag());
-        Tag tag6 = new Tag(tag5.getDatum().naechsterTag());
-        Tag tag7 = new Tag(tag6.getDatum().naechsterTag());
-        
-        wochentage.add(tag1);
-        wochentage.add(tag2);
-        wochentage.add(tag3);
-        wochentage.add(tag4);
-        wochentage.add(tag5);
-        wochentage.add(tag6);
-        wochentage.add(tag7);
-        
-        woche = new Woche(wochentage);
-        return woche;
+        return createWoche(datum);
+    }
+    
+    /**
+     * Gibt die letzte Woche zurück.
+     * 
+     * @ensure result != null
+     */
+    public Woche letzteWoche()
+    {
+        Datum startDatum = _wochentage.get(0).getDatum().minus(7);
+        return createWoche(startDatum);
+    }
+    
+    /**
+     * Gibt die nächste Woche zurück.
+     * 
+     * @ensure result != null
+     */
+    public Woche naechsteWoche()
+    {
+        Datum startDatum = _wochentage.get(0).getDatum().plus(7);
+        return createWoche(startDatum);
+    }
+    
+    /**
+     * Prüft, ob das gegebene Datum Teil der Woche ist.
+     * 
+     * @param datum Das zu prüfende Datum.
+     * 
+     * @require datum != null
+     */
+    public boolean istInWoche(Datum datum)
+    {
+        assert datum != null : "Vorbedingung verletzt: datum != null";
+        Tag tag = new Tag(datum);
+        return _wochentage.contains(tag);
     }
     
     /**
@@ -157,5 +174,40 @@ public final class Woche
             }
         }
         return result;
+    }
+    
+    /**
+     * Erzeugt eine Woche, startend von dem gegebenen Datum.
+     * 
+     * @param startDatum Das Startdatum.
+     * 
+     * @require startDatum != null
+     * 
+     * @ensure result != null
+     */
+    private static Woche createWoche(Datum startDatum)
+    {
+        assert startDatum != null : "Vorbedingung verletzt: startDatum != null";
+        
+        Woche woche = null;
+        List<Tag> wochentage = new ArrayList<>(7);
+        Tag tag1 = new Tag(startDatum);
+        Tag tag2 = new Tag(tag1.getDatum().naechsterTag());
+        Tag tag3 = new Tag(tag2.getDatum().naechsterTag());
+        Tag tag4 = new Tag(tag3.getDatum().naechsterTag());
+        Tag tag5 = new Tag(tag4.getDatum().naechsterTag());
+        Tag tag6 = new Tag(tag5.getDatum().naechsterTag());
+        Tag tag7 = new Tag(tag6.getDatum().naechsterTag());
+        
+        wochentage.add(tag1);
+        wochentage.add(tag2);
+        wochentage.add(tag3);
+        wochentage.add(tag4);
+        wochentage.add(tag5);
+        wochentage.add(tag6);
+        wochentage.add(tag7);
+        
+        woche = new Woche(wochentage);
+        return woche;
     }
 }
