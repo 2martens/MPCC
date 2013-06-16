@@ -212,6 +212,30 @@ public final class Woche
         return result;
     }
     
+    @Override
+    public boolean equals(Object o)
+    {
+        boolean result = false;
+        if (o instanceof Woche)
+        {
+            Woche andereWoche = (Woche) o;
+            result = andereWoche.getWochentage().equals(_wochentage);
+        }
+        return result;
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        int prime = 31;
+        int hashCode = prime;
+        for (Tag tag : _wochentage)
+        {
+            hashCode += prime * tag.hashCode();
+        }
+        return hashCode;
+    }
+    
     /**
      * Erzeugt eine Woche, startend von dem gegebenen Datum.
      * 

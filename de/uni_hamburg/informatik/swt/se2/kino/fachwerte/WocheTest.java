@@ -93,4 +93,17 @@ public class WocheTest
     {
         assertNotNull(Woche.wocheMitDiesemTag(Datum.heute()));
     }
+    
+    @Test
+    public void testEquals()
+    {
+        Woche woche = Woche.dieseWoche();
+        Woche woche2 = Woche.dieseWoche();
+        Woche woche3 = woche.letzteWoche();
+        
+        assertTrue(woche2.equals(woche));
+        assertTrue(woche2.hashCode() == woche.hashCode());
+        
+        assertFalse(woche2.equals(woche3));
+    }
 }
