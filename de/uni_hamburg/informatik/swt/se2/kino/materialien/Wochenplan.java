@@ -71,6 +71,21 @@ public class Wochenplan
     }
     
     /**
+     * Gibt den Tagesplan für das gegebene Datum zurück.
+     * 
+     * @param datum
+     * 
+     * @require istTagInDiesemPlan(datum)
+     * 
+     * @ensure result != null
+     */
+    public Tagesplan getTagesplan(Datum datum)
+    {
+        assert istInDiesemPlan(datum) : "Vorbedingung verletzt: istTagInDiesemPlan(datum)";
+        return _tagesplaene.get(datum);
+    }
+    
+    /**
      * Fügt eine Vorstellung in den Wochenplan ein.
      * 
      * @param vorstellung Die einzufügende Vorstellung.
@@ -127,7 +142,7 @@ public class Wochenplan
      * 
      * @require datum != null
      */
-    public boolean istTagInDiesemPlan(Datum datum)
+    public boolean istInDiesemPlan(Datum datum)
     {
         assert datum != null : "Vorbedingung verletzt: datum != null";
         boolean result = false;

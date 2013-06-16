@@ -43,13 +43,13 @@ public class WochenplanTest
     }
     
     @Test
-    public void testIstTagInDiesemPlan()
+    public void testIstInDiesemPlan()
     {
         Wochenplan wochenplan = new Wochenplan(_woche, _kinosaal);
         Datum datumVorhanden = _woche.getWochentage().get(0).getDatum();
         Datum datumNichtVorhanden = new Datum(1, 1, 1909);
-        assertTrue(wochenplan.istTagInDiesemPlan(datumVorhanden));
-        assertFalse(wochenplan.istTagInDiesemPlan(datumNichtVorhanden));
+        assertTrue(wochenplan.istInDiesemPlan(datumVorhanden));
+        assertFalse(wochenplan.istInDiesemPlan(datumNichtVorhanden));
     }
     
     @Test
