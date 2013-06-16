@@ -1,6 +1,7 @@
 package de.uni_hamburg.informatik.swt.se2.kino.materialien;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -53,7 +54,7 @@ public class TagesplanTest
     {
         _t.fuegeVorstellungHinzu(_vorstellung);
         assertEquals(1, _t.getVorstellungen().size());
-        assertTrue(_t.getVorstellungen().contains(_vorstellung));
+        assertTrue(_t.istVorhanden(_vorstellung));
     }
 
     @Test
@@ -71,5 +72,14 @@ public class TagesplanTest
         _t.fuegeVorstellungHinzu(_vorstellung2);
         _t.fuegeVorstellungHinzu(_vorstellung3);
         assertEquals(2, _t.getVorstellungen().size());
+    }
+    
+    @Test
+    public void testVorstellungEntfernen()
+    {
+        _t.fuegeVorstellungHinzu(_vorstellung);
+        assertTrue(_t.istVorhanden(_vorstellung));
+        _t.entferneVorstellung(_vorstellung);
+        assertFalse(_t.istVorhanden(_vorstellung));
     }
 }
