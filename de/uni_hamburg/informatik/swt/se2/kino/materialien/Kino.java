@@ -1,11 +1,14 @@
 package de.uni_hamburg.informatik.swt.se2.kino.materialien;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Woche;
 
 /**
  * Ein Kino mit mehreren Kinosälen, in denen Vorstellungen laufen koennen.
@@ -19,6 +22,7 @@ public class Kino
 
     // Die Vorstellungspläne, sortiert nach Tagen.
     private SortedMap<Datum, Tagesplan> _tagesplaene;
+    private Map<Kinosaal,Map<Woche,Wochenplan>> _wochenplaene;
 
     /**
      * Initialisiert ein Kino.
@@ -40,11 +44,15 @@ public class Kino
 
         _kinosaele = new ArrayList<Kinosaal>(saele.length);
         _tagesplaene = new TreeMap<Datum, Tagesplan>();
+        _wochenplaene = new HashMap<Kinosaal,Map<Woche,Wochenplan>>(3);
 
         for (Kinosaal saal : saele)
         {
             assert saal != null : "Vorbedingung verletzt: saele enthaelt keine Nullpointer";
             _kinosaele.add(saal);
+            _wochenplaene.put(saal, new HashMap<Woche,Wochenplan>());
+            _wochenplaene.get(saal).put(Woche.dieseWoche(), 
+                    new Wochenplan(Woche.dieseWoche(), saal));
         }
 
         for (Vorstellung vorstellung : vorstellungen)
@@ -60,6 +68,16 @@ public class Kino
                 _tagesplaene.put(datum, tagesplan);
             }
             tagesplan.fuegeVorstellungHinzu(vorstellung);
+            
+            Map<Woche,Wochenplan> plaene = _wochenplaene.get(saal);
+            Woche woche = Woche.wocheMitDiesemTag(datum);
+            Wochenplan plan = plaene.get(woche);
+            if (plan == null)
+            {
+                plan = new Wochenplan(woche, saal);
+                _wochenplaene.get(saal).put(woche, plan);
+            }
+            plan.fuegeVorstellungHinzu(vorstellung);
         }
     }
 
@@ -81,6 +99,47 @@ public class Kino
     public List<Kinosaal> getKinosaele()
     {
         return new ArrayList<Kinosaal>(_kinosaele);
+    }
+    
+    /**
+     * Gibt den Wochenplan für die angegebene Woche zurück.
+     * 
+     * @param saal
+     * @param woche
+     * 
+     * @require hatKinosaal(saal)
+     * @require woche != null
+     * 
+     * @ensure result != null
+     */
+    public Wochenplan getWochenplan(Kinosaal saal, Woche woche)
+    {
+        assert hatKinosaal(saal) : "Vorbedingung verletzt: hatKinosaal(saal)";
+        assert woche != null : "Vorbedingung verletzt: woche != null";
+        
+        return _wochenplaene.get(saal).get(woche);
+    }
+    
+    /**
+     * Setzt den Wochenplan für die angegebenen Daten.
+     * 
+     * @param saal
+     * @param woche
+     * @param wochenplan
+     * 
+     * @require hatKinosaal(saal)
+     * @require woche != null
+     * @require wochenplan != null
+     * 
+     * @ensure getWochenplan(saal, woche) == wochenplan
+     */
+    public void setWochenplan(Kinosaal saal, Woche woche, Wochenplan wochenplan)
+    {
+        assert hatKinosaal(saal) : "Vorbedingung verletzt: hatKinosaal(saal)";
+        assert woche != null : "Vorbedingung verletzt: woche != null";
+        assert wochenplan != null : "Vorbedingung verletzt: wochenplan != null";
+        
+        _wochenplaene.get(saal).put(woche, wochenplan);
     }
 
     /**

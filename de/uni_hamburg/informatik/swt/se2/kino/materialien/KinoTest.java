@@ -15,6 +15,7 @@ import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.FSK;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Platz;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Woche;
 
 public class KinoTest
 {
@@ -120,6 +121,26 @@ public class KinoTest
         assertFalse(tagesplan.equals(_kino.getTagesplan(datum)));
         _kino.setTagesplan(datum, tagesplan);
         assertTrue(tagesplan.equals(_kino.getTagesplan(datum)));
+    }
+    
+    @Test
+    public void testGetWochenplan()
+    {
+        Datum datum = Datum.heute();
+        Woche woche = Woche.wocheMitDiesemTag(datum);
+        Wochenplan wochenplan = _kino.getWochenplan(_saal0, woche);
+        assertTrue(wochenplan.getKinosaal().equals(_saal0));
+        assertTrue(wochenplan.getWoche().equals(woche));
+    }
+    
+    @Test
+    public void testSetWochenplan()
+    {
+        Woche woche = Woche.dieseWoche().letzteWoche();
+        Wochenplan wochenplan = new Wochenplan(woche, _saal0);
+        assertFalse(wochenplan.equals(_kino.getWochenplan(_saal0, woche)));
+        _kino.setWochenplan(_saal0, woche, wochenplan);
+        assertTrue(wochenplan.equals(_kino.getWochenplan(_saal0, woche)));
     }
 
     @Test
