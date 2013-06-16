@@ -4,6 +4,7 @@ import java.util.Set;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Platz;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
 
 /**
@@ -22,6 +23,8 @@ public class Vorstellung
     private Uhrzeit _anfangszeit;
     private Uhrzeit _endzeit;
     private Datum _datum;
+    private Reinigungszeit _reinigungszeit;
+    private Werbeblock _werbeblock;
     private int _preis;
     private boolean[][] _verkauft;
     private int _anzahlVerkauftePlaetze;
@@ -69,6 +72,114 @@ public class Vorstellung
         _verkauft = new boolean[kinosaal.getAnzahlReihen()][kinosaal
                 .getAnzahlSitzeProReihe()];
         _anzahlVerkauftePlaetze = 0;
+    }
+    
+    /**
+     * Erstellt eine neue Vorstellung.
+     * 
+     * @param kinosaal der Kinosaal, in dem die Vorstellung laeuft.
+     * @param film der Film, der in dieser Vorstellung gezeigt wird.
+     * @param anfangszeit die Anfangszeit der Vorstellung.
+     * @param endzeit die Endzeit der Vorstellung.
+     * @param datum das Datum der Vorstellung.
+     * @param preis der Verkaufspreis als int für Karten zu dieser Vorstellung.
+     * @param reinigungszeit Die Reinigungszeit nach der Veranstaltung.
+     * 
+     * @require kinosaal != null
+     * @require film != null
+     * @require anfangszeit != null
+     * @require endzeit != null
+     * @require datum != null
+     * @require preis >= 0
+     * @require reinigungszeit != null
+     * 
+     * @ensure getKinosaal() == kinosaal
+     * @ensure getFilm() == film
+     * @ensure getAnfangszeit() == anfangszeit
+     * @ensure getEndzeit() == endzeit
+     * @ensure getDatum() == datum
+     * @ensure getPreis() == preis
+     * @ensure getReinigungszeit() == reinigungszeit
+     */
+    public Vorstellung(Kinosaal kinosaal, Film film, Uhrzeit anfangszeit,
+            Uhrzeit endzeit, Datum datum, int preis, Reinigungszeit reinigungszeit)
+    {
+        this(kinosaal, film, anfangszeit, endzeit, datum, preis);
+        assert reinigungszeit != null : "Vorbedingung verletzt: reinigungszeit != null";
+        _reinigungszeit = reinigungszeit;
+    }
+    
+    /**
+     * Erstellt eine neue Vorstellung.
+     * 
+     * @param kinosaal der Kinosaal, in dem die Vorstellung laeuft.
+     * @param film der Film, der in dieser Vorstellung gezeigt wird.
+     * @param anfangszeit die Anfangszeit der Vorstellung.
+     * @param endzeit die Endzeit der Vorstellung.
+     * @param datum das Datum der Vorstellung.
+     * @param preis der Verkaufspreis als int für Karten zu dieser Vorstellung.
+     * @param werbeblock Der Werbeblock vor dem Film.
+     * 
+     * @require kinosaal != null
+     * @require film != null
+     * @require anfangszeit != null
+     * @require endzeit != null
+     * @require datum != null
+     * @require preis >= 0
+     * @require werbeblock != null
+     * 
+     * @ensure getKinosaal() == kinosaal
+     * @ensure getFilm() == film
+     * @ensure getAnfangszeit() == anfangszeit
+     * @ensure getEndzeit() == endzeit
+     * @ensure getDatum() == datum
+     * @ensure getPreis() == preis
+     * @ensure getReinigungszeit() == reinigungszeit
+     */
+    public Vorstellung(Kinosaal kinosaal, Film film, Uhrzeit anfangszeit,
+            Uhrzeit endzeit, Datum datum, int preis, Werbeblock werbeblock)
+    {
+        this(kinosaal, film, anfangszeit, endzeit, datum, preis);
+        assert werbeblock != null : "Vorbedingung verletzt: werbeblock != null";
+        _werbeblock = werbeblock;
+    }
+    
+    /**
+     * Erstellt eine neue Vorstellung.
+     * 
+     * @param kinosaal der Kinosaal, in dem die Vorstellung laeuft.
+     * @param film der Film, der in dieser Vorstellung gezeigt wird.
+     * @param anfangszeit die Anfangszeit der Vorstellung.
+     * @param endzeit die Endzeit der Vorstellung.
+     * @param datum das Datum der Vorstellung.
+     * @param preis der Verkaufspreis als int für Karten zu dieser Vorstellung.
+     * @param reinigungszeit Die Reinigungszeit nach der Veranstaltung.
+     * @param werbeblock Der Werbeblock vor dem Film.
+     * 
+     * @require kinosaal != null
+     * @require film != null
+     * @require anfangszeit != null
+     * @require endzeit != null
+     * @require datum != null
+     * @require preis >= 0
+     * @require reinigungszeit != null
+     * @require werbeblock != null
+     * 
+     * @ensure getKinosaal() == kinosaal
+     * @ensure getFilm() == film
+     * @ensure getAnfangszeit() == anfangszeit
+     * @ensure getEndzeit() == endzeit
+     * @ensure getDatum() == datum
+     * @ensure getPreis() == preis
+     * @ensure getReinigungszeit() == reinigungszeit
+     */
+    public Vorstellung(Kinosaal kinosaal, Film film, Uhrzeit anfangszeit,
+            Uhrzeit endzeit, Datum datum, int preis, 
+            Reinigungszeit reinigungszeit, Werbeblock werbeblock)
+    {
+        this(kinosaal, film, anfangszeit, endzeit, datum, preis, reinigungszeit);
+        assert werbeblock != null : "Vorbedingung verletzt: werbeblock != null";
+        _werbeblock = werbeblock;
     }
 
     /**
@@ -129,6 +240,78 @@ public class Vorstellung
     public int getPreis()
     {
         return _preis;
+    }
+    
+    /**
+     * Gibt die Reinigungszeit nach der Veranstaltung zurück.
+     * 
+     * @require hatReinigungszeit()
+     * 
+     * @ensure result != null
+     */
+    public Reinigungszeit getReinigungszeit()
+    {
+        assert hatReinigungszeit() : "Vorbedingung verletzt: hatReinigungszeit()";
+        return _reinigungszeit;
+    }
+    
+    /**
+     * Gibt an, ob diese Veranstaltung eine Reinigungszeit hat.
+     */
+    public boolean hatReinigungszeit()
+    {
+        return _reinigungszeit != null;
+    }
+    
+    /**
+     * Setzt die gegebene Reiningungszeit.
+     * 
+     * @param reinigungszeit Die Reinigungszeit nach der Veranstaltung.
+     * 
+     * @require reinigungszeit != null
+     * 
+     * @ensure getReinigungszeit() == reinigungszeit
+     */
+    public void setReinigungszeit(Reinigungszeit reinigungszeit)
+    {
+        assert reinigungszeit != null : "Vorbedingung verletzt: reinigungszeit != null";
+        _reinigungszeit = reinigungszeit;
+    }
+    
+    /**
+     * Gibt den Werbeblock vor dem Film zurück.
+     * 
+     * @require hatWerbeblock()
+     * 
+     * @ensure result != null
+     */
+    public Werbeblock getWerbeblock()
+    {
+        assert hatWerbeblock() : "Vorbedingung verletzt: hatWerbeblock()";
+        return _werbeblock;
+    }
+    
+    /**
+     * Gibt an, ob diese Veranstaltung einen Werbeblock hat.
+     */
+    public boolean hatWerbeblock()
+    {
+        return _werbeblock != null;
+    }
+    
+    /**
+     * Setzt den gegebenen Werbeblock.
+     * 
+     * @param werbeblock Der Werbeblock vor dem Film.
+     * 
+     * @require werbeblock != null
+     * 
+     * @ensure getWerbeblock() == werbeblock
+     */
+    public void setWerbeblock(Werbeblock werbeblock)
+    {
+        assert werbeblock != null : "Vorbedingung verletzt: werbeblock != null";
+        _werbeblock = werbeblock;
     }
 
     /**

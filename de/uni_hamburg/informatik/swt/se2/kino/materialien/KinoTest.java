@@ -13,7 +13,9 @@ import org.junit.Test;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.FSK;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Platz;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Woche;
 
 public class KinoTest
 {
@@ -34,6 +36,11 @@ public class KinoTest
     private Uhrzeit _u2;
     private Uhrzeit _u3;
     private Uhrzeit _u4;
+    
+    private Reinigungszeit _rz1;
+    private Reinigungszeit _rz2;
+    private Reinigungszeit _rz3;
+    private Reinigungszeit _rz4;
 
     private Datum _d1;
 
@@ -48,10 +55,15 @@ public class KinoTest
     @Before
     public void setUp()
     {
-        _saal0 = new Kinosaal("Standard", 25, 40);
-        _saal1 = new Kinosaal("Gehoben", 20, 32);
-        _saal2 = new Kinosaal("Luxus", 10, 16);
-        _saal3 = new Kinosaal("Nix", 10, 20);
+        _rz1 = new Reinigungszeit(35);
+        _rz2 = new Reinigungszeit(25);
+        _rz3 = new Reinigungszeit(15);
+        _rz4 = new Reinigungszeit(10);
+        
+        _saal0 = new Kinosaal("Standard", 25, 40, _rz1);
+        _saal1 = new Kinosaal("Gehoben", 20, 32, _rz2);
+        _saal2 = new Kinosaal("Luxus", 10, 16, _rz3);
+        _saal3 = new Kinosaal("Nix", 10, 20, _rz4);
 
         _alleSaele = new Kinosaal[] { _saal0, _saal1, _saal2 };
 
@@ -59,9 +71,9 @@ public class KinoTest
         _filmTitel1 = "Underworld Evolution";
         _filmTitel2 = "The New World";
 
-        _film0 = new Film(_filmTitel0, 90, FSK.FSK0, false);
-        _film1 = new Film(_filmTitel1, 108, FSK.FSK16, false);
-        _film2 = new Film(_filmTitel2, 135, FSK.FSK12, true);
+        _film0 = new Film(_filmTitel0, 90, FSK.FSK0, false, false);
+        _film1 = new Film(_filmTitel1, 108, FSK.FSK16, false, false);
+        _film2 = new Film(_filmTitel2, 135, FSK.FSK12, true, true);
 
         _u1 = new Uhrzeit(17, 30);
         _u2 = new Uhrzeit(20, 0);
@@ -95,6 +107,40 @@ public class KinoTest
         assertTrue(tagesplan.getVorstellungen().containsAll(
                 Arrays.asList(_vorstellungSaal2Film1, _vorstellungSaal2Film2a,
                         _vorstellungSaal2Film2b, _vorstellungSaal1Film0)));
+    }
+    
+    @Test
+    public void testSetTagesplan()
+    {
+        Datum datum = Datum.heute();
+        Tagesplan tagesplan = new Tagesplan(datum);
+        Vorstellung v =
+                new Vorstellung(_saal1, _film0, _u1, _u2, datum,
+                900);
+        tagesplan.fuegeVorstellungHinzu(v);
+        assertFalse(tagesplan.equals(_kino.getTagesplan(datum)));
+        _kino.setTagesplan(datum, tagesplan);
+        assertTrue(tagesplan.equals(_kino.getTagesplan(datum)));
+    }
+    
+    @Test
+    public void testGetWochenplan()
+    {
+        Datum datum = Datum.heute();
+        Woche woche = Woche.wocheMitDiesemTag(datum);
+        Wochenplan wochenplan = _kino.getWochenplan(_saal0, woche);
+        assertTrue(wochenplan.getKinosaal().equals(_saal0));
+        assertTrue(wochenplan.getWoche().equals(woche));
+    }
+    
+    @Test
+    public void testSetWochenplan()
+    {
+        Woche woche = Woche.dieseWoche().letzteWoche();
+        Wochenplan wochenplan = new Wochenplan(woche, _saal0);
+        assertFalse(wochenplan.equals(_kino.getWochenplan(_saal0, woche)));
+        _kino.setWochenplan(_saal0, woche, wochenplan);
+        assertTrue(wochenplan.equals(_kino.getWochenplan(_saal0, woche)));
     }
 
     @Test

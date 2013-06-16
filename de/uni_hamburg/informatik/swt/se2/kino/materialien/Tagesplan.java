@@ -66,15 +66,45 @@ public class Tagesplan
      * 
      * @param v die Vorstellung.
      * 
-     * @require v != null
+     * @require !istVorhanden(v)
      * @require die Vorstellung laeuft an dem Tag dieses Tagesplans
+     * 
+     * @ensure istVorhanden(v)
      */
     public void fuegeVorstellungHinzu(Vorstellung v)
     {
-        assert v != null : "Vorbedingung verletzt: v != null";
-        assert v.getDatum().equals(_tag) : "Vorbedingung verletzt: v.getDatum().equals(_tag)";
+        assert !istVorhanden(v) : "Vorbedingung verletzt: !istVorhanden(v)";
+        assert v.getDatum().equals(_tag) : "Vorbedingung verletzt: die Vorstellung laeuft an dem Tag dieses Tagesplans";
 
         _vorstellungen.add(v);
+    }
+    
+    /**
+     * Prüft, ob die angegebene Vorstellung in diesem Tagesplan vorkommt.
+     * 
+     * @param v Die Vorstellung.
+     * 
+     * @require v != null
+     */
+    public boolean istVorhanden(Vorstellung v)
+    {
+        assert v != null : "Vorbedingung verletzt: v != null";
+        return _vorstellungen.contains(v);
+    }
+    
+    /**
+     * Entfernt die angegebene Vorstellung von diesem Tagesplan.
+     * 
+     * @param v Die Vorstellung.
+     * 
+     * @require istVorhanden(v)
+     * 
+     * @ensure !istVorhanden(v)
+     */
+    public void entferneVorstellung(Vorstellung v)
+    {
+        assert istVorhanden(v) : "Vorbedingung verletzt: istVorhanden(v)";
+        _vorstellungen.remove(v);
     }
 
     /**

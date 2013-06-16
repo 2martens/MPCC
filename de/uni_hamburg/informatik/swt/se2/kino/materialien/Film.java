@@ -15,14 +15,16 @@ public class Film
     private int _laenge;
     private FSK _fsk;
     private boolean _ueberlaenge;
+    private boolean _3D;
 
     /**
      * Initialisiert einen neuen Film.
      * 
      * @param titel der Titel.
-     * @param laenge die Laenge in Minuten.
-     * @param fsk die Altersfreigabe fuer diesen Film.
-     * @param ueberlaenge hat der Film Überlaenge?
+     * @param laenge die Länge in Minuten.
+     * @param fsk die Altersfreigabe für diesen Film.
+     * @param ueberlaenge hat der Film Überlänge?
+     * @param is3D Ist dieser Film in 3D?
      * 
      * @require titel != null
      * @require laenge > 0
@@ -32,8 +34,9 @@ public class Film
      * @ensure getLaenge() == laenge
      * @ensure getFSK() == fsk
      * @ensure hatUeberlaenge() == ueberlaenge
+     * @ensure is3D() == 3D
      */
-    public Film(String titel, int laenge, FSK fsk, boolean ueberlaenge)
+    public Film(String titel, int laenge, FSK fsk, boolean ueberlaenge, boolean is3D)
     {
         assert titel != null : "Vorbedingung verletzt: titel != null";
         assert laenge > 0 : "Vorbedingung verletzt: laenge > 0";
@@ -43,6 +46,7 @@ public class Film
         _laenge = laenge;
         _fsk = fsk;
         _ueberlaenge = ueberlaenge;
+        _3D = is3D;
     }
 
     /**
@@ -79,6 +83,14 @@ public class Film
     public boolean hatUeberlaenge()
     {
         return _ueberlaenge;
+    }
+    
+    /**
+     * Gibt zurück. ob dieser Film in 3D ist.
+     */
+    public boolean is3D()
+    {
+        return _3D;
     }
 
     @Override

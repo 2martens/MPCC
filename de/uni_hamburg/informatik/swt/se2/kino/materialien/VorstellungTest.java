@@ -15,6 +15,7 @@ import org.junit.Test;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.FSK;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Platz;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
 
 public class VorstellungTest
@@ -24,20 +25,22 @@ public class VorstellungTest
     private Uhrzeit _16_45 = new Uhrzeit(16, 45);
     private Uhrzeit _20_15 = new Uhrzeit(20, 15);
     private Datum _11_07_2008 = new Datum(11, 07, 2008);
+    private Reinigungszeit _reinigungszeit = new Reinigungszeit(10);
+    private Werbeblock _werbeblock = new Werbeblock(30, FSK.FSK12);
 
     @Before
     public void setUp()
     {
-        _kinoA = new Kinosaal("A", 20, 50);
-        _hdR1 = new Film("Der Herr der Ringe - Die Gefhrten", 178, FSK.FSK12,
-                true);
+        _kinoA = new Kinosaal("A", 20, 50, _reinigungszeit);
+        _hdR1 = new Film("Der Herr der Ringe - Die Gefährten", 178, FSK.FSK12,
+                true, false);
     }
 
     @Test
     public void testeKonstruktor()
     {
         Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
-                _11_07_2008, 1230);
+                _11_07_2008, 1230, _reinigungszeit, _werbeblock);
 
         assertSame(_kinoA, v.getKinosaal());
         assertSame(_hdR1, v.getFilm());
@@ -45,7 +48,27 @@ public class VorstellungTest
         assertEquals(_20_15, v.getEndzeit());
         assertEquals(_11_07_2008, v.getDatum());
         assertEquals(1230, v.getPreis());
+        assertSame(_reinigungszeit, v.getReinigungszeit());
+        assertSame(_werbeblock, v.getWerbeblock());
         assertNotNull(v.toString());
+    }
+    
+    @Test
+    public void testSetReinigungszeit()
+    {
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
+                _11_07_2008, 1230);
+        v.setReinigungszeit(_reinigungszeit);
+        assertSame(_reinigungszeit, v.getReinigungszeit());
+    }
+    
+    @Test
+    public void testSetWerbeblock()
+    {
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
+                _11_07_2008, 1230);
+        v.setWerbeblock(_werbeblock);
+        assertSame(_werbeblock, v.getWerbeblock());
     }
 
     @Test
