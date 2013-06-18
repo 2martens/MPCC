@@ -237,6 +237,35 @@ public final class Woche
     }
     
     /**
+     * Gibt eine String-Repräsentation dieser Woche zurück.
+     * 
+     * @ensure result != null
+     */
+    @Override
+    public String toString()
+    {
+        return getFormatiertenString();
+    }
+    
+    /**
+     * Gibt diese Woche zurück in der Schreibweise Startdatum - Enddatum.
+     * 
+     * @ensure result != null
+     */
+    public String getFormatiertenString()
+    {
+        StringBuilder sb = new StringBuilder();
+        Datum startDatum = _wochentage.get(0).getDatum();
+        Datum endDatum = _wochentage.get(6).getDatum();
+        
+        sb.append(startDatum.getFormatiertenString());
+        sb.append(" - ");
+        sb.append(endDatum.getFormatiertenString());
+        
+        return sb.toString();
+    }
+    
+    /**
      * Erzeugt eine Woche, startend von dem gegebenen Datum.
      * 
      * @param startDatum Das Startdatum.
