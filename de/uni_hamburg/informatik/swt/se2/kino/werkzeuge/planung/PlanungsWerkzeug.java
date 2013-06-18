@@ -35,12 +35,17 @@ public class PlanungsWerkzeug implements Observer
         _kinosaalAuswaehlWerkzeug = new KinosaalAuswaehlWerkzeug(_kino);
         _wochenplanWerkzeug = new WochenplanWerkzeug(_kino);
         
+        _wochenAuswaehlWerkzeug.addObserver(this);
+        _kinosaalAuswaehlWerkzeug.addObserver(this);
+        
         _ui = new PlanungsWerkzeugUI(
             _wochenplanWerkzeug.getUIPanel(), 
             _wochenAuswaehlWerkzeug.getUIPanel(), 
             _kinosaalAuswaehlWerkzeug.getUIPanel()
         );
         
+        _wochenplanWerkzeug.setWoche(_wochenAuswaehlWerkzeug.getSelektierteWoche());
+        _wochenplanWerkzeug.setKinosaal(_kinosaalAuswaehlWerkzeug.getAusgewaehlterKinosaal());
     }
     
     /**
