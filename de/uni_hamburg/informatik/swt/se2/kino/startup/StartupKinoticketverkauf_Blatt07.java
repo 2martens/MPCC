@@ -10,7 +10,7 @@ import de.uni_hamburg.informatik.swt.se2.kino.materialien.Film;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kino;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
-import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.kasse.KassenWerkzeug;
+import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.hauptwerkzeug.KinoWerkzeug;
 
 /**
  * Startet die Anwendung.
@@ -33,7 +33,7 @@ public class StartupKinoticketverkauf_Blatt07
             @Override
             public void run()
             {
-                new KassenWerkzeug(kino);
+                new KinoWerkzeug(kino);
             }
         });
     }
