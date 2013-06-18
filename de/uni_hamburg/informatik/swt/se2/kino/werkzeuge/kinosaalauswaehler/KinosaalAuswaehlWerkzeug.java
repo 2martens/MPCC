@@ -29,9 +29,13 @@ public class KinosaalAuswaehlWerkzeug extends Observable
      * Initialisiert das Werkzeug.
      * 
      * @param kino Das Kino, für das die Kinosäle zur Auswahl stehen.
+     * 
+     * @require kino != null
      */
     public KinosaalAuswaehlWerkzeug(Kino kino)
     {
+        assert kino != null : "Vorbedingung verletzt: kino != null";
+        
         _ui = new KinosaalAuswaehlWerkzeugUI();
         _kino = kino;
         initialisiereAngezeigteKinosaalListe(_kino.getKinosaele());
