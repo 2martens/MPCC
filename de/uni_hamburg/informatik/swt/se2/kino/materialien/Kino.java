@@ -107,17 +107,32 @@ public class Kino
      * @param saal
      * @param woche
      * 
-     * @require hatKinosaal(saal)
-     * @require woche != null
+     * @require istWochenplanVorhanden(saal, woche)
      * 
      * @ensure result != null
      */
     public Wochenplan getWochenplan(Kinosaal saal, Woche woche)
     {
+        assert istWochenplanVorhanden(saal, woche) : "Vorbedingung verletzt: istWochenplanVorhanden(saal, woche)";
+        
+        return _wochenplaene.get(saal).get(woche);
+    }
+    
+    /**
+     * Prüft, ob der Wochenplan für die angegebenen Kriterien vorhanden ist.
+     * 
+     * @param saal
+     * @param woche
+     * 
+     * @require hatKinosaal(saal)
+     * @require woche != null
+     */
+    public boolean istWochenplanVorhanden(Kinosaal saal, Woche woche)
+    {
         assert hatKinosaal(saal) : "Vorbedingung verletzt: hatKinosaal(saal)";
         assert woche != null : "Vorbedingung verletzt: woche != null";
         
-        return _wochenplaene.get(saal).get(woche);
+        return _wochenplaene.get(saal).get(woche) != null;
     }
     
     /**
