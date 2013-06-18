@@ -65,10 +65,10 @@ public final class Woche
         {
             CALENDAR.clear();
             CALENDAR.setTimeInMillis(System.currentTimeMillis());
-            CALENDAR.setFirstDayOfWeek(Calendar.MONDAY);
+            CALENDAR.setFirstDayOfWeek(Calendar.THURSDAY);
             int dayOfWeek = CALENDAR.get(Calendar.DAY_OF_WEEK);
             // CALENDAR-Konstanten handeln
-            if (dayOfWeek == 1)
+            if (dayOfWeek < CALENDAR.getFirstDayOfWeek())
             {
                 dayOfWeek += 7;
             }
@@ -101,10 +101,10 @@ public final class Woche
         {
             CALENDAR.clear();
             CALENDAR.set(datum.getJahr(), datum.getMonat()-1, datum.getTag());
-            CALENDAR.setFirstDayOfWeek(Calendar.MONDAY);
+            CALENDAR.setFirstDayOfWeek(Calendar.THURSDAY);
             int dayOfWeek = CALENDAR.get(Calendar.DAY_OF_WEEK);
             // CALENDAR-Konstanten handeln
-            if (dayOfWeek == 1)
+            if (dayOfWeek < CALENDAR.getFirstDayOfWeek())
             {
                 dayOfWeek += 7;
             }
