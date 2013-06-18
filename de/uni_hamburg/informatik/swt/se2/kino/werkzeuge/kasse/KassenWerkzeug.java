@@ -1,9 +1,9 @@
 package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.kasse;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
+
+import javax.swing.JPanel;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kino;
@@ -61,26 +61,18 @@ public class KassenWerkzeug implements Observer
                 _datumAuswaehlWerkzeug.getUIPanel(),
                 _vorstellungAuswaehlWerkzeug.getUIPanel());
 
-        registriereUIAktionen();
         setzeTagesplanFuerAusgewaehltesDatum();
         setzeAusgewaehlteVorstellung();
-
-        _ui.zeigeFenster();
     }
-
+    
     /**
-     * Fügt die Funktionalitat zum Beenden-Button hinzu.
+     * Gibt das Haupt-Panel der UI zurück.
+     * 
+     * @ensure result != null
      */
-    private void registriereUIAktionen()
+    public JPanel getUIPanel()
     {
-        _ui.getBeendenButton().addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                reagiereAufBeendenButton();
-            }
-        });
+        return _ui.getUIPanel();
     }
 
     /**
@@ -99,14 +91,6 @@ public class KassenWerkzeug implements Observer
     private void setzeAusgewaehlteVorstellung()
     {
         _platzVerkaufsWerkzeug.setVorstellung(getAusgewaehlteVorstellung());
-    }
-
-    /**
-     * Beendet die Anwendung.
-     */
-    private void reagiereAufBeendenButton()
-    {
-        _ui.schliesseFenster();
     }
 
     /**

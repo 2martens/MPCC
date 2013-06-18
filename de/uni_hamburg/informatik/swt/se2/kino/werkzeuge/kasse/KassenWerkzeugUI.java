@@ -1,18 +1,11 @@
 package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.kasse;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.SwingConstants;
 
 /**
  * Das UI des {@link KassenWerkzeug}.
@@ -29,8 +22,7 @@ class KassenWerkzeugUI
      */
 
     // Die Widgets, aus denen das UI sich zusammensetzt
-    private JFrame _frame;
-    private JButton _beendenButton;
+    private JPanel _hauptPanel;
 
     /**
      * Initialisert die Oberfläche. Die Parameter sind die UIs der Subwerkzeuge,
@@ -39,38 +31,24 @@ class KassenWerkzeugUI
     public KassenWerkzeugUI(JPanel platzVerkaufsPanel,
             JPanel datumAuswaehlPanel, JPanel vorstellungAuswaehlPanel)
     {
-        _frame = new JFrame("SE2-Kinokartenverkauf Blatt 07");
-        _frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        _frame.getContentPane().setLayout(new BorderLayout());
-
-        JComponent topPanel = erstelleUeberschriftPanel();
+        _hauptPanel = new JPanel();
         JComponent leftPanel = erstelleVorstellungsauswahlPanel(
                 datumAuswaehlPanel, vorstellungAuswaehlPanel);
         JComponent rightPanel = platzVerkaufsPanel;
-        JComponent bottomPanel = erstelleBeendenPanel();
 
         JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 leftPanel, rightPanel);
-        _frame.getContentPane().add(splitter, BorderLayout.CENTER);
-        _frame.getContentPane().add(topPanel, BorderLayout.NORTH);
-        _frame.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
+        _hauptPanel.add(splitter, BorderLayout.CENTER);
     }
-
+    
     /**
-     * Zeigt das Fenster an.
+     * Gibt das Haupt-Panel der UI zurück.
+     * 
+     * @ensure result != null
      */
-    public void zeigeFenster()
+    public JPanel getUIPanel()
     {
-        _frame.setSize(1200, 900);
-        _frame.setVisible(true);
-    }
-
-    /**
-     * Schließt das Fenster.
-     */
-    public void schliesseFenster()
-    {
-        _frame.dispose();
+        return _hauptPanel;
     }
 
     /**
@@ -95,46 +73,5 @@ class KassenWerkzeugUI
         leftPanel.add(vorstellungAuswaehlPanel, BorderLayout.CENTER);
 
         return leftPanel;
-    }
-
-    /**
-     * Erzeugt das Panel mit der Überschrift fuer das Programm.
-     */
-    private JPanel erstelleUeberschriftPanel()
-    {
-        JPanel topPanel = new JPanel();
-        JLabel label = new JLabel("SE2-Kinokartenverkauf",
-                SwingConstants.CENTER);
-
-        Font font = label.getFont().deriveFont(Font.BOLD + Font.ITALIC, 20);
-        label.setFont(font);
-        label.setForeground(Color.blue);
-
-        topPanel.setLayout(new BorderLayout());
-        topPanel.add(label, BorderLayout.CENTER);
-
-        return topPanel;
-    }
-
-    /**
-     * Erzeugt das Panel mit dem Beenden-Button.
-     */
-    private JPanel erstelleBeendenPanel()
-    {
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
-        bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        _beendenButton = new JButton("Beenden");
-        bottomPanel.add(_beendenButton);
-
-        return bottomPanel;
-    }
-
-    /**
-     * Gibt den Beenden-Button zurück.
-     */
-    public JButton getBeendenButton()
-    {
-        return _beendenButton;
     }
 }
