@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  * Die GUI für {@link PlanungsWerkzeug}.
@@ -75,7 +76,8 @@ class PlanungsWerkzeugUI
         panel.setLayout(new BorderLayout());
         setNoSize(panel);
         panel.add(_wochenAuswaehlPanel, BorderLayout.NORTH);
-        panel.add(_wochenplanPanel, BorderLayout.CENTER);
+        JScrollPane wochenplanScrollPane = new JScrollPane(_wochenplanPanel);
+        panel.add(wochenplanScrollPane, BorderLayout.CENTER);
         return panel;
     }
     
