@@ -102,6 +102,6 @@ public class StartupKinoticketverkauf_Blatt07
                 new Vorstellung(saele[2], filme[3], abend, spaet, d3, 1000),
                 new Vorstellung(saele[2], filme[4], spaet, nacht, d3, 900) };
 
-        return new Kino(saele, vorstellungen);
+        return new Kino(saele, vorstellungen, filme);
     }
 }
