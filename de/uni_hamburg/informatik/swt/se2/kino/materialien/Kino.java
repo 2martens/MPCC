@@ -23,28 +23,42 @@ public class Kino
     // Die Vorstellungspläne, sortiert nach Tagen.
     private SortedMap<Datum, Tagesplan> _tagesplaene;
     private Map<Kinosaal,Map<Woche,Wochenplan>> _wochenplaene;
+    
+    // Die verfügbaren Filme
+    private List<Film> _filme;
 
     /**
      * Initialisiert ein Kino.
      * 
      * @param saele die Kinosäle des Kinos.
      * @param vorstellungen die Vorstellungen, die in dem Kino laufen.
+     * @param filme die Filme, die zur Verfügung stehen
      * 
      * @require saele != null
      * @require vorstellungen != null
+     * @require filme != null
      * @require saele enthaelt keine Nullpointer
      * @require vorstellungen enthaelt keine Nullpointer
+     * @require filme enthaelt keine Nullpointer
      * @require alle Vorstellungen laufen in uebergebenen Kinosälen
      * @require alle Vorstellungen fangen zu unterschiedlichen Zeiten an
      */
-    public Kino(Kinosaal[] saele, Vorstellung[] vorstellungen)
+    public Kino(Kinosaal[] saele, Vorstellung[] vorstellungen, Film[] filme)
     {
         assert saele != null : "Vorbedingung verletzt: saele != null";
         assert vorstellungen != null : "Vorbedingung verletzt: vorstellungen != null";
+        assert filme != null : "Vorbedingung verletzt: filme != null";
 
         _kinosaele = new ArrayList<Kinosaal>(saele.length);
         _tagesplaene = new TreeMap<Datum, Tagesplan>();
         _wochenplaene = new HashMap<Kinosaal,Map<Woche,Wochenplan>>(3);
+        _filme = new ArrayList<Film>(filme.length);
+        
+        for (Film film : filme)
+        {
+            assert film != null : "Vorbedingung verletzt: filme enthaelt keine Nullpointer";
+            _filme.add(film);
+        }
 
         for (Kinosaal saal : saele)
         {
@@ -155,6 +169,16 @@ public class Kino
         assert wochenplan != null : "Vorbedingung verletzt: wochenplan != null";
         
         _wochenplaene.get(saal).put(woche, wochenplan);
+    }
+    
+    /**
+     * Gibt die Liste der aktuell verfügbaren Filme zurück.
+     * 
+     * @ensure result != null
+     */
+    public List<Film> getFilme()
+    {
+        return new ArrayList<Film>(_filme);
     }
 
     /**

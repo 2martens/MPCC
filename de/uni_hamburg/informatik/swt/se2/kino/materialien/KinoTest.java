@@ -28,6 +28,7 @@ public class KinoTest
     private Film _film0;
     private Film _film1;
     private Film _film2;
+    private Film[] _alleFilme;
     private String _filmTitel0;
     private String _filmTitel1;
     private String _filmTitel2;
@@ -94,7 +95,9 @@ public class KinoTest
         _alleVorstellungen = new Vorstellung[] { _vorstellungSaal1Film0,
                 _vorstellungSaal2Film1, _vorstellungSaal2Film2a,
                 _vorstellungSaal2Film2b };
-        _kino = new Kino(_alleSaele, _alleVorstellungen);
+        
+        _alleFilme = new Film[] {_film0, _film1, _film2};
+        _kino = new Kino(_alleSaele, _alleVorstellungen, _alleFilme);
     }
 
     @Test
