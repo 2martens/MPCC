@@ -20,12 +20,13 @@ public class TagesplanTest
     private static final Kinosaal _kinosaal = new Kinosaal("Saal 1", 1, 1, _reinigungszeit);
     private static final Kinosaal _kinosaal2 = new Kinosaal("Saal 2", 1, 1, _reinigungszeit);
     private static final Uhrzeit _startzeit = new Uhrzeit(0, 0);
-    private static final Uhrzeit _startzeit2 = new Uhrzeit(0, 1);
+    private static final Uhrzeit _startzeit2 = new Uhrzeit(2, 0);
     private static final Uhrzeit _endzeit = new Uhrzeit(1, 1);
+    private static final Uhrzeit _endzeit2 = new Uhrzeit(3, 1);
     private static final Vorstellung _vorstellung = new Vorstellung(_kinosaal,
             _film, _startzeit, _endzeit, _datum, 0);
     private static final Vorstellung _vorstellung2 = new Vorstellung(_kinosaal,
-            _film, _startzeit2, _endzeit, _datum, 0);
+            _film, _startzeit2, _endzeit2, _datum, 0);
     private static final Vorstellung _vorstellung3 = new Vorstellung(
             _kinosaal2, _film, _startzeit2, _endzeit, _datum, 0);
 
