@@ -24,11 +24,12 @@ import de.uni_hamburg.informatik.swt.se2.kino.materialien.Werbeblock;
  * Mit diesem Werkzeug können Vorstellungen bearbeitet werden.
  * 
  * Das Kontextwerkzeug kann sich als Beobachter über Änderungen bezüglich
- * <code>Vorstellung-create</code> (Vorstellung erzeugt), <code>Vorstellung-remove</code> (Vorstellung entfernt), 
- * <code>FSK</code> (Werbeblock-FSK geändert) und
- * <code>Werbeblockdauer</code> (Werbeblockdauer verändert) informieren. 
+ * <code>Vorstellung-create</code> (Vorstellung erzeugt),
+ * <code>Vorstellung-remove</code> (Vorstellung entfernt) und
+ * <code>Filmauswahl</code> (Filmauswahl geändert) informieren.
  * 
- * Diese Schlüsselwerte werden im zweiten Parameter als String der update-Methode übergeben.
+ * Diese Schlüsselwerte werden im zweiten Parameter als String der
+ * update-Methode übergeben.
  * 
  * @author Jim Martens
  * @version 19.06.2013
@@ -47,13 +48,15 @@ public class VorstellungWerkzeug extends Observable
     /**
      * Initialisiert das Werkzeug.
      * 
-     * @param filme Eine Liste aller verfügbaren Filme.
+     * @param filme
+     *            Eine Liste aller verfügbaren Filme.
      * @param kinosaalReinigungszeit
      * 
      * @require !filme.isEmpty()
      * @require kinosaalReinigungszeit != null
      */
-    public VorstellungWerkzeug(List<Film> filme, Reinigungszeit kinosaalReinigungszeit)
+    public VorstellungWerkzeug(List<Film> filme,
+            Reinigungszeit kinosaalReinigungszeit)
     {
         assert !filme.isEmpty() : "Vorbedingung verletzt: !filme.isEmpty()";
         assert kinosaalReinigungszeit != null : "Vorbedingung verletzt: kinosaalReinigungszeit != null";
@@ -63,8 +66,9 @@ public class VorstellungWerkzeug extends Observable
         
         _werbeblockMinuten = 0;
         _werbeblockFSK = FSK.FSK0;
-        _selectedFilm = null;
-        initialisiereFilmBox(filme);
+        _selectedFilm = filme.get(0);
+        initGUI(filme);
+        
         registriereUIAktionen();
     }
     
@@ -72,18 +76,27 @@ public class VorstellungWerkzeug extends Observable
      * Setzt die Vorstellung.
      * 
      * @param vorstellung
+     *            Die zu setzende Vorstellung (auch <code>null</code>).
      * 
-     * @require vorstellung != null
      */
     public void setVorstellung(Vorstellung vorstellung)
     {
-        assert vorstellung != null : "Vorbedingung verletzt: vorstellung != null";
         _vorstellung = vorstellung;
         aktualisiereUI();
     }
     
     /**
+     * Gibt die aktuelle Vorstellung zurück.
+     */
+    public Vorstellung getVorstellung()
+    {
+        return _vorstellung;
+    }
+    
+    /**
      * Gibt den aktuell ausgewählten Film zurück.
+     * 
+     * @ensure result != null
      */
     public Film getSelectedFilm()
     {
@@ -115,6 +128,17 @@ public class VorstellungWerkzeug extends Observable
     }
     
     /**
+     * Initialisiert die GUI.
+     * 
+     * @param filme
+     */
+    private void initGUI(List<Film> filme)
+    {
+        initialisiereFilmBox(filme);
+        _ui.getVorstellungGruppe().hide();
+    }
+    
+    /**
      * Initialisiert die Film-Box.
      * 
      * @param filme
@@ -139,22 +163,31 @@ public class VorstellungWerkzeug extends Observable
      */
     private void aktualisiereUI()
     {
-        // Film aktualisieren
-        Film film = _vorstellung.getFilm();
-        JComboBox<FilmFormatierer> filmBox = _ui.getFilmBox();
-        
-        for (int i = 0; i < filmBox.getItemCount(); i++)
+        if (_vorstellung != null)
         {
-            FilmFormatierer formatierer = filmBox.getItemAt(i);
-            if (formatierer.getFilm().equals(film))
+            _ui.getVorstellungCheckBox().setSelected(true);
+            
+            // Film aktualisieren
+            Film film = _vorstellung.getFilm();
+            JComboBox<FilmFormatierer> filmBox = _ui.getFilmBox();
+            
+            for (int i = 0; i < filmBox.getItemCount(); i++)
             {
-                filmBox.setSelectedItem(formatierer);
-                break;
+                FilmFormatierer formatierer = filmBox.getItemAt(i);
+                if (formatierer.getFilm().equals(film))
+                {
+                    filmBox.setSelectedItem(formatierer);
+                    break;
+                }
             }
+            aktualisiereFSKBox();
+            aktualisiereWerbeblockMinuten();
+            aktualisiereReinigungszeit();
         }
-        aktualisiereFSKBox();
-        aktualisiereWerbeblockMinuten();
-        aktualisiereReinigungszeit();
+        else
+        {
+            _ui.getVorstellungCheckBox().setSelected(false);
+        }
     }
     
     /**
@@ -180,26 +213,27 @@ public class VorstellungWerkzeug extends Observable
             }
         });
         
-        _ui.getWerbeblockMinutenInput().getDocument().addDocumentListener(new DocumentListener()
-        {
-            @Override
-            public void insertUpdate(DocumentEvent e)
-            {
-                werbeblockDauerGeaendert();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e)
-            {
-                werbeblockDauerGeaendert();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e)
-            {
-                werbeblockDauerGeaendert();
-            }
-        });
+        _ui.getWerbeblockMinutenInput().getDocument()
+                .addDocumentListener(new DocumentListener()
+                {
+                    @Override
+                    public void insertUpdate(DocumentEvent e)
+                    {
+                        werbeblockDauerGeaendert();
+                    }
+                    
+                    @Override
+                    public void removeUpdate(DocumentEvent e)
+                    {
+                        werbeblockDauerGeaendert();
+                    }
+                    
+                    @Override
+                    public void changedUpdate(DocumentEvent e)
+                    {
+                        werbeblockDauerGeaendert();
+                    }
+                });
         
         _ui.getVorstellungCheckBox().addItemListener(new ItemListener()
         {
@@ -232,9 +266,9 @@ public class VorstellungWerkzeug extends Observable
                 {
                     reinigungszeitEntfernen();
                 }
-            }            
+            }
         });
-    
+        
     }
     
     /**
@@ -266,8 +300,17 @@ public class VorstellungWerkzeug extends Observable
             FSKFormatierer selectedFormatierer = (FSKFormatierer) selected;
             _werbeblockFSK = selectedFormatierer.getFSK();
         }
-        setChanged();
-        notifyObservers("FSK");
+        if (_werbeblockMinuten == 0 && _vorstellung.hatWerbeblock())
+        {
+            _vorstellung.entferneWerbeblock();
+        }
+        else if (_werbeblockMinuten > 0)
+        {
+            Werbeblock werbeblock = new Werbeblock(_werbeblockMinuten,
+                    _werbeblockFSK);
+            _vorstellung.setWerbeblock(werbeblock);
+        }
+        
     }
     
     /**
@@ -278,8 +321,16 @@ public class VorstellungWerkzeug extends Observable
         JTextField werbeblockMinuten = _ui.getWerbeblockMinutenInput();
         String input = werbeblockMinuten.getText();
         _werbeblockMinuten = Integer.parseInt(input);
-        setChanged();
-        notifyObservers("Werbeblockdauer");
+        if (_werbeblockMinuten == 0 && _vorstellung.hatWerbeblock())
+        {
+            _vorstellung.entferneWerbeblock();
+        }
+        else if (_werbeblockMinuten > 0)
+        {
+            Werbeblock werbeblock = new Werbeblock(_werbeblockMinuten,
+                    _werbeblockFSK);
+            _vorstellung.setWerbeblock(werbeblock);
+        }
     }
     
     /**
@@ -317,8 +368,11 @@ public class VorstellungWerkzeug extends Observable
     private void aktualisiereWerbeblockMinuten()
     {
         JTextField werbeblockMinuten = _ui.getWerbeblockMinutenInput();
-        Werbeblock werbeblock = _vorstellung.getWerbeblock();
-        werbeblockMinuten.setText(String.valueOf(werbeblock.getLaenge()));
+        if (_vorstellung.hatWerbeblock())
+        {
+            Werbeblock werbeblock = _vorstellung.getWerbeblock();
+            werbeblockMinuten.setText(String.valueOf(werbeblock.getLaenge()));
+        }
     }
     
     /**
@@ -341,8 +395,11 @@ public class VorstellungWerkzeug extends Observable
      */
     private void erzeugeVorstellung()
     {
-        setChanged();
-        notifyObservers("Vorstellung-create");
+        if (_vorstellung == null)
+        {
+            setChanged();
+            notifyObservers("Vorstellung-create");
+        }
     }
     
     /**
@@ -350,9 +407,13 @@ public class VorstellungWerkzeug extends Observable
      */
     private void entferneVorstellung()
     {
-        _vorstellung = null;
-        setChanged();
-        notifyObservers("Vorstellung-remove");
+        if (_vorstellung != null)
+        {
+            setChanged();
+            notifyObservers("Vorstellung-remove");
+            
+            _vorstellung = null;
+        }
     }
     
     /**
