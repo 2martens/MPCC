@@ -228,4 +228,20 @@ public class VorstellungTest
         }
         assertEquals(30, v.getAnzahlVerkauftePlaetze());
     }
+    
+    @Test
+    public void testeEqualsUndHashCode()
+    {
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
+                _11_07_2008, 1230);
+        Vorstellung v1 = new Vorstellung(_kinoA, _hdR1, new Uhrzeit(16, 30), new Uhrzeit(20, 00),
+                _11_07_2008, 1230);
+        Vorstellung v2 = new Vorstellung(_kinoA, _hdR1, new Uhrzeit(20,00), new Uhrzeit(0, 0),
+                _11_07_2008, 1230);
+        
+        assertTrue(v.equals(v1));
+        assertTrue(v.equals(v));
+        assertFalse(v.equals(v2));
+        assertFalse(v1.equals(v2));
+    }
 }
