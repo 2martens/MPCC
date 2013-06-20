@@ -141,9 +141,10 @@ public class KinoTest
     {
         Woche woche = Woche.dieseWoche().letzteWoche();
         Wochenplan wochenplan = new Wochenplan(woche, _saal0);
-        assertFalse(wochenplan.equals(_kino.getWochenplan(_saal0, woche)));
+        assertFalse(_kino.istWochenplanVorhanden(_saal0, woche));
         _kino.setWochenplan(_saal0, woche, wochenplan);
         assertTrue(wochenplan.equals(_kino.getWochenplan(_saal0, woche)));
+        assertTrue(_kino.istWochenplanVorhanden(_saal0, woche));
     }
 
     @Test
