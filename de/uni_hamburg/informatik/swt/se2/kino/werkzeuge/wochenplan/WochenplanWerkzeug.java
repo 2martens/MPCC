@@ -3,15 +3,15 @@ package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.wochenplan;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Tag;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Woche;
-import de.uni_hamburg.informatik.swt.se2.kino.materialien.Film;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kino;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
+import de.uni_hamburg.informatik.swt.se2.kino.materialien.Tagesplan;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Wochenplan;
+import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.wochenplan.subwerkzeuge.tag.TagWerkzeug;
 
 /**
  * Mit diesem Werkzeug können Wochenpläne bearbeitet werden. Es können
@@ -29,36 +29,63 @@ public class WochenplanWerkzeug
     private Woche _woche;
     private Kino _kino;
     
+    private TagWerkzeug _donnerstagWerkzeug;
+    private TagWerkzeug _freitagWerkzeug;
+    private TagWerkzeug _samstagWerkzeug;
+    private TagWerkzeug _sonntagWerkzeug;
+    private TagWerkzeug _montagWerkzeug;
+    private TagWerkzeug _dienstagWerkzeug;
+    private TagWerkzeug _mittwochWerkzeug;
+    
     /**
      * Initialisiert dieses Werkzeug.
      * 
      * @param kino
+     * @param kinosaal
+     * @param woche
      * 
      * @require kino != null
+     * @require kinosaal != null
+     * @require woche != null
      */
-    public WochenplanWerkzeug(Kino kino)
+    public WochenplanWerkzeug(Kino kino, Kinosaal kinosaal, Woche woche)
     {
         assert kino != null : "Vorbedingung verletzt: kino != null";
+        assert kinosaal != null : "Vorbedingung verletzt: kinosaal != null";
+        assert woche != null : "Vorbedingung verletzt: woche != null";
         
-        _ui = new WochenplanWerkzeugUI();
         _kino = kino;
+        _woche = woche;
+        _kinosaal = kinosaal;
         
-        registriereUIAktionen();
-        _woche = null;
-        _kinosaal = null;
+        // Subwerkzeuge initialisieren
+        _donnerstagWerkzeug = new TagWerkzeug(_kino, _kinosaal);
+        _freitagWerkzeug = new TagWerkzeug(_kino, _kinosaal);
+        _samstagWerkzeug = new TagWerkzeug(_kino, _kinosaal);
+        _sonntagWerkzeug = new TagWerkzeug(_kino, _kinosaal);
+        _montagWerkzeug = new TagWerkzeug(_kino, _kinosaal);
+        _dienstagWerkzeug = new TagWerkzeug(_kino, _kinosaal);
+        _mittwochWerkzeug = new TagWerkzeug(_kino, _kinosaal);
+        
+        _ui = new WochenplanWerkzeugUI(_donnerstagWerkzeug.getUIPanel(),
+                _freitagWerkzeug.getUIPanel(), _samstagWerkzeug.getUIPanel(),
+                _sonntagWerkzeug.getUIPanel(), _montagWerkzeug.getUIPanel(),
+                _dienstagWerkzeug.getUIPanel(), _mittwochWerkzeug.getUIPanel());
+        
         aktualisiereWochenplan();
-        aktualisiereUI();
-        
-        initFilmListen();
     }
     
     /**
      * Setzt die Woche.
      * 
-     * @param woche Die zu setzende Woche (auch <code>null</code>).
+     * @param woche
+     *            Die zu setzende Woche.
+     * 
+     * @require woche != null
      */
     public void setWoche(Woche woche)
     {
+        assert woche != null : "Vorbedingung verletzt: woche != null";
         _woche = woche;
         aktualisiereWochenplan();
     }
@@ -66,14 +93,18 @@ public class WochenplanWerkzeug
     /**
      * Setzt den Kinosaal.
      * 
-     * @param woche Der zu setzende Kinosaal (auch <code>null</code>).
+     * @param kinosaal
+     *            Der zu setzende Kinosaal.
+     * 
+     * @require kinosaal != null
      */
     public void setKinosaal(Kinosaal kinosaal)
     {
+        assert kinosaal != null : "Vorbedingung verletzt: kinosaal != null";
         _kinosaal = kinosaal;
         aktualisiereWochenplan();
     }
-
+    
     /**
      * Gibt das Panel dieses Subwerkzeugs zurück. Das Panel sollte von einem
      * Kontextwerkzeug eingebettet werden.
@@ -112,7 +143,6 @@ public class WochenplanWerkzeug
     {
         if (_wochenplan != null)
         {
-            // TODO: UI die nötigen Infos übergeben
             // aktualisiere Datumsanzeigen
             List<Tag> tage = _woche.getWochentage();
             List<String> datumsTexte = new ArrayList<String>(7);
@@ -125,35 +155,35 @@ public class WochenplanWerkzeug
             datumsTexte.add(tage.get(6).getDatum().getFormatiertenString());
             _ui.aktualisiereDatumsLabel(datumsTexte);
             
-            
-        }    
-        else
-        {
-            // TODO: keine Veranstaltungen anzeigen
-        }
-    }
-    
-    /**
-     * Initialisiert die Filmlisten.
-     */
-    private void initFilmListen()
-    {
-        List<JComboBox<FilmFormatierer>> filmListen = _ui.getFilmListen();
-        for (Film film : _kino.getFilme())
-        {
-            FilmFormatierer formatierer = new FilmFormatierer(film);
-            for (JComboBox<FilmFormatierer> filmBox : filmListen)
+            // aktualisiere Subwerkzeug-UIs
+            for (Tag tag : tage)
             {
-                filmBox.addItem(formatierer);
+                Tagesplan tagesplan = _wochenplan.getTagesplan(tag.getDatum());
+                switch (tag.getWochentag())
+                {
+                    case DONNERSTAG:
+                        _donnerstagWerkzeug.setTagesplan(tagesplan);
+                        break;
+                    case FREITAG:
+                        _freitagWerkzeug.setTagesplan(tagesplan);
+                        break;
+                    case SAMSTAG:
+                        _samstagWerkzeug.setTagesplan(tagesplan);
+                        break;
+                    case SONNTAG:
+                        _sonntagWerkzeug.setTagesplan(tagesplan);
+                        break;
+                    case MONTAG:
+                        _montagWerkzeug.setTagesplan(tagesplan);
+                        break;
+                    case DIENSTAG:
+                        _dienstagWerkzeug.setTagesplan(tagesplan);
+                        break;
+                    case MITTWOCH:
+                        _mittwochWerkzeug.setTagesplan(tagesplan);
+                        break;
+                }
             }
         }
-    }
-
-    /**
-     * Registriert die UI-Aktionen.
-     */
-    private void registriereUIAktionen()
-    {
-        
     }
 }

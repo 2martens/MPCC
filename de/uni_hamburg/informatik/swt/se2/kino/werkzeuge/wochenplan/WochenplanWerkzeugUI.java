@@ -1,12 +1,9 @@
 package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.wochenplan;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import net.java.dev.designgridlayout.DesignGridLayout;
 
@@ -40,125 +37,14 @@ class WochenplanWerkzeugUI
     private JLabel _labelTag6;
     private JLabel _labelTag7;
     
-    // 15:00 Zeile
-    private JPanel _tag1Panel1500;
-    private JPanel _tag2Panel1500;
-    private JPanel _tag3Panel1500;
-    private JPanel _tag4Panel1500;
-    private JPanel _tag5Panel1500;
-    private JPanel _tag6Panel1500;
-    private JPanel _tag7Panel1500;
-    private JComboBox<FilmFormatierer> _tag1FilmBox1500;
-    private JComboBox<FilmFormatierer> _tag2FilmBox1500;
-    private JComboBox<FilmFormatierer> _tag3FilmBox1500;
-    private JComboBox<FilmFormatierer> _tag4FilmBox1500;
-    private JComboBox<FilmFormatierer> _tag5FilmBox1500;
-    private JComboBox<FilmFormatierer> _tag6FilmBox1500;
-    private JComboBox<FilmFormatierer> _tag7FilmBox1500;
-    private JTextField _tag1WerbeblockMin1500;
-    private JTextField _tag2WerbeblockMin1500;
-    private JTextField _tag3WerbeblockMin1500;
-    private JTextField _tag4WerbeblockMin1500;
-    private JTextField _tag5WerbeblockMin1500;
-    private JTextField _tag6WerbeblockMin1500;
-    private JTextField _tag7WerbeblockMin1500;
-    private JComboBox<FSKFormatierer> _tag1FSKBox1500;
-    private JComboBox<FSKFormatierer> _tag2FSKBox1500;
-    private JComboBox<FSKFormatierer> _tag3FSKBox1500;
-    private JComboBox<FSKFormatierer> _tag4FSKBox1500;
-    private JComboBox<FSKFormatierer> _tag5FSKBox1500;
-    private JComboBox<FSKFormatierer> _tag6FSKBox1500;
-    private JComboBox<FSKFormatierer> _tag7FSKBox1500;
-    
-    // 17:30 Zeile
-    private JPanel _tag1Panel1730;
-    private JPanel _tag2Panel1730;
-    private JPanel _tag3Panel1730;
-    private JPanel _tag4Panel1730;
-    private JPanel _tag5Panel1730;
-    private JPanel _tag6Panel1730;
-    private JPanel _tag7Panel1730;
-    private JComboBox<FilmFormatierer> _tag1FilmBox1730;
-    private JComboBox<FilmFormatierer> _tag2FilmBox1730;
-    private JComboBox<FilmFormatierer> _tag3FilmBox1730;
-    private JComboBox<FilmFormatierer> _tag4FilmBox1730;
-    private JComboBox<FilmFormatierer> _tag5FilmBox1730;
-    private JComboBox<FilmFormatierer> _tag6FilmBox1730;
-    private JComboBox<FilmFormatierer> _tag7FilmBox1730;
-    private JTextField _tag1WerbeblockMin1730;
-    private JTextField _tag2WerbeblockMin1730;
-    private JTextField _tag3WerbeblockMin1730;
-    private JTextField _tag4WerbeblockMin1730;
-    private JTextField _tag5WerbeblockMin1730;
-    private JTextField _tag6WerbeblockMin1730;
-    private JTextField _tag7WerbeblockMin1730;
-    private JComboBox<FSKFormatierer> _tag1FSKBox1730;
-    private JComboBox<FSKFormatierer> _tag2FSKBox1730;
-    private JComboBox<FSKFormatierer> _tag3FSKBox1730;
-    private JComboBox<FSKFormatierer> _tag4FSKBox1730;
-    private JComboBox<FSKFormatierer> _tag5FSKBox1730;
-    private JComboBox<FSKFormatierer> _tag6FSKBox1730;
-    private JComboBox<FSKFormatierer> _tag7FSKBox1730;
-    
-    // 20:00 Zeile
-    private JPanel _tag1Panel2000;
-    private JPanel _tag2Panel2000;
-    private JPanel _tag3Panel2000;
-    private JPanel _tag4Panel2000;
-    private JPanel _tag5Panel2000;
-    private JPanel _tag6Panel2000;
-    private JPanel _tag7Panel2000;
-    private JComboBox<FilmFormatierer> _tag1FilmBox2000;
-    private JComboBox<FilmFormatierer> _tag2FilmBox2000;
-    private JComboBox<FilmFormatierer> _tag3FilmBox2000;
-    private JComboBox<FilmFormatierer> _tag4FilmBox2000;
-    private JComboBox<FilmFormatierer> _tag5FilmBox2000;
-    private JComboBox<FilmFormatierer> _tag6FilmBox2000;
-    private JComboBox<FilmFormatierer> _tag7FilmBox2000;
-    private JTextField _tag1WerbeblockMin2000;
-    private JTextField _tag2WerbeblockMin2000;
-    private JTextField _tag3WerbeblockMin2000;
-    private JTextField _tag4WerbeblockMin2000;
-    private JTextField _tag5WerbeblockMin2000;
-    private JTextField _tag6WerbeblockMin2000;
-    private JTextField _tag7WerbeblockMin2000;
-    private JComboBox<FSKFormatierer> _tag1FSKBox2000;
-    private JComboBox<FSKFormatierer> _tag2FSKBox2000;
-    private JComboBox<FSKFormatierer> _tag3FSKBox2000;
-    private JComboBox<FSKFormatierer> _tag4FSKBox2000;
-    private JComboBox<FSKFormatierer> _tag5FSKBox2000;
-    private JComboBox<FSKFormatierer> _tag6FSKBox2000;
-    private JComboBox<FSKFormatierer> _tag7FSKBox2000;
-    
-    // 20:30 Zeile
-    private JPanel _tag1Panel2230;
-    private JPanel _tag2Panel2230;
-    private JPanel _tag3Panel2230;
-    private JPanel _tag4Panel2230;
-    private JPanel _tag5Panel2230;
-    private JPanel _tag6Panel2230;
-    private JPanel _tag7Panel2230;
-    private JComboBox<FilmFormatierer> _tag1FilmBox2230;
-    private JComboBox<FilmFormatierer> _tag2FilmBox2230;
-    private JComboBox<FilmFormatierer> _tag3FilmBox2230;
-    private JComboBox<FilmFormatierer> _tag4FilmBox2230;
-    private JComboBox<FilmFormatierer> _tag5FilmBox2230;
-    private JComboBox<FilmFormatierer> _tag6FilmBox2230;
-    private JComboBox<FilmFormatierer> _tag7FilmBox2230;
-    private JTextField _tag1WerbeblockMin2230;
-    private JTextField _tag2WerbeblockMin2230;
-    private JTextField _tag3WerbeblockMin2230;
-    private JTextField _tag4WerbeblockMin2230;
-    private JTextField _tag5WerbeblockMin2230;
-    private JTextField _tag6WerbeblockMin2230;
-    private JTextField _tag7WerbeblockMin2230;
-    private JComboBox<FSKFormatierer> _tag1FSKBox2230;
-    private JComboBox<FSKFormatierer> _tag2FSKBox2230;
-    private JComboBox<FSKFormatierer> _tag3FSKBox2230;
-    private JComboBox<FSKFormatierer> _tag4FSKBox2230;
-    private JComboBox<FSKFormatierer> _tag5FSKBox2230;
-    private JComboBox<FSKFormatierer> _tag6FSKBox2230;
-    private JComboBox<FSKFormatierer> _tag7FSKBox2230;
+    // Panel der Subwerkzeuge
+    private JPanel _panelTag1;
+    private JPanel _panelTag2;
+    private JPanel _panelTag3;
+    private JPanel _panelTag4;
+    private JPanel _panelTag5;
+    private JPanel _panelTag6;
+    private JPanel _panelTag7;
     
     // Konstanten für Wochentage
     private static final String MONTAG = "Montag";
@@ -171,9 +57,50 @@ class WochenplanWerkzeugUI
     
     /**
      * Initialisiert die UI.
+     * 
+     * @param panelTag1
+     *            Das UI-Panel des ersten Tages.
+     * @param panelTag2
+     *            Das UI-Panel des zweiten Tages.
+     * @param panelTag3
+     *            Das UI-Panel des dritten Tages.
+     * @param panelTag4
+     *            Das UI-Panel des vierten Tages.
+     * @param panelTag5
+     *            Das UI-Panel des fünften Tages.
+     * @param panelTag6
+     *            Das UI-Panel des sechsten Tages.
+     * @param panelTag7
+     *            Das UI-Panel des siebten Tages.
+     * 
+     * @require panelTag1 != null
+     * @require panelTag2 != null
+     * @require panelTag3 != null
+     * @require panelTag4 != null
+     * @require panelTag5 != null
+     * @require panelTag6 != null
+     * @require panelTag7 != null
      */
-    public WochenplanWerkzeugUI()
+    public WochenplanWerkzeugUI(JPanel panelTag1, JPanel panelTag2,
+            JPanel panelTag3, JPanel panelTag4, JPanel panelTag5,
+            JPanel panelTag6, JPanel panelTag7)
     {
+        assert panelTag1 != null : "Vorbedingung verletzt: panelTag1 != null";
+        assert panelTag2 != null : "Vorbedingung verletzt: panelTag2 != null";
+        assert panelTag3 != null : "Vorbedingung verletzt: panelTag3 != null";
+        assert panelTag4 != null : "Vorbedingung verletzt: panelTag4 != null";
+        assert panelTag5 != null : "Vorbedingung verletzt: panelTag5 != null";
+        assert panelTag6 != null : "Vorbedingung verletzt: panelTag6 != null";
+        assert panelTag7 != null : "Vorbedingung verletzt: panelTag7 != null";
+        
+        _panelTag1 = panelTag1;
+        _panelTag2 = panelTag2;
+        _panelTag3 = panelTag3;
+        _panelTag4 = panelTag4;
+        _panelTag5 = panelTag5;
+        _panelTag6 = panelTag6;
+        _panelTag7 = panelTag7;
+        
         _hauptPanel = erstellePanel();
     }
     
@@ -207,46 +134,6 @@ class WochenplanWerkzeugUI
     }
     
     /**
-     * Gibt die Filmlisten zurück.
-     */
-    public List<JComboBox<FilmFormatierer>> getFilmListen()
-    {
-        List<JComboBox<FilmFormatierer>> list = new ArrayList<JComboBox<FilmFormatierer>>();
-        list.add(_tag1FilmBox1500);
-        list.add(_tag2FilmBox1500);
-        list.add(_tag3FilmBox1500);
-        list.add(_tag4FilmBox1500);
-        list.add(_tag5FilmBox1500);
-        list.add(_tag6FilmBox1500);
-        list.add(_tag7FilmBox1500);
-        
-        list.add(_tag1FilmBox1730);
-        list.add(_tag2FilmBox1730);
-        list.add(_tag3FilmBox1730);
-        list.add(_tag4FilmBox1730);
-        list.add(_tag5FilmBox1730);
-        list.add(_tag6FilmBox1730);
-        list.add(_tag7FilmBox1730);
-        
-        list.add(_tag1FilmBox2000);
-        list.add(_tag2FilmBox2000);
-        list.add(_tag3FilmBox2000);
-        list.add(_tag4FilmBox2000);
-        list.add(_tag5FilmBox2000);
-        list.add(_tag6FilmBox2000);
-        list.add(_tag7FilmBox2000);
-        
-        list.add(_tag1FilmBox2230);
-        list.add(_tag2FilmBox2230);
-        list.add(_tag3FilmBox2230);
-        list.add(_tag4FilmBox2230);
-        list.add(_tag5FilmBox2230);
-        list.add(_tag6FilmBox2230);
-        list.add(_tag7FilmBox2230);
-        return list;
-    }
-    
-    /**
      * Erstellt das Panel.
      */
     private JPanel erstellePanel()
@@ -257,12 +144,6 @@ class WochenplanWerkzeugUI
         // Label initialisieren
         erzeugeDatumsLabel();
         erzeugeWochentagsLabel();
-        
-        // Panel initialisieren
-        erzeuge1500Panel();
-        erzeuge1730Panel();
-        erzeuge2000Panel();
-        erzeuge2230Panel();
         
         // Datums-Zeile erstellen
         _layout.row()
@@ -276,511 +157,11 @@ class WochenplanWerkzeugUI
                 .add(_labelTag1, _labelTag2, _labelTag3, _labelTag4,
                         _labelTag5, _labelTag6, _labelTag7);
         
-        // 15:00 Uhr Zeile erstellen
         _layout.row()
-                .grid(new JLabel("15:00"))
-                .add(_tag1Panel1500, _tag2Panel1500, _tag3Panel1500,
-                        _tag4Panel1500, _tag5Panel1500, _tag6Panel1500,
-                        _tag7Panel1500);
-        
-        // 17:30 Uhr Zeile erstellen
-        _layout.row()
-                .grid(new JLabel("17:30"))
-                .add(_tag1Panel1730, _tag2Panel1730, _tag3Panel1730,
-                        _tag4Panel1730, _tag5Panel1730, _tag6Panel1730,
-                        _tag7Panel1730);
-        
-        // 20:00 Uhr Zeile erstellen
-        _layout.row()
-                .grid(new JLabel("20:00"))
-                .add(_tag1Panel2000, _tag2Panel2000, _tag3Panel2000,
-                        _tag4Panel2000, _tag5Panel2000, _tag6Panel2000,
-                        _tag7Panel2000);
-                        
-        // 22:30 Uhr Zeile erstellen
-        _layout.row()
-                .grid(new JLabel("22:30"))
-                .add(_tag1Panel2230, _tag2Panel2230, _tag3Panel2230,
-                        _tag4Panel2230, _tag5Panel2230, _tag6Panel2230,
-                        _tag7Panel2230);
+                .grid()
+                .add(_panelTag1, _panelTag2, _panelTag3,
+                        _panelTag4, _panelTag5, _panelTag6, _panelTag7);
         return panel;
-    }
-    
-    /**
-     * Erzeugt die 22:30 Uhr Panel.
-     */
-    private void erzeuge2230Panel()
-    {
-        erzeuge2230FilmBoxen();
-        erzeuge2230WerbeblockTextfelder();
-        erzeuge2230WerbeblockFSKBoxen();
-        
-        // Tag 1
-        _tag1Panel2230 = new JPanel();
-        DesignGridLayout gridLayout1 = new DesignGridLayout(_tag1Panel2230);
-        gridLayout1.row().grid(new JLabel("Film")).add(_tag1FilmBox2230);
-        gridLayout1
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag1WerbeblockMin2230,
-                        _tag1FSKBox2230);
-        // Tag 2
-        _tag2Panel2230 = new JPanel();
-        DesignGridLayout gridLayout2 = new DesignGridLayout(_tag2Panel2230);
-        gridLayout2.row().grid(new JLabel("Film")).add(_tag2FilmBox2230);
-        gridLayout2
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag2WerbeblockMin2230,
-                        _tag2FSKBox2230);
-        // Tag 3
-        _tag3Panel2230 = new JPanel();
-        DesignGridLayout gridLayout3 = new DesignGridLayout(_tag3Panel2230);
-        gridLayout3.row().grid(new JLabel("Film")).add(_tag3FilmBox2230);
-        gridLayout3
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag3WerbeblockMin2230,
-                        _tag3FSKBox2230);
-        
-        // Tag 4
-        _tag4Panel2230 = new JPanel();
-        DesignGridLayout gridLayout4 = new DesignGridLayout(_tag4Panel2230);
-        gridLayout4.row().grid(new JLabel("Film")).add(_tag4FilmBox2230);
-        gridLayout4
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag4WerbeblockMin2230,
-                        _tag4FSKBox2230);
-        
-        // Tag 5
-        _tag5Panel2230 = new JPanel();
-        DesignGridLayout gridLayout5 = new DesignGridLayout(_tag5Panel2230);
-        gridLayout5.row().grid(new JLabel("Film")).add(_tag5FilmBox2230);
-        gridLayout5
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag5WerbeblockMin2230,
-                        _tag5FSKBox2230);
-        // Tag 6
-        _tag6Panel2230 = new JPanel();
-        DesignGridLayout gridLayout6 = new DesignGridLayout(_tag6Panel2230);
-        gridLayout6.row().grid(new JLabel("Film")).add(_tag6FilmBox2230);
-        gridLayout6
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag6WerbeblockMin2230,
-                        _tag6FSKBox2230);
-        
-        // Tag 7
-        _tag7Panel2230 = new JPanel();
-        DesignGridLayout gridLayout7 = new DesignGridLayout(_tag7Panel2230);
-        gridLayout7.row().grid(new JLabel("Film")).add(_tag7FilmBox2230);
-        gridLayout7
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag7WerbeblockMin2230,
-                        _tag7FSKBox2230);
-    }
-    
-    /**
-     * Erzeugt die 20:00 Uhr Panel.
-     */
-    private void erzeuge2000Panel()
-    {
-        erzeuge2000FilmBoxen();
-        erzeuge2000WerbeblockTextfelder();
-        erzeuge2000WerbeblockFSKBoxen();
-        
-        // Tag 1
-        _tag1Panel2000 = new JPanel();
-        DesignGridLayout gridLayout1 = new DesignGridLayout(_tag1Panel2000);
-        gridLayout1.row().grid(new JLabel("Film")).add(_tag1FilmBox2000);
-        gridLayout1
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag1WerbeblockMin2000,
-                        _tag1FSKBox2000);
-        // Tag 2
-        _tag2Panel2000 = new JPanel();
-        DesignGridLayout gridLayout2 = new DesignGridLayout(_tag2Panel2000);
-        gridLayout2.row().grid(new JLabel("Film")).add(_tag2FilmBox2000);
-        gridLayout2
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag2WerbeblockMin2000,
-                        _tag2FSKBox2000);
-        // Tag 3
-        _tag3Panel2000 = new JPanel();
-        DesignGridLayout gridLayout3 = new DesignGridLayout(_tag3Panel2000);
-        gridLayout3.row().grid(new JLabel("Film")).add(_tag3FilmBox2000);
-        gridLayout3
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag3WerbeblockMin2000,
-                        _tag3FSKBox2000);
-        
-        // Tag 4
-        _tag4Panel2000 = new JPanel();
-        DesignGridLayout gridLayout4 = new DesignGridLayout(_tag4Panel2000);
-        gridLayout4.row().grid(new JLabel("Film")).add(_tag4FilmBox2000);
-        gridLayout4
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag4WerbeblockMin2000,
-                        _tag4FSKBox2000);
-        
-        // Tag 5
-        _tag5Panel2000 = new JPanel();
-        DesignGridLayout gridLayout5 = new DesignGridLayout(_tag5Panel2000);
-        gridLayout5.row().grid(new JLabel("Film")).add(_tag5FilmBox2000);
-        gridLayout5
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag5WerbeblockMin2000,
-                        _tag5FSKBox2000);
-        // Tag 6
-        _tag6Panel2000 = new JPanel();
-        DesignGridLayout gridLayout6 = new DesignGridLayout(_tag6Panel2000);
-        gridLayout6.row().grid(new JLabel("Film")).add(_tag6FilmBox2000);
-        gridLayout6
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag6WerbeblockMin2000,
-                        _tag6FSKBox2000);
-        
-        // Tag 7
-        _tag7Panel2000 = new JPanel();
-        DesignGridLayout gridLayout7 = new DesignGridLayout(_tag7Panel2000);
-        gridLayout7.row().grid(new JLabel("Film")).add(_tag7FilmBox2000);
-        gridLayout7
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag7WerbeblockMin2000,
-                        _tag7FSKBox2000);
-    }
-    
-    /**
-     * Erzeugt die 17:30 Uhr Panel.
-     */
-    private void erzeuge1730Panel()
-    {
-        erzeuge1730FilmBoxen();
-        erzeuge1730WerbeblockTextfelder();
-        erzeuge1730WerbeblockFSKBoxen();
-        
-        // Tag 1
-        _tag1Panel1730 = new JPanel();
-        DesignGridLayout gridLayout1 = new DesignGridLayout(_tag1Panel1730);
-        gridLayout1.row().grid(new JLabel("Film")).add(_tag1FilmBox1730);
-        gridLayout1
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag1WerbeblockMin1730,
-                        _tag1FSKBox1730);
-        // Tag 2
-        _tag2Panel1730 = new JPanel();
-        DesignGridLayout gridLayout2 = new DesignGridLayout(_tag2Panel1730);
-        gridLayout2.row().grid(new JLabel("Film")).add(_tag2FilmBox1730);
-        gridLayout2
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag2WerbeblockMin1730,
-                        _tag2FSKBox1730);
-        // Tag 3
-        _tag3Panel1730 = new JPanel();
-        DesignGridLayout gridLayout3 = new DesignGridLayout(_tag3Panel1730);
-        gridLayout3.row().grid(new JLabel("Film")).add(_tag3FilmBox1730);
-        gridLayout3
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag3WerbeblockMin1730,
-                        _tag3FSKBox1730);
-        
-        // Tag 4
-        _tag4Panel1730 = new JPanel();
-        DesignGridLayout gridLayout4 = new DesignGridLayout(_tag4Panel1730);
-        gridLayout4.row().grid(new JLabel("Film")).add(_tag4FilmBox1730);
-        gridLayout4
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag4WerbeblockMin1730,
-                        _tag4FSKBox1730);
-        
-        // Tag 5
-        _tag5Panel1730 = new JPanel();
-        DesignGridLayout gridLayout5 = new DesignGridLayout(_tag5Panel1730);
-        gridLayout5.row().grid(new JLabel("Film")).add(_tag5FilmBox1730);
-        gridLayout5
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag5WerbeblockMin1730,
-                        _tag5FSKBox1730);
-        // Tag 6
-        _tag6Panel1730 = new JPanel();
-        DesignGridLayout gridLayout6 = new DesignGridLayout(_tag6Panel1730);
-        gridLayout6.row().grid(new JLabel("Film")).add(_tag6FilmBox1730);
-        gridLayout6
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag6WerbeblockMin1730,
-                        _tag6FSKBox1730);
-        
-        // Tag 7
-        _tag7Panel1730 = new JPanel();
-        DesignGridLayout gridLayout7 = new DesignGridLayout(_tag7Panel1730);
-        gridLayout7.row().grid(new JLabel("Film")).add(_tag7FilmBox1730);
-        gridLayout7
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag7WerbeblockMin1730,
-                        _tag7FSKBox1730);
-    }
-    
-    /**
-     * Erzeugt die 15:00 Panel.
-     * TODO: Reinigungszeit
-     */
-    private void erzeuge1500Panel()
-    {
-        erzeuge1500FilmBoxen();
-        erzeuge1500WerbeblockTextfelder();
-        erzeuge1500WerbeblockFSKBoxen();
-        
-        // Tag 1
-        _tag1Panel1500 = new JPanel();
-        DesignGridLayout gridLayout1 = new DesignGridLayout(_tag1Panel1500);
-        gridLayout1.row().grid(new JLabel("Film")).add(_tag1FilmBox1500);
-        gridLayout1
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag1WerbeblockMin1500,
-                        _tag1FSKBox1500);
-        // Tag 2
-        _tag2Panel1500 = new JPanel();
-        DesignGridLayout gridLayout2 = new DesignGridLayout(_tag2Panel1500);
-        gridLayout2.row().grid(new JLabel("Film")).add(_tag2FilmBox1500);
-        gridLayout2
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag2WerbeblockMin1500,
-                        _tag2FSKBox1500);
-        // Tag 3
-        _tag3Panel1500 = new JPanel();
-        DesignGridLayout gridLayout3 = new DesignGridLayout(_tag3Panel1500);
-        gridLayout3.row().grid(new JLabel("Film")).add(_tag3FilmBox1500);
-        gridLayout3
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag3WerbeblockMin1500,
-                        _tag3FSKBox1500);
-        
-        // Tag 4
-        _tag4Panel1500 = new JPanel();
-        DesignGridLayout gridLayout4 = new DesignGridLayout(_tag4Panel1500);
-        gridLayout4.row().grid(new JLabel("Film")).add(_tag4FilmBox1500);
-        gridLayout4
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag4WerbeblockMin1500,
-                        _tag4FSKBox1500);
-        
-        // Tag 5
-        _tag5Panel1500 = new JPanel();
-        DesignGridLayout gridLayout5 = new DesignGridLayout(_tag5Panel1500);
-        gridLayout5.row().grid(new JLabel("Film")).add(_tag5FilmBox1500);
-        gridLayout5
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag5WerbeblockMin1500,
-                        _tag5FSKBox1500);
-        // Tag 6
-        _tag6Panel1500 = new JPanel();
-        DesignGridLayout gridLayout6 = new DesignGridLayout(_tag6Panel1500);
-        gridLayout6.row().grid(new JLabel("Film")).add(_tag6FilmBox1500);
-        gridLayout6
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag6WerbeblockMin1500,
-                        _tag6FSKBox1500);
-        
-        // Tag 7
-        _tag7Panel1500 = new JPanel();
-        DesignGridLayout gridLayout7 = new DesignGridLayout(_tag7Panel1500);
-        gridLayout7.row().grid(new JLabel("Film")).add(_tag7FilmBox1500);
-        gridLayout7
-                .row()
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _tag7WerbeblockMin1500,
-                        _tag7FSKBox1500);
-    }
-    
-    /**
-     * Erzeugt die 15:00 Uhr Film-Auswahllisten.
-     */
-    private void erzeuge1500FilmBoxen()
-    {
-        _tag1FilmBox1500 = new JComboBox<FilmFormatierer>();
-        _tag2FilmBox1500 = new JComboBox<FilmFormatierer>();
-        _tag3FilmBox1500 = new JComboBox<FilmFormatierer>();
-        _tag4FilmBox1500 = new JComboBox<FilmFormatierer>();
-        _tag5FilmBox1500 = new JComboBox<FilmFormatierer>();
-        _tag6FilmBox1500 = new JComboBox<FilmFormatierer>();
-        _tag7FilmBox1500 = new JComboBox<FilmFormatierer>();
-    }
-    
-    /**
-     * Erzeugt die 15:00 Uhr Werbeblock Minuten-Textfelder.
-     */
-    private void erzeuge1500WerbeblockTextfelder()
-    {
-        _tag1WerbeblockMin1500 = new JTextField("15");
-        _tag2WerbeblockMin1500 = new JTextField("15");
-        _tag3WerbeblockMin1500 = new JTextField("15");
-        _tag4WerbeblockMin1500 = new JTextField("15");
-        _tag5WerbeblockMin1500 = new JTextField("15");
-        _tag6WerbeblockMin1500 = new JTextField("15");
-        _tag7WerbeblockMin1500 = new JTextField("15");
-    }
-    
-    /**
-     * Erzeugt die 15:00 Uhr Werbeblock FSK-Boxen.
-     */
-    private void erzeuge1500WerbeblockFSKBoxen()
-    {
-        _tag1FSKBox1500 = new JComboBox<FSKFormatierer>();
-        _tag2FSKBox1500 = new JComboBox<FSKFormatierer>();
-        _tag3FSKBox1500 = new JComboBox<FSKFormatierer>();
-        _tag4FSKBox1500 = new JComboBox<FSKFormatierer>();
-        _tag5FSKBox1500 = new JComboBox<FSKFormatierer>();
-        _tag6FSKBox1500 = new JComboBox<FSKFormatierer>();
-        _tag7FSKBox1500 = new JComboBox<FSKFormatierer>();
-    }
-    
-    /**
-     * Erzeugt die 17:30 Uhr Film-Auswahllisten.
-     */
-    private void erzeuge1730FilmBoxen()
-    {
-        _tag1FilmBox1730 = new JComboBox<FilmFormatierer>();
-        _tag2FilmBox1730 = new JComboBox<FilmFormatierer>();
-        _tag3FilmBox1730 = new JComboBox<FilmFormatierer>();
-        _tag4FilmBox1730 = new JComboBox<FilmFormatierer>();
-        _tag5FilmBox1730 = new JComboBox<FilmFormatierer>();
-        _tag6FilmBox1730 = new JComboBox<FilmFormatierer>();
-        _tag7FilmBox1730 = new JComboBox<FilmFormatierer>();
-    }
-    
-    /**
-     * Erzeugt die 17:30 Uhr Werbeblock Minuten-Textfelder.
-     */
-    private void erzeuge1730WerbeblockTextfelder()
-    {
-        _tag1WerbeblockMin1730 = new JTextField("15");
-        _tag2WerbeblockMin1730 = new JTextField("15");
-        _tag3WerbeblockMin1730 = new JTextField("15");
-        _tag4WerbeblockMin1730 = new JTextField("15");
-        _tag5WerbeblockMin1730 = new JTextField("15");
-        _tag6WerbeblockMin1730 = new JTextField("15");
-        _tag7WerbeblockMin1730 = new JTextField("15");
-    }
-    
-    /**
-     * Erzeugt die 17:30 Uhr Werbeblock FSK-Boxen.
-     */
-    private void erzeuge1730WerbeblockFSKBoxen()
-    {
-        _tag1FSKBox1730 = new JComboBox<FSKFormatierer>();
-        _tag2FSKBox1730 = new JComboBox<FSKFormatierer>();
-        _tag3FSKBox1730 = new JComboBox<FSKFormatierer>();
-        _tag4FSKBox1730 = new JComboBox<FSKFormatierer>();
-        _tag5FSKBox1730 = new JComboBox<FSKFormatierer>();
-        _tag6FSKBox1730 = new JComboBox<FSKFormatierer>();
-        _tag7FSKBox1730 = new JComboBox<FSKFormatierer>();
-    }
-    
-    /**
-     * Erzeugt die 20:00 Uhr Film-Auswahllisten.
-     */
-    private void erzeuge2000FilmBoxen()
-    {
-        _tag1FilmBox2000 = new JComboBox<FilmFormatierer>();
-        _tag2FilmBox2000 = new JComboBox<FilmFormatierer>();
-        _tag3FilmBox2000 = new JComboBox<FilmFormatierer>();
-        _tag4FilmBox2000 = new JComboBox<FilmFormatierer>();
-        _tag5FilmBox2000 = new JComboBox<FilmFormatierer>();
-        _tag6FilmBox2000 = new JComboBox<FilmFormatierer>();
-        _tag7FilmBox2000 = new JComboBox<FilmFormatierer>();
-    }
-    
-    /**
-     * Erzeugt die 20:00 Uhr Werbeblock Minuten-Textfelder.
-     */
-    private void erzeuge2000WerbeblockTextfelder()
-    {
-        _tag1WerbeblockMin2000 = new JTextField("15");
-        _tag2WerbeblockMin2000 = new JTextField("15");
-        _tag3WerbeblockMin2000 = new JTextField("15");
-        _tag4WerbeblockMin2000 = new JTextField("15");
-        _tag5WerbeblockMin2000 = new JTextField("15");
-        _tag6WerbeblockMin2000 = new JTextField("15");
-        _tag7WerbeblockMin2000 = new JTextField("15");
-    }
-    
-    /**
-     * Erzeugt die 20:00 Uhr Werbeblock FSK-Boxen.
-     */
-    private void erzeuge2000WerbeblockFSKBoxen()
-    {
-        _tag1FSKBox2000 = new JComboBox<FSKFormatierer>();
-        _tag2FSKBox2000 = new JComboBox<FSKFormatierer>();
-        _tag3FSKBox2000 = new JComboBox<FSKFormatierer>();
-        _tag4FSKBox2000 = new JComboBox<FSKFormatierer>();
-        _tag5FSKBox2000 = new JComboBox<FSKFormatierer>();
-        _tag6FSKBox2000 = new JComboBox<FSKFormatierer>();
-        _tag7FSKBox2000 = new JComboBox<FSKFormatierer>();
-    }
-    
-    /**
-     * Erzeugt die 22:30 Uhr Film-Auswahllisten.
-     */
-    private void erzeuge2230FilmBoxen()
-    {
-        _tag1FilmBox2230 = new JComboBox<FilmFormatierer>();
-        _tag2FilmBox2230 = new JComboBox<FilmFormatierer>();
-        _tag3FilmBox2230 = new JComboBox<FilmFormatierer>();
-        _tag4FilmBox2230 = new JComboBox<FilmFormatierer>();
-        _tag5FilmBox2230 = new JComboBox<FilmFormatierer>();
-        _tag6FilmBox2230 = new JComboBox<FilmFormatierer>();
-        _tag7FilmBox2230 = new JComboBox<FilmFormatierer>();
-    }
-    
-    /**
-     * Erzeugt die 22:30 Uhr Werbeblock Minuten-Textfelder.
-     */
-    private void erzeuge2230WerbeblockTextfelder()
-    {
-        _tag1WerbeblockMin2230 = new JTextField("15");
-        _tag2WerbeblockMin2230 = new JTextField("15");
-        _tag3WerbeblockMin2230 = new JTextField("15");
-        _tag4WerbeblockMin2230 = new JTextField("15");
-        _tag5WerbeblockMin2230 = new JTextField("15");
-        _tag6WerbeblockMin2230 = new JTextField("15");
-        _tag7WerbeblockMin2230 = new JTextField("15");
-    }
-    
-    /**
-     * Erzeugt die 22:30 Uhr Werbeblock FSK-Boxen.
-     */
-    private void erzeuge2230WerbeblockFSKBoxen()
-    {
-        _tag1FSKBox2230 = new JComboBox<FSKFormatierer>();
-        _tag2FSKBox2230 = new JComboBox<FSKFormatierer>();
-        _tag3FSKBox2230 = new JComboBox<FSKFormatierer>();
-        _tag4FSKBox2230 = new JComboBox<FSKFormatierer>();
-        _tag5FSKBox2230 = new JComboBox<FSKFormatierer>();
-        _tag6FSKBox2230 = new JComboBox<FSKFormatierer>();
-        _tag7FSKBox2230 = new JComboBox<FSKFormatierer>();
     }
     
     /**
