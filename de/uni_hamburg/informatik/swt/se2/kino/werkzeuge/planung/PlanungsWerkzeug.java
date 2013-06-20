@@ -5,7 +5,9 @@ import java.util.Observer;
 
 import javax.swing.JPanel;
 
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Woche;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kino;
+import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.kinosaalauswaehler.KinosaalAuswaehlWerkzeug;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.wochenauswaehler.WochenAuswaehlWerkzeug;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.wochenplan.WochenplanWerkzeug;
@@ -33,7 +35,11 @@ public class PlanungsWerkzeug implements Observer
         
         _wochenAuswaehlWerkzeug = new WochenAuswaehlWerkzeug();
         _kinosaalAuswaehlWerkzeug = new KinosaalAuswaehlWerkzeug(_kino);
-        _wochenplanWerkzeug = new WochenplanWerkzeug(_kino);
+        
+        Woche woche = _wochenAuswaehlWerkzeug.getSelektierteWoche();
+        Kinosaal kinosaal = _kinosaalAuswaehlWerkzeug.getAusgewaehlterKinosaal();
+        
+        _wochenplanWerkzeug = new WochenplanWerkzeug(_kino, kinosaal, woche);
         
         _wochenAuswaehlWerkzeug.addObserver(this);
         _kinosaalAuswaehlWerkzeug.addObserver(this);
@@ -43,9 +49,6 @@ public class PlanungsWerkzeug implements Observer
             _wochenAuswaehlWerkzeug.getUIPanel(), 
             _kinosaalAuswaehlWerkzeug.getUIPanel()
         );
-        
-        _wochenplanWerkzeug.setWoche(_wochenAuswaehlWerkzeug.getSelektierteWoche());
-        _wochenplanWerkzeug.setKinosaal(_kinosaalAuswaehlWerkzeug.getAusgewaehlterKinosaal());
     }
     
     /**
