@@ -1,4 +1,4 @@
-package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.wochenplan;
+package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.wochenplan.subwerkzeuge.vorstellung;
 
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Film;
 
