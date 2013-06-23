@@ -1,6 +1,8 @@
 package de.uni_hamburg.informatik.swt.se2.kino.startup;
 
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.FSK;
@@ -33,6 +35,16 @@ public class StartupKinoticketverkauf_Blatt07
             @Override
             public void run()
             {
+                try
+                {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                }
+                catch (ClassNotFoundException | InstantiationException
+                        | IllegalAccessException
+                        | UnsupportedLookAndFeelException e)
+                {
+                    e.printStackTrace();
+                }
                 new KinoWerkzeug(kino);
             }
         });
