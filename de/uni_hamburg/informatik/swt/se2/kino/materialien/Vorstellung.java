@@ -237,6 +237,21 @@ public class Vorstellung
     }
     
     /**
+     * Setzt den Film, der in dieser Vorstellung gezeigt wird, auf den gegebenen Film.
+     * 
+     * @param film Der Film, der in dieser Vorstellung gezeigt werden soll.
+     * 
+     * @require film != null
+     * 
+     * @ensure getFilm() == film
+     */
+    public void setFilm(Film film)
+    {
+        assert film != null : "Vorbedingung verletzt: film != null";
+        _film = film;
+    }
+    
+    /**
      * Gibt die Uhrzeit zurück, zu der diese Vorstellung beginnt.
      * 
      * @ensure result != null

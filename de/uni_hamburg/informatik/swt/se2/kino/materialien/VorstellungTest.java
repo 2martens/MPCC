@@ -54,6 +54,17 @@ public class VorstellungTest
     }
     
     @Test
+    public void testSetFilm()
+    {
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
+                _11_07_2008, 1230);
+        assertSame(_hdR1, v.getFilm());
+        Film neuerFilm = new Film("Doof", 90, FSK.FSK12, false, false);
+        v.setFilm(neuerFilm);
+        assertSame(neuerFilm, v.getFilm());
+    }
+    
+    @Test
     public void testSetReinigungszeit()
     {
         Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
