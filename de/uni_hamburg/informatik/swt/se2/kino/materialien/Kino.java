@@ -197,6 +197,7 @@ public class Kino
         if (tagesplan == null)
         {
             tagesplan = new Tagesplan(tag);
+            setTagesplan(tag, tagesplan);
         }
         return tagesplan;
     }
