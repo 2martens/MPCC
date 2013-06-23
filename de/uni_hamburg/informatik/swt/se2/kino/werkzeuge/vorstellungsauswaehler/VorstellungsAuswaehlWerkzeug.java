@@ -1,5 +1,6 @@
 package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.vorstellungsauswaehler;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
@@ -23,6 +24,8 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
 
     // Das Material dieses Werkzeugs
     private Tagesplan _tagesplan;
+    
+    private List<Vorstellung> _vorstellungen;
 
     /**
      * Initialisiert das Werkzeug.
@@ -30,6 +33,7 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
     public VorstellungsAuswaehlWerkzeug()
     {
         _ui = new VorstellungsAuswaehlWerkzeugUI();
+        _vorstellungen = new ArrayList<Vorstellung>();
         registriereUIAktionen();
     }
 
@@ -69,6 +73,19 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
 
         return result;
     }
+    
+    /**
+     * Aktualisiert die angezeigten Vorstellungen.
+     */
+    public void aktualisiereVorstellungen()
+    {
+        List<Vorstellung> vorstellungen = _tagesplan.getVorstellungen();
+        if (!vorstellungen.equals(_vorstellungen))
+        {
+            _vorstellungen = vorstellungen;
+            aktualisiereAngezeigteVorstellungsliste(vorstellungen);
+        }
+    }
 
     /**
      * Setzt den Tagesplan, dessen Vorstellungen zur Auswahl angeboten werden.
@@ -80,8 +97,7 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
         assert tagesplan != null : "Vorbedingung verletzt: tagesplan != null";
 
         _tagesplan = tagesplan;
-        List<Vorstellung> vorstellungen = _tagesplan.getVorstellungen();
-        aktualisiereAngezeigteVorstellungsliste(vorstellungen);
+        aktualisiereVorstellungen();
     }
 
     /**
@@ -96,6 +112,7 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
         {
             varray[i] = new VorstellungsFormatierer(vorstellungen.get(i));
         }
+        
         _ui.getVorstellungAuswahlList().setListData(varray);
         _ui.getVorstellungAuswahlList().setSelectedIndex(0);
     }

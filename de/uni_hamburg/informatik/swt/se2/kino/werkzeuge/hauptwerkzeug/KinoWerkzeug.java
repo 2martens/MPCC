@@ -88,6 +88,7 @@ public class KinoWerkzeug
             public void actionPerformed(ActionEvent e)
             {
                 _ui.zeigeKasse();
+                _kassenWerkzeug.aktualisiereTagesplan();
             }
         });
     }

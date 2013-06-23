@@ -74,6 +74,14 @@ public class KassenWerkzeug implements Observer
     {
         return _ui.getUIPanel();
     }
+    
+    /**
+     * Aktualisiert den Tagesplan.
+     */
+    public void aktualisiereTagesplan()
+    {
+        _vorstellungAuswaehlWerkzeug.aktualisiereVorstellungen();
+    }
 
     /**
      * Setzt den in diesem Werkzeug angezeigten Tagesplan basierend auf dem
