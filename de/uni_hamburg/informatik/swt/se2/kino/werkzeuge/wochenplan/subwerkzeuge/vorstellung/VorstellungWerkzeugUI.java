@@ -5,6 +5,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 import net.java.dev.designgridlayout.DesignGridLayout;
 import net.java.dev.designgridlayout.RowGroup;
@@ -100,7 +103,26 @@ class VorstellungWerkzeugUI
         _filmBox = new JComboBox<FilmFormatierer>();
         _fskBox = new JComboBox<FSKFormatierer>();
         _vorstellungCheckbox = new JCheckBox("Vorstellung einplanen?");
-        _werbeblockMinuten = new JTextField();
+        _werbeblockMinuten = new JTextField(new PlainDocument()
+        {
+            private static final long serialVersionUID = 8223350209013132127L;
+            
+            @Override
+            public void insertString(int offset, String s,
+                    AttributeSet attributeSet) throws BadLocationException
+            {
+                try
+                {
+                    Integer.parseInt(s);
+                }
+                catch (NumberFormatException ex)
+                {
+                    return;
+                }
+                super.insertString(offset, s, attributeSet);
+            }
+            
+        }, "15", 0);
         _reinigungszeitCheckbox = new JCheckBox("Reinigungszeit einplanen?");
         
         _hauptPanel = new JPanel();

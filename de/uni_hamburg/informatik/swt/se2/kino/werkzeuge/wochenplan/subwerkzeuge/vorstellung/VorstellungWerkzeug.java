@@ -237,13 +237,11 @@ public class VorstellungWerkzeug extends Observable
                     @Override
                     public void removeUpdate(DocumentEvent e)
                     {
-                        werbeblockDauerGeaendert();
                     }
                     
                     @Override
                     public void changedUpdate(DocumentEvent e)
                     {
-                        werbeblockDauerGeaendert();
                     }
                 });
         
