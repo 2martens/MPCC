@@ -24,9 +24,8 @@ import de.uni_hamburg.informatik.swt.se2.kino.materialien.Werbeblock;
  * Mit diesem Werkzeug können Vorstellungen bearbeitet werden.
  * 
  * Das Kontextwerkzeug kann sich als Beobachter über Änderungen bezüglich
- * <code>Vorstellung-create</code> (Vorstellung erzeugt),
- * <code>Vorstellung-remove</code> (Vorstellung entfernt) und
- * <code>Filmauswahl</code> (Filmauswahl geändert) informieren.
+ * <code>Vorstellung-create</code> (Vorstellung erzeugt) und
+ * <code>Vorstellung-remove</code> (Vorstellung entfernt) informieren.
  * 
  * Diese Schlüsselwerte werden im zweiten Parameter als String der
  * update-Methode übergeben.
@@ -297,8 +296,10 @@ public class VorstellungWerkzeug extends Observable
             _selectedFilm = selectedFormatierer.getFilm();
         }
         aktualisiereFSKBox();
-        setChanged();
-        notifyObservers("Filmauswahl");
+        if (_vorstellung != null)
+        {
+            _vorstellung.setFilm(_selectedFilm);
+        }
     }
     
     /**
@@ -323,7 +324,6 @@ public class VorstellungWerkzeug extends Observable
                     _werbeblockFSK);
             _vorstellung.setWerbeblock(werbeblock);
         }
-        
     }
     
     /**

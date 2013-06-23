@@ -210,8 +210,6 @@ public class TagWerkzeug implements Observer
     {
         switch (parameter)
         {
-            case "Filmauswahl":
-                _tagesplan.entferneVorstellung(werkzeug.getVorstellung());
             case "Vorstellung-create":
                 Film film = werkzeug.getSelectedFilm();
                 Uhrzeit endZeit = berechneEndZeit(startZeit, film.getLaenge());
@@ -219,10 +217,12 @@ public class TagWerkzeug implements Observer
                         startZeit, endZeit, _tagesplan.getDatum(),
                         Vorstellung.TICKETPREIS);
                 _tagesplan.fuegeVorstellungHinzu(neueVorstellung);
+                _kino.getTagesplan(_tagesplan.getDatum()).fuegeVorstellungHinzu(neueVorstellung);
                 werkzeug.setVorstellung(neueVorstellung);
                 break;
             case "Vorstellung-remove":
                 _tagesplan.entferneVorstellung(werkzeug.getVorstellung());
+                _kino.getTagesplan(_tagesplan.getDatum()).entferneVorstellung(werkzeug.getVorstellung());
                 break;
         }
     }
