@@ -1,5 +1,7 @@
 package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.wochenplan.subwerkzeuge.vorstellung;
 
+import java.awt.Toolkit;
+
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -103,26 +105,76 @@ class VorstellungWerkzeugUI
         _filmBox = new JComboBox<FilmFormatierer>();
         _fskBox = new JComboBox<FSKFormatierer>();
         _vorstellungCheckbox = new JCheckBox("Vorstellung einplanen?");
-        _werbeblockMinuten = new JTextField(new PlainDocument()
+        _werbeblockMinuten = new JTextField();
+        _werbeblockMinuten.setDocument(new PlainDocument()
         {
-            private static final long serialVersionUID = 8223350209013132127L;
+            private static final long serialVersionUID = 5900453040208923245L;
             
             @Override
-            public void insertString(int offset, String s,
-                    AttributeSet attributeSet) throws BadLocationException
+            public void insertString(int offs, String str, AttributeSet a)
+                    throws BadLocationException
             {
                 try
                 {
-                    Integer.parseInt(s);
+                    if (!str.isEmpty())
+                    {
+                        Integer.parseInt(str);
+                        if ((getLength() + str.length()) <= 2)
+                        {
+                            super.insertString(offs, str, a);
+                            return;
+                        }
+                    }
                 }
-                catch (NumberFormatException ex)
+                catch (NumberFormatException nfe)
                 {
-                    return;
+                    Toolkit.getDefaultToolkit().beep();
                 }
-                super.insertString(offset, s, attributeSet);
+                Toolkit.getDefaultToolkit().beep();
             }
             
-        }, "15", 0);
+            @Override
+            public void replace(int offset, int length, String text,
+                    AttributeSet attrs) throws BadLocationException
+            {
+                try
+                {
+                    if (!text.isEmpty())
+                    {
+                        Integer.parseInt(text);
+                        super.remove(offset, length);
+                        insertString(offset, text, attrs);
+                        return;
+                    }
+                }
+                catch (NumberFormatException nfe)
+                {
+                    Toolkit.getDefaultToolkit().beep();
+                }
+                Toolkit.getDefaultToolkit().beep();
+            }
+            
+            @Override
+            public void remove(int offset, int length)
+                    throws BadLocationException
+            {
+                if ((this.getLength() - length) > 0)
+                {
+                    super.remove(offset, length);
+                }
+                else if ((this.getLength() - length) == 0)
+                {
+                    super.remove(offset, length);
+                    super.insertString(offset, "0", null);
+                }
+                else
+                {
+                    Toolkit.getDefaultToolkit().beep();
+                }
+            }
+        });
+        _werbeblockMinuten.setText("0");
+        
         _reinigungszeitCheckbox = new JCheckBox("Reinigungszeit einplanen?");
         
         _hauptPanel = new JPanel();
