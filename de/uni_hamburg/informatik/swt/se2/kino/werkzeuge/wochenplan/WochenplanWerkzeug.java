@@ -163,24 +163,31 @@ public class WochenplanWerkzeug
                 {
                     case DONNERSTAG:
                         _donnerstagWerkzeug.setTagesplan(tagesplan);
+                        _donnerstagWerkzeug.setKinosaal(_kinosaal);
                         break;
                     case FREITAG:
                         _freitagWerkzeug.setTagesplan(tagesplan);
+                        _freitagWerkzeug.setKinosaal(_kinosaal);
                         break;
                     case SAMSTAG:
                         _samstagWerkzeug.setTagesplan(tagesplan);
+                        _samstagWerkzeug.setKinosaal(_kinosaal);
                         break;
                     case SONNTAG:
                         _sonntagWerkzeug.setTagesplan(tagesplan);
+                        _sonntagWerkzeug.setKinosaal(_kinosaal);
                         break;
                     case MONTAG:
                         _montagWerkzeug.setTagesplan(tagesplan);
+                        _montagWerkzeug.setKinosaal(_kinosaal);
                         break;
                     case DIENSTAG:
                         _dienstagWerkzeug.setTagesplan(tagesplan);
+                        _dienstagWerkzeug.setKinosaal(_kinosaal);
                         break;
                     case MITTWOCH:
                         _mittwochWerkzeug.setTagesplan(tagesplan);
+                        _mittwochWerkzeug.setKinosaal(_kinosaal);
                         break;
                 }
             }

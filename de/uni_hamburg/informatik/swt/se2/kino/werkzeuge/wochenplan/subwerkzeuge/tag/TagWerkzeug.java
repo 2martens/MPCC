@@ -77,6 +77,20 @@ public class TagWerkzeug implements Observer
     }
     
     /**
+     * Setzt den Kinosaal.
+     * 
+     * @param kinosaal
+     * 
+     * @require kinosaal != null
+     */
+    public void setKinosaal(Kinosaal kinosaal)
+    {
+        assert kinosaal != null : "Vorbedingung verletzt: kinosaal != null";
+        _kinosaal = kinosaal;
+        aktualisiereReinigungszeiten();
+    }
+    
+    /**
      * Setzt den Tagesplan.
      * 
      * @param tagesplan
@@ -99,7 +113,19 @@ public class TagWerkzeug implements Observer
     }
     
     /**
-     * Leitet die Vorstellungen des Tagesplan an die Subwerkzeuge weiter.
+     * Aktualisiert die Reinigungszeiten der Subwerkzeuge.
+     */
+    private void aktualisiereReinigungszeiten()
+    {
+        _1100werkzeug.setReinigungszeit(_kinosaal.getReinigungszeit());
+        _1500werkzeug.setReinigungszeit(_kinosaal.getReinigungszeit());
+        _1730werkzeug.setReinigungszeit(_kinosaal.getReinigungszeit());
+        _2000werkzeug.setReinigungszeit(_kinosaal.getReinigungszeit());
+        _2230werkzeug.setReinigungszeit(_kinosaal.getReinigungszeit());
+    }
+    
+    /**
+     * Leitet die Vorstellungen des Tagesplans an die Subwerkzeuge weiter.
      */
     private void aktualisiereUI()
     {

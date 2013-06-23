@@ -86,6 +86,19 @@ public class VorstellungWerkzeug extends Observable
     }
     
     /**
+     * Setzt die Kinosaal-gebundene Reinigungszeit.
+     * 
+     * @param reinigungszeit
+     * 
+     * @require reinigungszeit != null
+     */
+    public void setReinigungszeit(Reinigungszeit reinigungszeit)
+    {
+        assert reinigungszeit != null : "Vorbedingung verletzt: reinigungszeit != null";
+        _reinigungszeit = reinigungszeit;
+    }
+    
+    /**
      * Gibt die aktuelle Vorstellung zurück.
      */
     public Vorstellung getVorstellung()
