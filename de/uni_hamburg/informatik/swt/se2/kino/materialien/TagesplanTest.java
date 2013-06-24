@@ -17,39 +17,39 @@ public class TagesplanTest
     private static final Reinigungszeit _reinigungszeit = new Reinigungszeit(10);
     private static final Datum _datum = new Datum(1, 1, 2010);
     private static final Film _film = new Film("", 1, FSK.FSK0, false, false);
-    private static final Kinosaal _kinosaal = new Kinosaal("Saal 1", 1, 1, _reinigungszeit);
-    private static final Kinosaal _kinosaal2 = new Kinosaal("Saal 2", 1, 1, _reinigungszeit);
+    private static final Kinosaal _kinosaal = new Kinosaal("Saal 1", 1, 1,
+            _reinigungszeit);
+    private static final Kinosaal _kinosaal2 = new Kinosaal("Saal 2", 1, 1,
+            _reinigungszeit);
     private static final Uhrzeit _startzeit = new Uhrzeit(0, 0);
     private static final Uhrzeit _startzeit2 = new Uhrzeit(2, 0);
-    private static final Uhrzeit _endzeit = new Uhrzeit(1, 1);
-    private static final Uhrzeit _endzeit2 = new Uhrzeit(3, 1);
     private static final Vorstellung _vorstellung = new Vorstellung(_kinosaal,
-            _film, _startzeit, _endzeit, _datum, 0);
+            _film, _startzeit, _datum, 0);
     private static final Vorstellung _vorstellung2 = new Vorstellung(_kinosaal,
-            _film, _startzeit2, _endzeit2, _datum, 0);
+            _film, _startzeit2, _datum, 0);
     private static final Vorstellung _vorstellung3 = new Vorstellung(
-            _kinosaal2, _film, _startzeit2, _endzeit, _datum, 0);
-
+            _kinosaal2, _film, _startzeit2, _datum, 0);
+    
     private Tagesplan _t;
-
+    
     @Before
     public void setUp()
     {
         _t = new Tagesplan(_datum);
     }
-
+    
     @Test
     public void testTagesplanKenntSeinDatum()
     {
         assertEquals(_datum, _t.getDatum());
     }
-
+    
     @Test
     public void testNeuerTagesplanIstLeer()
     {
         assertTrue(_t.getVorstellungen().isEmpty());
     }
-
+    
     @Test
     public void testVorstellungenHinzufuegen()
     {
@@ -57,7 +57,7 @@ public class TagesplanTest
         assertEquals(1, _t.getVorstellungen().size());
         assertTrue(_t.istVorhanden(_vorstellung));
     }
-
+    
     @Test
     public void testVorstellungenWerdenNachAnfangszeitSortiert()
     {
@@ -66,7 +66,7 @@ public class TagesplanTest
         assertEquals(_vorstellung, _t.getVorstellungen().get(0));
         assertEquals(_vorstellung2, _t.getVorstellungen().get(1));
     }
-
+    
     @Test
     public void testGleichzeitigeVorstellungenInVerschiedenenSaelenMoeglich()
     {
