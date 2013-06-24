@@ -207,34 +207,48 @@ public class KinoServiceImpl extends AbstractObservableService implements
         assert film != null : "Vorbedingung verletzt: film != null";
         return _kino.getFilme().contains(film);
     }
-
+    
     @Override
     public List<Film> getFilme()
     {
         // TODO Auto-generated method stub
         return null;
     }
-
+    
     @Override
     public Tagesplan getTagesplan(Datum datum)
     {
         // TODO Auto-generated method stub
         return null;
     }
-
+    
     @Override
     public Wochenplan getWochenplan(Kinosaal kinosaal, Woche woche)
     {
         // TODO Auto-generated method stub
         return null;
     }
-
+    
     @Override
     public void setWochenplan(Wochenplan wochenplan, Kinosaal kinosaal,
             Woche woche)
     {
         // TODO Auto-generated method stub
         
+    }
+    
+    @Override
+    public boolean istWochenplanVorhanden(Kinosaal kinosaal, Woche woche)
+    {
+        // TODO Auto-generated method stub
+        return false;
+    }
+    
+    @Override
+    public List<Kinosaal> getKinosaele()
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
     
 }
