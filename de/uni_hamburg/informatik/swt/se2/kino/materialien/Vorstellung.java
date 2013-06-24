@@ -73,21 +73,7 @@ public class Vorstellung
     public Vorstellung(Kinosaal kinosaal, Film film, Uhrzeit anfangszeit,
             Datum datum, int preis)
     {
-        assert kinosaal != null : "Vorbedingung verletzt: saal != null";
-        assert film != null : "Vorbedingung verletzt: film != null";
-        assert anfangszeit != null : "Vorbedingung verletzt: anfangszeit != null";
-        assert datum != null : "Vorbedingung verletzt: datum != null";
-        assert preis >= 0 : "Vorbedingung verletzt: preis >= 0";
-        
-        _kinosaal = kinosaal;
-        _film = film;
-        _anfangszeit = anfangszeit;
-        berechneEndUhrzeit();
-        _datum = datum;
-        _preis = preis;
-        _verkauft = new boolean[kinosaal.getAnzahlReihen()][kinosaal
-                .getAnzahlSitzeProReihe()];
-        _anzahlVerkauftePlaetze = 0;
+        this(kinosaal, film, anfangszeit, datum, preis, null, null);
     }
     
     /**
@@ -123,9 +109,8 @@ public class Vorstellung
     public Vorstellung(Kinosaal kinosaal, Film film, Uhrzeit anfangszeit,
             Datum datum, int preis, Reinigungszeit reinigungszeit)
     {
-        this(kinosaal, film, anfangszeit, datum, preis);
+        this(kinosaal, film, anfangszeit, datum, preis, reinigungszeit, null);
         assert reinigungszeit != null : "Vorbedingung verletzt: reinigungszeit != null";
-        _reinigungszeit = reinigungszeit;
     }
     
     /**
@@ -161,9 +146,8 @@ public class Vorstellung
     public Vorstellung(Kinosaal kinosaal, Film film, Uhrzeit anfangszeit,
             Datum datum, int preis, Werbeblock werbeblock)
     {
-        this(kinosaal, film, anfangszeit, datum, preis);
+        this(kinosaal, film, anfangszeit, datum, preis, null, werbeblock);
         assert werbeblock != null : "Vorbedingung verletzt: werbeblock != null";
-        _werbeblock = werbeblock;
     }
     
     /**
@@ -189,8 +173,6 @@ public class Vorstellung
      * @require anfangszeit != null
      * @require datum != null
      * @require preis >= 0
-     * @require reinigungszeit != null
-     * @require werbeblock != null
      * 
      * @ensure getKinosaal() == kinosaal
      * @ensure getFilm() == film
@@ -203,9 +185,23 @@ public class Vorstellung
             Datum datum, int preis, Reinigungszeit reinigungszeit,
             Werbeblock werbeblock)
     {
-        this(kinosaal, film, anfangszeit, datum, preis, reinigungszeit);
-        assert werbeblock != null : "Vorbedingung verletzt: werbeblock != null";
+        assert kinosaal != null : "Vorbedingung verletzt: saal != null";
+        assert film != null : "Vorbedingung verletzt: film != null";
+        assert anfangszeit != null : "Vorbedingung verletzt: anfangszeit != null";
+        assert datum != null : "Vorbedingung verletzt: datum != null";
+        assert preis >= 0 : "Vorbedingung verletzt: preis >= 0";
+        
+        _kinosaal = kinosaal;
+        _film = film;
+        _anfangszeit = anfangszeit;
+        _datum = datum;
+        _preis = preis;
+        _verkauft = new boolean[kinosaal.getAnzahlReihen()][kinosaal
+                .getAnzahlSitzeProReihe()];
+        _anzahlVerkauftePlaetze = 0;
+        _reinigungszeit = reinigungszeit;
         _werbeblock = werbeblock;
+        berechneEndUhrzeit();
     }
     
     /**

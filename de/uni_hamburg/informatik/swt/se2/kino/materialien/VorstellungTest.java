@@ -34,8 +34,7 @@ public class VorstellungTest
         _kinoA = new Kinosaal("A", 20, 50, _reinigungszeit);
         _hdR1 = new Film("Der Herr der Ringe - Die Gefährten", 178, FSK.FSK12,
                 true, false);
-        _hdR2 = new Film("Der Hobbit", 178, FSK.FSK12,
-                true, true);
+        _hdR2 = new Film("Der Hobbit", 178, FSK.FSK12, true, true);
     }
     
     @Test
