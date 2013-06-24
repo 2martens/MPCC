@@ -45,6 +45,15 @@ public class UhrzeitTest
         assertEquals(230, u3_15_40.minutenSeit(u1_11_50));
         assertEquals(1210, u1_11_50.minutenSeit(u3_15_40));
     }
+    
+    @Test
+    public void testeGetUhrzeit()
+    {
+        Uhrzeit _1130 = new Uhrzeit(11, 30);
+        Uhrzeit endZeit = Uhrzeit.getUhrzeit(_1130, 150);
+        
+        assertEquals(150, endZeit.minutenSeit(_1130));
+    }
 
     @Test
     public void testeEquals()
