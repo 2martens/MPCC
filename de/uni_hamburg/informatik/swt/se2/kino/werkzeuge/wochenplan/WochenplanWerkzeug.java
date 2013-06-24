@@ -130,7 +130,7 @@ public class WochenplanWerkzeug
             else
             {
                 _wochenplan = new Wochenplan(_woche, _kinosaal);
-                _kinoService.setWochenplan(_kinosaal, _woche, _wochenplan);
+                _kinoService.setWochenplan(_wochenplan, _kinosaal, _woche);
             }
             aktualisiereUI();
         }
