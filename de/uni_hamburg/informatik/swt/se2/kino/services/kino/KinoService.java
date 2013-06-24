@@ -1,12 +1,17 @@
 package de.uni_hamburg.informatik.swt.se2.kino.services.kino;
 
+import java.util.List;
+
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Woche;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Film;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
+import de.uni_hamburg.informatik.swt.se2.kino.materialien.Tagesplan;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Werbeblock;
+import de.uni_hamburg.informatik.swt.se2.kino.materialien.Wochenplan;
 import de.uni_hamburg.informatik.swt.se2.kino.services.ObservableService;
 
 /**
@@ -158,4 +163,50 @@ public interface KinoService extends ObservableService
      *         sonst
      */
     boolean istFilmVorraetig(Film film);
+    
+    /**
+     * Gibt eine Liste aller verfügbaren Filme zurück.
+     * 
+     * @ensure result != null
+     */
+    List<Film> getFilme();
+    
+    /**
+     * Gibt den Tagesplan für den gegebenen Tag zurück.
+     *  
+     * @param datum
+     * 
+     * @require datum != null
+     * 
+     * @ensure result != null
+     */
+    Tagesplan getTagesplan(Datum datum);
+    
+    /**
+     * Gibt den Wochenplan für die Woche und den Kinosaal zurück.
+     * 
+     * @param kinosaal Der Kinosaal des Wochenplans
+     * @param woche Die Woche des Wochenplans
+     * 
+     * @require istKinosaalVorhanden(kinosaal)
+     * @require woche != null
+     * 
+     * @ensure result != null
+     */
+    Wochenplan getWochenplan(Kinosaal kinosaal, Woche woche);
+    
+    /**
+     * Setzt den Wochenplan für den gegebenen Kinosaal und die gegebene Woche.
+     * 
+     * @param wochenplan Der zu setzende Wochenplan
+     * @param kinosaal Der Kinosaal des Wochenplans
+     * @param woche Die Woche des Wochenplans
+     * 
+     * @require !istWochenplanVorhanden(wochenplan)
+     * @require istKinosaalVorhanden(kinosaal)
+     * @require woche != null
+     * 
+     * @ensure getWochenplan(kinosaal, woche) == wochenplan
+     */
+    void setWochenplan(Wochenplan wochenplan, Kinosaal kinosaal, Woche woche);
 }
