@@ -136,4 +136,33 @@ public final class Uhrzeit implements Comparable<Uhrzeit>
         }
         return result + _minuten;
     }
+    
+    /**
+     * Gibt eine Uhrzeit zurück, die um dauer Minuten später ist.
+     * 
+     * @param startZeit Die Anfangsuhrzeit
+     * @param laenge Die Dauer in Minuten, die auf die Anfangsuhrzeit addiert werden sollen
+     * 
+     * @require startZeit != null
+     * @require laenge >= 0
+     * 
+     * @ensure result != null
+     */
+    public static Uhrzeit getUhrzeit(Uhrzeit startZeit, int laenge)
+    {
+        Uhrzeit endZeit;
+        int stunden = startZeit.getStunden();
+        stunden += laenge / 60;
+        
+        int minuten = startZeit.getMinuten();
+        minuten += laenge % 60;
+        
+        stunden += minuten / 60;
+        minuten = minuten % 60;
+        
+        stunden = (stunden >= 24 ? stunden - 24 : stunden);
+        
+        endZeit = new Uhrzeit(stunden, minuten);
+        return endZeit;
+    }
 }
