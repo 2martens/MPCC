@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Tagesplan;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
+import de.uni_hamburg.informatik.swt.se2.kino.services.ServiceObserver;
 import de.uni_hamburg.informatik.swt.se2.kino.services.kino.KinoService;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.datumsauswaehler.DatumAuswaehlWerkzeug;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.platzverkauf.PlatzVerkaufsWerkzeug;
@@ -56,6 +57,14 @@ public class KassenWerkzeug implements Observer
         // als Observer registrieren
         _datumAuswaehlWerkzeug.addObserver(this);
         _vorstellungAuswaehlWerkzeug.addObserver(this);
+        _kinoService.registriereBeobachter(new ServiceObserver()
+        {
+            @Override
+            public void reagiereAufAenderung()
+            {
+                aktualisiereVorstellungsAuswahl();
+            }
+        });
         
         // UI erstellen (mit eingebetteten UIs der direkten Subwerkzeuge)
         _ui = new KassenWerkzeugUI(_platzVerkaufsWerkzeug.getUIPanel(),
@@ -119,6 +128,14 @@ public class KassenWerkzeug implements Observer
         return _vorstellungAuswaehlWerkzeug.getAusgewaehlteVorstellung();
     }
     
+    /**
+     * Aktualisiert die Vorstellungsauswahl.
+     */
+    private void aktualisiereVorstellungsAuswahl()
+    {
+        setzeTagesplanFuerAusgewaehltesDatum();
+    }
+    
     @Override
     public void update(Observable observable, Object object)
     {
@@ -131,6 +148,5 @@ public class KassenWerkzeug implements Observer
         {
             setzeAusgewaehlteVorstellung();
         }
-        
     }
 }
