@@ -12,6 +12,8 @@ import de.uni_hamburg.informatik.swt.se2.kino.materialien.Film;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kino;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
+import de.uni_hamburg.informatik.swt.se2.kino.services.kino.KinoService;
+import de.uni_hamburg.informatik.swt.se2.kino.services.kino.KinoServiceImpl;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.hauptwerkzeug.KinoWerkzeug;
 
 /**
@@ -30,6 +32,7 @@ public class StartupKinoticketverkauf_Blatt07
     public static void main(String[] args)
     {
         final Kino kino = erzeugeKinoMitBeispieldaten();
+        final KinoService kinoService = new KinoServiceImpl(kino);
         SwingUtilities.invokeLater(new Runnable()
         {
             @Override
@@ -45,7 +48,7 @@ public class StartupKinoticketverkauf_Blatt07
                 {
                     e.printStackTrace();
                 }
-                new KinoWerkzeug(kino);
+                new KinoWerkzeug(kinoService);
             }
         });
     }
@@ -76,7 +79,6 @@ public class StartupKinoticketverkauf_Blatt07
         Uhrzeit nachmittag = new Uhrzeit(17, 30);
         Uhrzeit abend = new Uhrzeit(20, 0);
         Uhrzeit spaet = new Uhrzeit(22, 30);
-        Uhrzeit nacht = new Uhrzeit(1, 0);
 
         Datum d1 = Datum.heute();
         Datum d2 = d1.naechsterTag();
@@ -84,35 +86,35 @@ public class StartupKinoticketverkauf_Blatt07
 
         final Vorstellung[] vorstellungen = {
                 // Heute
-                new Vorstellung(saele[0], filme[2], nachmittag, abend, d1, 500),
-                new Vorstellung(saele[0], filme[0], abend, spaet, d1, 700),
-                new Vorstellung(saele[0], filme[0], spaet, nacht, d1, 700),
+                new Vorstellung(saele[0], filme[2], nachmittag, d1, 500),
+                new Vorstellung(saele[0], filme[0], abend, d1, 700),
+                new Vorstellung(saele[0], filme[0], spaet, d1, 700),
 
-                new Vorstellung(saele[1], filme[3], nachmittag, abend, d1, 900),
-                new Vorstellung(saele[1], filme[1], spaet, nacht, d1, 800),
+                new Vorstellung(saele[1], filme[3], nachmittag, d1, 900),
+                new Vorstellung(saele[1], filme[1], spaet, d1, 800),
 
-                new Vorstellung(saele[2], filme[3], abend, spaet, d1, 1000),
-                new Vorstellung(saele[2], filme[4], spaet, nacht, d1, 900),
+                new Vorstellung(saele[2], filme[3], abend, d1, 1000),
+                new Vorstellung(saele[2], filme[4], spaet, d1, 900),
 
                 // Morgen
-                new Vorstellung(saele[0], filme[0], abend, spaet, d2, 500),
-                new Vorstellung(saele[0], filme[0], spaet, nacht, d2, 700),
+                new Vorstellung(saele[0], filme[0], abend, d2, 500),
+                new Vorstellung(saele[0], filme[0], spaet, d2, 700),
 
-                new Vorstellung(saele[1], filme[2], nachmittag, abend, d2, 900),
-                new Vorstellung(saele[1], filme[4], abend, nacht, d2, 800),
+                new Vorstellung(saele[1], filme[2], nachmittag, d2, 900),
+                new Vorstellung(saele[1], filme[4], abend, d2, 800),
 
-                new Vorstellung(saele[2], filme[3], nachmittag, abend, d2, 1000),
-                new Vorstellung(saele[2], filme[1], spaet, nacht, d2, 900),
+                new Vorstellung(saele[2], filme[3], nachmittag, d2, 1000),
+                new Vorstellung(saele[2], filme[1], spaet, d2, 900),
 
                 // Übermorgen
-                new Vorstellung(saele[0], filme[1], abend, spaet, d3, 500),
-                new Vorstellung(saele[0], filme[1], spaet, nacht, d3, 700),
+                new Vorstellung(saele[0], filme[1], abend, d3, 500),
+                new Vorstellung(saele[0], filme[1], spaet, d3, 700),
 
-                new Vorstellung(saele[1], filme[2], nachmittag, abend, d3, 900),
-                new Vorstellung(saele[1], filme[0], abend, nacht, d3, 800),
+                new Vorstellung(saele[1], filme[2], nachmittag, d3, 900),
+                new Vorstellung(saele[1], filme[0], abend, d3, 800),
 
-                new Vorstellung(saele[2], filme[3], abend, spaet, d3, 1000),
-                new Vorstellung(saele[2], filme[4], spaet, nacht, d3, 900) };
+                new Vorstellung(saele[2], filme[3], abend, d3, 1000),
+                new Vorstellung(saele[2], filme[4], spaet, d3, 900) };
 
         return new Kino(saele, vorstellungen, filme);
     }
