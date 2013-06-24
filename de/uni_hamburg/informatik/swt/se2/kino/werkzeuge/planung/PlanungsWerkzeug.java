@@ -6,15 +6,15 @@ import java.util.Observer;
 import javax.swing.JPanel;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Woche;
-import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kino;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
+import de.uni_hamburg.informatik.swt.se2.kino.services.kino.KinoService;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.kinosaalauswaehler.KinosaalAuswaehlWerkzeug;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.wochenauswaehler.WochenAuswaehlWerkzeug;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.wochenplan.WochenplanWerkzeug;
 
 /**
- * Das Planungswerkzeug. Mit diesem Werkzeug kann die Benutzerin oder der Benutzer
- * für jeden Kinosaal Wochenpläne für Vorstellungen erstellen.
+ * Das Planungswerkzeug. Mit diesem Werkzeug kann die Benutzerin oder der
+ * Benutzer für jeden Kinosaal Wochenpläne für Vorstellungen erstellen.
  * 
  * @author Jim Martens
  * @version 18.06.2013
@@ -23,32 +23,39 @@ import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.wochenplan.WochenplanWer
 public class PlanungsWerkzeug implements Observer
 {
     private PlanungsWerkzeugUI _ui;
-    private Kino _kino;
     
     private WochenAuswaehlWerkzeug _wochenAuswaehlWerkzeug;
     private KinosaalAuswaehlWerkzeug _kinosaalAuswaehlWerkzeug;
     private WochenplanWerkzeug _wochenplanWerkzeug;
     
-    public PlanungsWerkzeug(Kino kino)
+    /**
+     * Initialisiert das Planungswerkzeug.
+     * 
+     * @param kinoService
+     *            Der KinoService, mit dem das Werkzeug arbeitet.
+     * 
+     * @require kinoService != null
+     */
+    public PlanungsWerkzeug(KinoService kinoService)
     {
-        _kino = kino;
+        assert kinoService != null : "Vorbedingung verletzt: kinoService != null";
         
         _wochenAuswaehlWerkzeug = new WochenAuswaehlWerkzeug();
-        _kinosaalAuswaehlWerkzeug = new KinosaalAuswaehlWerkzeug(_kino);
+        _kinosaalAuswaehlWerkzeug = new KinosaalAuswaehlWerkzeug(kinoService.getKinosaele());
         
         Woche woche = _wochenAuswaehlWerkzeug.getSelektierteWoche();
-        Kinosaal kinosaal = _kinosaalAuswaehlWerkzeug.getAusgewaehlterKinosaal();
+        Kinosaal kinosaal = _kinosaalAuswaehlWerkzeug
+                .getAusgewaehlterKinosaal();
         
-        _wochenplanWerkzeug = new WochenplanWerkzeug(_kino, kinosaal, woche);
+        _wochenplanWerkzeug = new WochenplanWerkzeug(kinoService, kinosaal,
+                woche);
         
         _wochenAuswaehlWerkzeug.addObserver(this);
         _kinosaalAuswaehlWerkzeug.addObserver(this);
         
-        _ui = new PlanungsWerkzeugUI(
-            _wochenplanWerkzeug.getUIPanel(), 
-            _wochenAuswaehlWerkzeug.getUIPanel(), 
-            _kinosaalAuswaehlWerkzeug.getUIPanel()
-        );
+        _ui = new PlanungsWerkzeugUI(_wochenplanWerkzeug.getUIPanel(),
+                _wochenAuswaehlWerkzeug.getUIPanel(),
+                _kinosaalAuswaehlWerkzeug.getUIPanel());
     }
     
     /**
@@ -66,12 +73,14 @@ public class PlanungsWerkzeug implements Observer
     {
         if (o instanceof WochenAuswaehlWerkzeug)
         {
-            _wochenplanWerkzeug.setWoche(_wochenAuswaehlWerkzeug.getSelektierteWoche());
+            _wochenplanWerkzeug.setWoche(_wochenAuswaehlWerkzeug
+                    .getSelektierteWoche());
         }
         
         if (o instanceof KinosaalAuswaehlWerkzeug)
         {
-            _wochenplanWerkzeug.setKinosaal(_kinosaalAuswaehlWerkzeug.getAusgewaehlterKinosaal());
+            _wochenplanWerkzeug.setKinosaal(_kinosaalAuswaehlWerkzeug
+                    .getAusgewaehlterKinosaal());
         }
     }
     

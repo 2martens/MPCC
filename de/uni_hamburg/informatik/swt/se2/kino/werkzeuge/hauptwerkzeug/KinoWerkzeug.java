@@ -3,7 +3,7 @@ package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.hauptwerkzeug;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kino;
+import de.uni_hamburg.informatik.swt.se2.kino.services.kino.KinoService;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.kasse.KassenWerkzeug;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.planung.PlanungsWerkzeug;
 
@@ -17,7 +17,6 @@ import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.planung.PlanungsWerkzeug
 public class KinoWerkzeug
 {
     private KinoWerkzeugUI _ui;
-    private Kino _kino;
     
     private KassenWerkzeug _kassenWerkzeug;
     private PlanungsWerkzeug _planungsWerkzeug;
@@ -25,18 +24,16 @@ public class KinoWerkzeug
     /**
      * Initialisiert das Werkzeug.
      * 
-     * @param kino
+     * @param kinoService
      * 
      * @require kino != null
      */
-    public KinoWerkzeug(Kino kino)
+    public KinoWerkzeug(KinoService kinoService)
     {
-        assert kino != null : "Vorbedingung verletzt: kino != null";
+        assert kinoService != null : "Vorbedingung verletzt: kinoService != null";
         
-        _kino = kino;
-        
-        _kassenWerkzeug = new KassenWerkzeug(_kino);
-        _planungsWerkzeug = new PlanungsWerkzeug(_kino);
+        _kassenWerkzeug = new KassenWerkzeug(kinoService);
+        _planungsWerkzeug = new PlanungsWerkzeug(kinoService);
         
         _ui = new KinoWerkzeugUI(_kassenWerkzeug.getUIPanel(),
                 _planungsWerkzeug.getUIPanel());

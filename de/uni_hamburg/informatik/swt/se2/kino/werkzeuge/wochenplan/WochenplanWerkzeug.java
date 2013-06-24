@@ -7,10 +7,10 @@ import javax.swing.JPanel;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Tag;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Woche;
-import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kino;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Tagesplan;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Wochenplan;
+import de.uni_hamburg.informatik.swt.se2.kino.services.kino.KinoService;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.wochenplan.subwerkzeuge.tag.TagWerkzeug;
 
 /**
@@ -27,7 +27,7 @@ public class WochenplanWerkzeug
     private Wochenplan _wochenplan;
     private Kinosaal _kinosaal;
     private Woche _woche;
-    private Kino _kino;
+    private KinoService _kinoService;
     
     private TagWerkzeug _donnerstagWerkzeug;
     private TagWerkzeug _freitagWerkzeug;
@@ -40,32 +40,32 @@ public class WochenplanWerkzeug
     /**
      * Initialisiert dieses Werkzeug.
      * 
-     * @param kino
-     * @param kinosaal
-     * @param woche
+     * @param kinoService Der KinoService, mit dem gearbeitet wird.
+     * @param kinosaal Der aktuelle Kinosaal
+     * @param woche Die aktuelle Woche
      * 
      * @require kino != null
      * @require kinosaal != null
      * @require woche != null
      */
-    public WochenplanWerkzeug(Kino kino, Kinosaal kinosaal, Woche woche)
+    public WochenplanWerkzeug(KinoService kinoService, Kinosaal kinosaal, Woche woche)
     {
-        assert kino != null : "Vorbedingung verletzt: kino != null";
+        assert kinoService != null : "Vorbedingung verletzt: kinoService != null";
         assert kinosaal != null : "Vorbedingung verletzt: kinosaal != null";
         assert woche != null : "Vorbedingung verletzt: woche != null";
         
-        _kino = kino;
+        _kinoService = kinoService;
         _woche = woche;
         _kinosaal = kinosaal;
         
         // Subwerkzeuge initialisieren
-        _donnerstagWerkzeug = new TagWerkzeug(_kino, _kinosaal);
-        _freitagWerkzeug = new TagWerkzeug(_kino, _kinosaal);
-        _samstagWerkzeug = new TagWerkzeug(_kino, _kinosaal);
-        _sonntagWerkzeug = new TagWerkzeug(_kino, _kinosaal);
-        _montagWerkzeug = new TagWerkzeug(_kino, _kinosaal);
-        _dienstagWerkzeug = new TagWerkzeug(_kino, _kinosaal);
-        _mittwochWerkzeug = new TagWerkzeug(_kino, _kinosaal);
+        _donnerstagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal);
+        _freitagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal);
+        _samstagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal);
+        _sonntagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal);
+        _montagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal);
+        _dienstagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal);
+        _mittwochWerkzeug = new TagWerkzeug(_kinoService, _kinosaal);
         
         _ui = new WochenplanWerkzeugUI(_donnerstagWerkzeug.getUIPanel(),
                 _freitagWerkzeug.getUIPanel(), _samstagWerkzeug.getUIPanel(),
@@ -123,14 +123,14 @@ public class WochenplanWerkzeug
     {
         if (_woche != null && _kinosaal != null)
         {
-            if (_kino.istWochenplanVorhanden(_kinosaal, _woche))
+            if (_kinoService.istWochenplanVorhanden(_kinosaal, _woche))
             {
-                _wochenplan = _kino.getWochenplan(_kinosaal, _woche);
+                _wochenplan = _kinoService.getWochenplan(_kinosaal, _woche);
             }
             else
             {
                 _wochenplan = new Wochenplan(_woche, _kinosaal);
-                _kino.setWochenplan(_kinosaal, _woche, _wochenplan);
+                _kinoService.setWochenplan(_kinosaal, _woche, _wochenplan);
             }
             aktualisiereUI();
         }

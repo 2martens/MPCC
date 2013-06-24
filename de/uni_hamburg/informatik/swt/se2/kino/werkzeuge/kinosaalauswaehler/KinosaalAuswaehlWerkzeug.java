@@ -7,7 +7,6 @@ import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kino;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
 
 /**
@@ -23,22 +22,20 @@ import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
 public class KinosaalAuswaehlWerkzeug extends Observable
 {
     private KinosaalAuswaehlWerkzeugUI _ui;
-    private Kino _kino;
     
     /**
      * Initialisiert das Werkzeug.
      * 
-     * @param kino Das Kino, für das die Kinosäle zur Auswahl stehen.
+     * @param kinoSaele Eine Liste der Kinosäle.
      * 
-     * @require kino != null
+     * @require !kinoSaele.isEmpty()
      */
-    public KinosaalAuswaehlWerkzeug(Kino kino)
+    public KinosaalAuswaehlWerkzeug(List<Kinosaal> kinoSaele)
     {
-        assert kino != null : "Vorbedingung verletzt: kino != null";
+        assert !kinoSaele.isEmpty() : "Vorbedingung verletzt: !kinoSaele.isEmpty()";
         
         _ui = new KinosaalAuswaehlWerkzeugUI();
-        _kino = kino;
-        initialisiereAngezeigteKinosaalListe(_kino.getKinosaele());
+        initialisiereAngezeigteKinosaalListe(kinoSaele);
         registriereUIAktionen();
     }
     

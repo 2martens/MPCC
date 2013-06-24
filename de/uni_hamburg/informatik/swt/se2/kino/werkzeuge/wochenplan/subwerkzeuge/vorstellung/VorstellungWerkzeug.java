@@ -19,6 +19,7 @@ import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Film;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Werbeblock;
+import de.uni_hamburg.informatik.swt.se2.kino.services.kino.KinoService;
 
 /**
  * Mit diesem Werkzeug können Vorstellungen bearbeitet werden.
@@ -36,6 +37,7 @@ import de.uni_hamburg.informatik.swt.se2.kino.materialien.Werbeblock;
  */
 public class VorstellungWerkzeug extends Observable
 {
+    private KinoService _kinoService;
     private VorstellungWerkzeugUI _ui;
     private Vorstellung _vorstellung;
     private Reinigungszeit _reinigungszeit;
@@ -47,21 +49,24 @@ public class VorstellungWerkzeug extends Observable
     /**
      * Initialisiert das Werkzeug.
      * 
-     * @param filme
-     *            Eine Liste aller verfügbaren Filme.
+     * @param kinoService
+     *            Der KinoService, mit dem gearbeitet wird
      * @param kinosaalReinigungszeit
+     *            Die Reinigungszeit des Kinosaals
      * 
-     * @require !filme.isEmpty()
+     * @require kinoService != null
      * @require kinosaalReinigungszeit != null
      */
-    public VorstellungWerkzeug(List<Film> filme,
-            Reinigungszeit kinosaalReinigungszeit)
+    public VorstellungWerkzeug(KinoService kinoService, Reinigungszeit kinosaalReinigungszeit)
     {
-        assert !filme.isEmpty() : "Vorbedingung verletzt: !filme.isEmpty()";
+        assert kinoService != null : "Vorbedingung verletzt: kinoService != null";
         assert kinosaalReinigungszeit != null : "Vorbedingung verletzt: kinosaalReinigungszeit != null";
         
         _ui = new VorstellungWerkzeugUI();
         _reinigungszeit = kinosaalReinigungszeit;
+        _kinoService = kinoService;
+        
+        List<Film> filme = _kinoService.getFilme();
         
         _werbeblockMinuten = 0;
         _werbeblockFSK = FSK.FSK0;

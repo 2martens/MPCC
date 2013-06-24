@@ -9,10 +9,10 @@ import javax.swing.JPanel;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Film;
-import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kino;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Tagesplan;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
+import de.uni_hamburg.informatik.swt.se2.kino.services.kino.KinoService;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.wochenplan.subwerkzeuge.vorstellung.VorstellungWerkzeug;
 
 /**
@@ -26,7 +26,7 @@ public class TagWerkzeug implements Observer
 {
     private TagWerkzeugUI _ui;
     private Tagesplan _tagesplan;
-    private Kino _kino;
+    private KinoService _kinoService;
     private Kinosaal _kinosaal;
     
     // Subwerkzeuge
@@ -39,30 +39,36 @@ public class TagWerkzeug implements Observer
     /**
      * Initialisiert das TagWerkzeug.
      * 
-     * @param kino
+     * @param kinoService
+     *            Der KinoService, mit dem gearbeitet wird
      * @param kinosaal
+     *            Der aktuelle Kinosaal
      * 
-     * @require kino != null
+     * @require kinoService != null
      * @require kinosaal != null
      */
-    public TagWerkzeug(Kino kino, Kinosaal kinosaal)
+    public TagWerkzeug(KinoService kinoService, Kinosaal kinosaal)
     {
-        assert kino != null : "Vorbedingung verletzt: kino != null";
+        assert kinoService != null : "Vorbedingung verletzt: kinoService != null";
         assert kinosaal != null : "Vorbedingung verletzt: kinosaal != null";
         
-        _kino = kino;
+        _kinoService = kinoService;
         _kinosaal = kinosaal;
         _tagesplan = null;
         
-        List<Film> filme = _kino.getFilme();
         Reinigungszeit kinosaalReinigungszeit = _kinosaal.getReinigungszeit();
         
         // Subwerkzeuge initialisieren
-        _1100werkzeug = new VorstellungWerkzeug(filme, kinosaalReinigungszeit);
-        _1500werkzeug = new VorstellungWerkzeug(filme, kinosaalReinigungszeit);
-        _1730werkzeug = new VorstellungWerkzeug(filme, kinosaalReinigungszeit);
-        _2000werkzeug = new VorstellungWerkzeug(filme, kinosaalReinigungszeit);
-        _2230werkzeug = new VorstellungWerkzeug(filme, kinosaalReinigungszeit);
+        _1100werkzeug = new VorstellungWerkzeug(_kinoService,
+                kinosaalReinigungszeit);
+        _1500werkzeug = new VorstellungWerkzeug(_kinoService,
+                kinosaalReinigungszeit);
+        _1730werkzeug = new VorstellungWerkzeug(_kinoService,
+                kinosaalReinigungszeit);
+        _2000werkzeug = new VorstellungWerkzeug(_kinoService,
+                kinosaalReinigungszeit);
+        _2230werkzeug = new VorstellungWerkzeug(_kinoService,
+                kinosaalReinigungszeit);
         
         // bei Subwerkzeugen als Beobachter melden
         _1100werkzeug.addObserver(this);
@@ -212,46 +218,16 @@ public class TagWerkzeug implements Observer
         {
             case "Vorstellung-create":
                 Film film = werkzeug.getSelectedFilm();
-                Uhrzeit endZeit = berechneEndZeit(startZeit, film.getLaenge());
                 Vorstellung neueVorstellung = new Vorstellung(_kinosaal, film,
-                        startZeit, endZeit, _tagesplan.getDatum(),
+                        startZeit, _tagesplan.getDatum(),
                         Vorstellung.TICKETPREIS);
-                _tagesplan.fuegeVorstellungHinzu(neueVorstellung);
-                _kino.getTagesplan(_tagesplan.getDatum()).fuegeVorstellungHinzu(neueVorstellung);
+                _kinoService.fuegeVorstellungHinzu(neueVorstellung,
+                        _tagesplan.getDatum(), _kinosaal, startZeit);
                 werkzeug.setVorstellung(neueVorstellung);
                 break;
             case "Vorstellung-remove":
-                _tagesplan.entferneVorstellung(werkzeug.getVorstellung());
-                _kino.getTagesplan(_tagesplan.getDatum()).entferneVorstellung(werkzeug.getVorstellung());
+                _kinoService.entferneVorstellung(werkzeug.getVorstellung());
                 break;
         }
-    }
-    
-    /**
-     * Berechnet die Endzeit für eine gegebene Startzeit und eine Länge.
-     * 
-     * @param startZeit
-     *            Die Uhrzeit, von der ausgegangen wird.
-     * @param laenge
-     *            Die Dauer in Minuten, die hinzuaddiert werden soll.
-     * 
-     * @ensure result != null
-     */
-    private Uhrzeit berechneEndZeit(Uhrzeit startZeit, int laenge)
-    {
-        Uhrzeit endZeit;
-        int stunden = startZeit.getStunden();
-        stunden += laenge / 60;
-        
-        int minuten = startZeit.getMinuten();
-        minuten += laenge % 60;
-        
-        stunden += minuten / 60;
-        minuten = minuten % 60;
-        
-        stunden = (stunden >= 24 ? stunden - 24 : stunden);
-        
-        endZeit = new Uhrzeit(stunden, minuten);
-        return endZeit;
     }
 }

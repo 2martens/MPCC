@@ -6,9 +6,9 @@ import java.util.Observer;
 import javax.swing.JPanel;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
-import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kino;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Tagesplan;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
+import de.uni_hamburg.informatik.swt.se2.kino.services.kino.KinoService;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.datumsauswaehler.DatumAuswaehlWerkzeug;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.platzverkauf.PlatzVerkaufsWerkzeug;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.vorstellungsauswaehler.VorstellungsAuswaehlWerkzeug;
@@ -23,30 +23,31 @@ import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.vorstellungsauswaehler.V
  */
 public class KassenWerkzeug implements Observer
 {
-    // Das Material dieses Werkzeugs
-    private Kino _kino;
-
+    // Der Service dieses Werkzeugs
+    private KinoService _kinoService;
+    
     // UI dieses Werkzeugs
     private KassenWerkzeugUI _ui;
-
+    
     // Die Subwerkzeuge
     private PlatzVerkaufsWerkzeug _platzVerkaufsWerkzeug;
     private DatumAuswaehlWerkzeug _datumAuswaehlWerkzeug;
     private VorstellungsAuswaehlWerkzeug _vorstellungAuswaehlWerkzeug;
-
+    
     /**
      * Initialisiert das Kassenwerkzeug.
      * 
-     * @param kino das Kino, mit dem das Werkzeug arbeitet.
+     * @param kinoService
+     *            Der KinoService, mit dem das Werkzeug arbeitet.
      * 
-     * @require kino != null
+     * @require kinoService != null
      */
-    public KassenWerkzeug(Kino kino)
+    public KassenWerkzeug(KinoService kinoService)
     {
-        assert kino != null : "Vorbedingung verletzt: kino != null";
-
-        _kino = kino;
-
+        assert kinoService != null : "Vorbedingung verletzt: kinoService != null";
+        
+        _kinoService = kinoService;
+        
         // Subwerkzeuge erstellen
         _platzVerkaufsWerkzeug = new PlatzVerkaufsWerkzeug();
         _datumAuswaehlWerkzeug = new DatumAuswaehlWerkzeug();
@@ -55,12 +56,12 @@ public class KassenWerkzeug implements Observer
         // als Observer registrieren
         _datumAuswaehlWerkzeug.addObserver(this);
         _vorstellungAuswaehlWerkzeug.addObserver(this);
-
+        
         // UI erstellen (mit eingebetteten UIs der direkten Subwerkzeuge)
         _ui = new KassenWerkzeugUI(_platzVerkaufsWerkzeug.getUIPanel(),
                 _datumAuswaehlWerkzeug.getUIPanel(),
                 _vorstellungAuswaehlWerkzeug.getUIPanel());
-
+        
         setzeTagesplanFuerAusgewaehltesDatum();
         setzeAusgewaehlteVorstellung();
     }
@@ -82,17 +83,17 @@ public class KassenWerkzeug implements Observer
     {
         _vorstellungAuswaehlWerkzeug.aktualisiereVorstellungen();
     }
-
+    
     /**
      * Setzt den in diesem Werkzeug angezeigten Tagesplan basierend auf dem
-     * derzeit im DatumsAuswahlWerkzeug ausgewählten Datum.
+     * derzeit im DatumsAuswaehlWerkzeug ausgewählten Datum.
      */
     private void setzeTagesplanFuerAusgewaehltesDatum()
     {
-        Tagesplan tagesplan = _kino.getTagesplan(getAusgewaehltesDatum());
+        Tagesplan tagesplan = _kinoService.getTagesplan(getAusgewaehltesDatum());
         _vorstellungAuswaehlWerkzeug.setTagesplan(tagesplan);
     }
-
+    
     /**
      * Passt die Anzeige an, wenn eine andere Vorstellung gewählt wurde.
      */
@@ -100,7 +101,7 @@ public class KassenWerkzeug implements Observer
     {
         _platzVerkaufsWerkzeug.setVorstellung(getAusgewaehlteVorstellung());
     }
-
+    
     /**
      * Gibt das derzeit gewählte Datum zurück.
      */
@@ -108,7 +109,7 @@ public class KassenWerkzeug implements Observer
     {
         return _datumAuswaehlWerkzeug.getSelektiertesDatum();
     }
-
+    
     /**
      * Gibt die derzeit ausgewaehlte Vorstellung zurück. Wenn keine Vorstellung
      * ausgewählt ist, wird <code>null</code> zurückgegeben.
@@ -117,7 +118,7 @@ public class KassenWerkzeug implements Observer
     {
         return _vorstellungAuswaehlWerkzeug.getAusgewaehlteVorstellung();
     }
-
+    
     @Override
     public void update(Observable observable, Object object)
     {

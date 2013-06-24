@@ -21,12 +21,12 @@ import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
 public class VorstellungsAuswaehlWerkzeug extends Observable
 {
     private VorstellungsAuswaehlWerkzeugUI _ui;
-
+    
     // Das Material dieses Werkzeugs
     private Tagesplan _tagesplan;
     
     private List<Vorstellung> _vorstellungen;
-
+    
     /**
      * Initialisiert das Werkzeug.
      */
@@ -36,7 +36,7 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
         _vorstellungen = new ArrayList<Vorstellung>();
         registriereUIAktionen();
     }
-
+    
     /**
      * Diese Methode wird aufgerufen, wenn eine Vorstellung ausgewaehlt wurde.
      */
@@ -45,7 +45,7 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
         setChanged();
         notifyObservers();
     }
-
+    
     /**
      * Gibt das Panel dieses Subwerkzeugs zurück. Das Panel sollte von einem
      * Kontextwerkzeug eingebettet werden.
@@ -56,7 +56,7 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
     {
         return _ui.getUIPanel();
     }
-
+    
     /**
      * Gibt die derzeit ausgewählte Vorstellung zurück. Wenn keine Vorstellung
      * ausgewählt ist, wird <code>null</code> zurückgegeben.
@@ -70,7 +70,7 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
         {
             result = adapter.getVorstellung();
         }
-
+        
         return result;
     }
     
@@ -86,7 +86,7 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
             aktualisiereAngezeigteVorstellungsliste(vorstellungen);
         }
     }
-
+    
     /**
      * Setzt den Tagesplan, dessen Vorstellungen zur Auswahl angeboten werden.
      * 
@@ -95,11 +95,11 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
     public void setTagesplan(Tagesplan tagesplan)
     {
         assert tagesplan != null : "Vorbedingung verletzt: tagesplan != null";
-
+        
         _tagesplan = tagesplan;
         aktualisiereVorstellungen();
     }
-
+    
     /**
      * Aktualisiert die Liste der Vorstellungen.
      */
@@ -116,7 +116,7 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
         _ui.getVorstellungAuswahlList().setListData(varray);
         _ui.getVorstellungAuswahlList().setSelectedIndex(0);
     }
-
+    
     /**
      * 
      * Verbindet die fachlichen Aktionen mit den Interaktionselementen der
@@ -135,6 +135,7 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
                             vorstellungWurdeAusgewaehlt();
                         }
                     }
-                });
+                }
+        );
     }
 }
