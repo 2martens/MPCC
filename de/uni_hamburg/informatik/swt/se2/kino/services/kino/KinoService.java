@@ -1,0 +1,161 @@
+package de.uni_hamburg.informatik.swt.se2.kino.services.kino;
+
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
+import de.uni_hamburg.informatik.swt.se2.kino.materialien.Film;
+import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
+import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
+import de.uni_hamburg.informatik.swt.se2.kino.materialien.Werbeblock;
+import de.uni_hamburg.informatik.swt.se2.kino.services.ObservableService;
+
+/**
+ * Der Kino-Service erlaubt es Vorstellungen hinzuzufügen, zu bearbeiten und zu
+ * entfernen.
+ * 
+ * KinoService ist ein ObservableService. Als solcher bietet er die Möglichkeit
+ * über Vorstellungsänderungen zu informieren. Beobachter müssen das Interface
+ * ServiceObserver implementieren.
+ * 
+ * @author Jim Martens
+ * @version 24.06.2013
+ * @copyright 2013 Jim Martens
+ */
+public interface KinoService extends ObservableService
+{
+    /**
+     * Prüft, ob das Zeigen eines Films um die gegebene Uhrzeit möglich ist.
+     * 
+     * @param film
+     *            Der zu überprüfende Film
+     * @param werbeblock
+     *            Der vor dem Film gezeigte Werbeblock (auch <code>null</code>)
+     * @param reinigungszeit
+     *            Die nach dem Film eingeplante Reinigungszeit (auch
+     *            <code>null</code>)
+     * @param kinosaal
+     *            Der Kinosaal der Vorstellung
+     * @param datum
+     *            Das Datum der Vorstellung
+     * @param startzeit
+     *            Die Startzeit der Vorstellung
+     * 
+     * @require filmVorraetig(film)
+     * @require istKinosaalVorhanden(kinosaal)
+     * @require datum != null
+     * @require startzeit != null
+     * 
+     * @return <code>true</code> wenn das Zeigen des Films zu der Startzeit mit
+     *         dem Werbeblock möglich ist, <code>false</code> sonst
+     */
+    boolean istFilmZeigenMoeglich(Film film, Werbeblock werbeblock,
+            Reinigungszeit reinigungszeit, Kinosaal kinosaal, Datum datum,
+            Uhrzeit startzeit);
+    
+    /**
+     * Fügt eine Vorstellung in das Kinosystem ein.
+     * 
+     * @param vorstellung
+     *            Die einzufügende Vorstellung.
+     * @param datum
+     *            Der Tag der Vorstellung.
+     * @param kinosaal
+     *            Der Kinosaal der Vorstellung.
+     * @param startzeit
+     *            Die Startzeit der Vorstellung.
+     * 
+     * @require istHinzufuegenMoeglich(vorstellung)
+     * @require datum != null
+     * @require istKinosaalVorhanden(kinosaal)
+     * @require startzeit != null
+     * 
+     * @ensure getVorstellung(kinosaal, datum, startzeit) == vorstellung
+     * @ensure istVorstellungVorhanden(vorstellung)
+     */
+    void fuegeVorstellungHinzu(Vorstellung vorstellung, Datum datum,
+            Kinosaal kinosaal, Uhrzeit startzeit);
+    
+    /**
+     * Prüft, ob das Hinzufügen der Vorstellung möglich ist.
+     * 
+     * @param vorstellung
+     *            Die Vorstellung, für die das Hinzufügen geprüft werden soll.
+     * 
+     * @require vorstellung != null
+     * 
+     * @return <code>true</code>, wenn die Vorstellung hinzugefügt werden kann,
+     *         <code>false</code> sonst
+     */
+    boolean istHinzufuegenMoeglich(Vorstellung vorstellung);
+    
+    /**
+     * Prüft, ob eine Vorstellung vorhanden ist.
+     * 
+     * @param vorstellung
+     *            Die Vorstellung auf deren Vorhandensein geprüft werden soll.
+     * 
+     * @require vorstellung != null
+     * 
+     * @return <code>true</code>, wenn die Vorstellung vorhanden ist,
+     *         <code>false</code> sonst
+     */
+    boolean istVorstellungVorhanden(Vorstellung vorstellung);
+    
+    /**
+     * Entfernt eine Vorstellung aus dem Kinosystem.
+     * 
+     * @param vorstellung
+     *            Die zu entfernende Vorstellung
+     * 
+     * @require istVorstellungVorhanden(vorstellung)
+     * 
+     * @ensure !istVorstellungVorhanden(vorstellung)
+     */
+    void entferneVorstellung(Vorstellung vorstellung);
+    
+    /**
+     * Gibt eine Vorstellung zurück.
+     * 
+     * @param saal
+     *            Der Kinosaal der Vorstellung.
+     * @param datum
+     *            Das Datum der Vorstellung.
+     * @param startzeit
+     *            Die Startzeit der Vorstellung.
+     * 
+     * @require istKinosaalVorhanden(saal)
+     * @require datum != null
+     * @require startzeit != null
+     * @require Eine Vorstellung in dem Kinosaal, an dem gegebenen Tag zur
+     *          gegebenen Uhrzeit muss existieren.
+     * 
+     * @ensure result != null
+     */
+    Vorstellung getVorstellung(Kinosaal saal, Datum datum, Uhrzeit startzeit);
+    
+    /**
+     * Prüft, ob ein Kinosaal vorhanden ist.
+     * 
+     * @param kinosaal
+     *            Der zu überprüfende Kinosaal.
+     * 
+     * @require kinosaal != null
+     * 
+     * @return <code>true</code>, wenn der Kinosaal vorhanden ist,
+     *         <code>false</code> sonst
+     */
+    boolean istKinosaalVorhanden(Kinosaal kinosaal);
+    
+    /**
+     * Prüft, ob ein Film im Bestand des Kinosystems ist.
+     * 
+     * @param film
+     *            Der zu überprüfende Film.
+     * 
+     * @require film != null
+     * 
+     * @return <code>true</code>, wenn der Film vorrätig ist, <code>false</code>
+     *         sonst
+     */
+    boolean istFilmVorraetig(Film film);
+}
