@@ -173,7 +173,7 @@ public interface KinoService extends ObservableService
     
     /**
      * Gibt den Tagesplan für den gegebenen Tag zurück.
-     *  
+     * 
      * @param datum
      * 
      * @require datum != null
@@ -185,8 +185,10 @@ public interface KinoService extends ObservableService
     /**
      * Gibt den Wochenplan für die Woche und den Kinosaal zurück.
      * 
-     * @param kinosaal Der Kinosaal des Wochenplans
-     * @param woche Die Woche des Wochenplans
+     * @param kinosaal
+     *            Der Kinosaal des Wochenplans
+     * @param woche
+     *            Die Woche des Wochenplans
      * 
      * @require istKinosaalVorhanden(kinosaal)
      * @require woche != null
@@ -196,17 +198,44 @@ public interface KinoService extends ObservableService
     Wochenplan getWochenplan(Kinosaal kinosaal, Woche woche);
     
     /**
+     * Prüft, ob ein Wochenplan mit dem gegebenen Kinosaal und der gegebenen
+     * Woche vorhanden ist.
+     * 
+     * @param kinosaal
+     *            Der Kinosaal des Wochenplans
+     * @param woche
+     *            Die Woche des Wochenplans
+     * 
+     * @require istKinosaalVorhanden(kinosaal)
+     * @require woche != null
+     * 
+     * @return <code>true</code>, wenn ein Wochenplan vorhanden ist,
+     *         <code>false</code> sonst
+     */
+    boolean istWochenplanVorhanden(Kinosaal kinosaal, Woche woche);
+    
+    /**
      * Setzt den Wochenplan für den gegebenen Kinosaal und die gegebene Woche.
      * 
-     * @param wochenplan Der zu setzende Wochenplan
-     * @param kinosaal Der Kinosaal des Wochenplans
-     * @param woche Die Woche des Wochenplans
+     * @param wochenplan
+     *            Der zu setzende Wochenplan
+     * @param kinosaal
+     *            Der Kinosaal des Wochenplans
+     * @param woche
+     *            Die Woche des Wochenplans
      * 
-     * @require !istWochenplanVorhanden(wochenplan)
+     * @require !istWochenplanVorhanden(kinosaal, woche)
      * @require istKinosaalVorhanden(kinosaal)
      * @require woche != null
      * 
      * @ensure getWochenplan(kinosaal, woche) == wochenplan
      */
     void setWochenplan(Wochenplan wochenplan, Kinosaal kinosaal, Woche woche);
+    
+    /**
+     * Gibt eine Liste aller Kinosäle zurück.
+     * 
+     * @ensure result != null
+     */
+    List<Kinosaal> getKinosaele();
 }
