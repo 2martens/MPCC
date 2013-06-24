@@ -29,9 +29,8 @@ public class WochenplanTest
         _kinosaal = new Kinosaal("Kino1", 10, 10, new Reinigungszeit(15));
         Film film = new Film("Hammersmith", 90, FSK.FSK12, false, false);
         Uhrzeit anfang = new Uhrzeit(17, 30);
-        Uhrzeit ende = new Uhrzeit(20, 00);
         Datum datum = _woche.getWochentage().get(0).getDatum();
-        _vorstellung = new Vorstellung(_kinosaal, film, anfang, ende, datum, 750);
+        _vorstellung = new Vorstellung(_kinosaal, film, anfang, datum, 750);
     }
     
     @Test
