@@ -61,6 +61,15 @@ public class WochenplanWerkzeug
         _kinoService = kinoService;
         _woche = woche;
         _kinosaal = kinosaal;
+        if (_kinoService.istWochenplanVorhanden(_kinosaal, _woche))
+        {
+            _wochenplan = _kinoService.getWochenplan(_kinosaal, _woche);
+        }
+        else
+        {
+            _wochenplan = new Wochenplan(_woche, _kinosaal);
+            _kinoService.setWochenplan(_wochenplan, _kinosaal, _woche);
+        }
         
         // Subwerkzeuge initialisieren
         List<Tag> wochentage = _woche.getWochentage();
@@ -105,7 +114,6 @@ public class WochenplanWerkzeug
                 _sonntagWerkzeug.getUIPanel(), _montagWerkzeug.getUIPanel(),
                 _dienstagWerkzeug.getUIPanel(), _mittwochWerkzeug.getUIPanel());
         
-        aktualisiereWochenplan();
     }
     
     /**
@@ -168,19 +176,16 @@ public class WochenplanWerkzeug
      */
     private void aktualisiereWochenplan()
     {
-        if (_woche != null && _kinosaal != null)
+        if (_kinoService.istWochenplanVorhanden(_kinosaal, _woche))
         {
-            if (_kinoService.istWochenplanVorhanden(_kinosaal, _woche))
-            {
-                _wochenplan = _kinoService.getWochenplan(_kinosaal, _woche);
-            }
-            else
-            {
-                _wochenplan = new Wochenplan(_woche, _kinosaal);
-                _kinoService.setWochenplan(_wochenplan, _kinosaal, _woche);
-            }
-            aktualisiereUI();
+            _wochenplan = _kinoService.getWochenplan(_kinosaal, _woche);
         }
+        else
+        {
+            _wochenplan = new Wochenplan(_woche, _kinosaal);
+            _kinoService.setWochenplan(_wochenplan, _kinosaal, _woche);
+        }
+        aktualisiereUI();
     }
     
     /**
@@ -209,32 +214,32 @@ public class WochenplanWerkzeug
                 switch (tag.getWochentag())
                 {
                     case DONNERSTAG:
-                        _donnerstagWerkzeug.setTagesplan(tagesplan);
                         _donnerstagWerkzeug.setKinosaal(_kinosaal);
+                        _donnerstagWerkzeug.setTagesplan(tagesplan);
                         break;
                     case FREITAG:
-                        _freitagWerkzeug.setTagesplan(tagesplan);
                         _freitagWerkzeug.setKinosaal(_kinosaal);
+                        _freitagWerkzeug.setTagesplan(tagesplan);
                         break;
                     case SAMSTAG:
-                        _samstagWerkzeug.setTagesplan(tagesplan);
                         _samstagWerkzeug.setKinosaal(_kinosaal);
+                        _samstagWerkzeug.setTagesplan(tagesplan);
                         break;
                     case SONNTAG:
-                        _sonntagWerkzeug.setTagesplan(tagesplan);
                         _sonntagWerkzeug.setKinosaal(_kinosaal);
+                        _sonntagWerkzeug.setTagesplan(tagesplan);
                         break;
                     case MONTAG:
-                        _montagWerkzeug.setTagesplan(tagesplan);
                         _montagWerkzeug.setKinosaal(_kinosaal);
+                        _montagWerkzeug.setTagesplan(tagesplan);
                         break;
                     case DIENSTAG:
-                        _dienstagWerkzeug.setTagesplan(tagesplan);
                         _dienstagWerkzeug.setKinosaal(_kinosaal);
+                        _dienstagWerkzeug.setTagesplan(tagesplan);
                         break;
                     case MITTWOCH:
-                        _mittwochWerkzeug.setTagesplan(tagesplan);
                         _mittwochWerkzeug.setKinosaal(_kinosaal);
+                        _mittwochWerkzeug.setTagesplan(tagesplan);
                         break;
                 }
             }
