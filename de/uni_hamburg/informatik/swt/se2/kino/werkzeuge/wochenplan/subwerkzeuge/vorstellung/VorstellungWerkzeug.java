@@ -14,9 +14,12 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.FSK;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Film;
+import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Werbeblock;
 import de.uni_hamburg.informatik.swt.se2.kino.services.kino.KinoService;
@@ -25,8 +28,9 @@ import de.uni_hamburg.informatik.swt.se2.kino.services.kino.KinoService;
  * Mit diesem Werkzeug können Vorstellungen bearbeitet werden.
  * 
  * Das Kontextwerkzeug kann sich als Beobachter über Änderungen bezüglich
- * <code>Vorstellung-create</code> (Vorstellung erzeugt) und
- * <code>Vorstellung-remove</code> (Vorstellung entfernt) informieren.
+ * <code>Vorstellungsanzeige</code> (Bedingungen für Vorstellungserstellbarkeit
+ * haben sich geändert), <code>Vorstellung-create</code> (Vorstellung erzeugt)
+ * und <code>Vorstellung-remove</code> (Vorstellung entfernt) informieren.
  * 
  * Diese Schlüsselwerte werden im zweiten Parameter als String der
  * update-Methode übergeben.
@@ -39,39 +43,62 @@ public class VorstellungWerkzeug extends Observable
 {
     private KinoService _kinoService;
     private VorstellungWerkzeugUI _ui;
+    private Uhrzeit _startzeit;
+    private List<Film> _filme;
+    
+    private Datum _datum;
+    private Kinosaal _kinosaal;
     private Vorstellung _vorstellung;
-    private Reinigungszeit _reinigungszeit;
     
     private Film _selectedFilm;
     private int _werbeblockMinuten;
+    private int _werbeblockMaxMinuten;
     private FSK _werbeblockFSK;
+    private Reinigungszeit _reinigungszeit;
+    private Werbeblock _werbeblock;
+    
+    private List<FilmFormatierer> _formatierer;
     
     /**
      * Initialisiert das Werkzeug.
      * 
      * @param kinoService
      *            Der KinoService, mit dem gearbeitet wird
-     * @param kinosaalReinigungszeit
-     *            Die Reinigungszeit des Kinosaals
+     * @param kinosaal
+     *            Der Kinosaal der Vorstellung, die dieses Werkzeug bearbeitet
+     * @param startzeit
+     *            Die Startzeit der Vorstellung, die dieses Werkzeug bearbeitet
+     * @param datum
+     *            Der Tag der Vorstellung, die dieses Werkzeug bearbeitet
      * 
      * @require kinoService != null
-     * @require kinosaalReinigungszeit != null
+     * @require kinosaal != null
+     * @require startzeit != null
+     * @require datum != null
      */
-    public VorstellungWerkzeug(KinoService kinoService, Reinigungszeit kinosaalReinigungszeit)
+    public VorstellungWerkzeug(KinoService kinoService, Kinosaal kinosaal,
+            Uhrzeit startzeit, Datum datum)
     {
         assert kinoService != null : "Vorbedingung verletzt: kinoService != null";
-        assert kinosaalReinigungszeit != null : "Vorbedingung verletzt: kinosaalReinigungszeit != null";
+        assert kinosaal != null : "Vorbedingung verletzt: kinosaal != null";
+        assert startzeit != null : "Vorbedingung verletzt: startzeit != null";
+        assert datum != null : "Vorbedingung verletzt: datum != null";
         
         _ui = new VorstellungWerkzeugUI();
-        _reinigungszeit = kinosaalReinigungszeit;
+        _kinosaal = kinosaal;
         _kinoService = kinoService;
-        
-        List<Film> filme = _kinoService.getFilme();
-        
+        _startzeit = startzeit;
+        _datum = datum;
+        _vorstellung = null;
         _werbeblockMinuten = 0;
+        _werbeblockMaxMinuten = 0;
         _werbeblockFSK = FSK.FSK0;
-        _selectedFilm = filme.get(0);
-        initGUI(filme);
+        _reinigungszeit = null;
+        _werbeblock = null;
+        _filme = _kinoService.getFilme();
+        _selectedFilm = _filme.get(0);
+        
+        initGUI(_filme);
         
         registriereUIAktionen();
     }
@@ -90,16 +117,17 @@ public class VorstellungWerkzeug extends Observable
     }
     
     /**
-     * Setzt die Kinosaal-gebundene Reinigungszeit.
+     * Setzt den Kinosaal.
      * 
-     * @param reinigungszeit
+     * @param kinosaal
+     *            Der Kinosaal für die Vorstellung
      * 
-     * @require reinigungszeit != null
+     * @require kinosaal!= null
      */
-    public void setReinigungszeit(Reinigungszeit reinigungszeit)
+    public void setKinosaal(Kinosaal kinosaal)
     {
-        assert reinigungszeit != null : "Vorbedingung verletzt: reinigungszeit != null";
-        _reinigungszeit = reinigungszeit;
+        assert kinosaal != null : "Vorbedingung verletzt: kinosaal != null";
+        _kinosaal = kinosaal;
     }
     
     /**
@@ -134,6 +162,17 @@ public class VorstellungWerkzeug extends Observable
     public FSK getWerbeblockFSK()
     {
         return _werbeblockFSK;
+    }
+    
+    /**
+     * Aktualisiert die Vorstellung.
+     */
+    public void aktualisiereVorstellung()
+    {
+        aktualisiereVorstellungsCheckbox();
+        aktualisiereWerbeblockMaxMinuten();
+        aktualisiereReinigungsCheckbox();
+        aktualisiereFilmauswahl();
     }
     
     /**
@@ -172,6 +211,7 @@ public class VorstellungWerkzeug extends Observable
         {
             filmBox.addItem(formatierer);
         }
+        _formatierer = filmFormatierer;
         filmAusgewaehlt();
     }
     
@@ -183,6 +223,10 @@ public class VorstellungWerkzeug extends Observable
         if (_vorstellung != null)
         {
             _ui.getVorstellungCheckBox().setSelected(true);
+            if (_vorstellung.getAnzahlVerkauftePlaetze() > 0)
+            {
+                _ui.getVorstellungCheckBox().setEnabled(false);
+            }
             
             // Film aktualisieren
             Film film = _vorstellung.getFilm();
@@ -303,6 +347,8 @@ public class VorstellungWerkzeug extends Observable
         {
             _vorstellung.setFilm(_selectedFilm);
         }
+        setChanged();
+        notifyObservers("Vorstellungsanzeige");
     }
     
     /**
@@ -320,12 +366,12 @@ public class VorstellungWerkzeug extends Observable
         if (_werbeblockMinuten == 0 && _vorstellung.hatWerbeblock())
         {
             _vorstellung.entferneWerbeblock();
+            _werbeblock = null;
         }
         else if (_werbeblockMinuten > 0)
         {
-            Werbeblock werbeblock = new Werbeblock(_werbeblockMinuten,
-                    _werbeblockFSK);
-            _vorstellung.setWerbeblock(werbeblock);
+            _werbeblock = new Werbeblock(_werbeblockMinuten, _werbeblockFSK);
+            _vorstellung.setWerbeblock(_werbeblock);
         }
     }
     
@@ -336,17 +382,25 @@ public class VorstellungWerkzeug extends Observable
     {
         JTextField werbeblockMinuten = _ui.getWerbeblockMinutenInput();
         String input = werbeblockMinuten.getText();
-        _werbeblockMinuten = Integer.parseInt(input);
+        int werbeblockMinutenInt = Integer.parseInt(input);
+        if (werbeblockMinutenInt > _werbeblockMaxMinuten)
+        {
+            werbeblockMinutenInt = _werbeblockMaxMinuten;
+        }
+        _werbeblockMinuten = werbeblockMinutenInt;
+        
         if (_werbeblockMinuten == 0 && _vorstellung.hatWerbeblock())
         {
             _vorstellung.entferneWerbeblock();
+            _werbeblock = null;
         }
         else if (_werbeblockMinuten > 0)
         {
-            Werbeblock werbeblock = new Werbeblock(_werbeblockMinuten,
-                    _werbeblockFSK);
-            _vorstellung.setWerbeblock(werbeblock);
+            _werbeblock = new Werbeblock(_werbeblockMinuten, _werbeblockFSK);
+            _vorstellung.setWerbeblock(_werbeblock);
         }
+        setChanged();
+        notifyObservers("Vorstellungsanzeige");
     }
     
     /**
@@ -386,8 +440,7 @@ public class VorstellungWerkzeug extends Observable
         JTextField werbeblockMinuten = _ui.getWerbeblockMinutenInput();
         if (_vorstellung.hatWerbeblock())
         {
-            Werbeblock werbeblock = _vorstellung.getWerbeblock();
-            werbeblockMinuten.setText(String.valueOf(werbeblock.getLaenge()));
+            werbeblockMinuten.setText(String.valueOf(_werbeblock.getLaenge()));
         }
     }
     
@@ -403,6 +456,123 @@ public class VorstellungWerkzeug extends Observable
         else
         {
             _ui.getReinigungszeitCheckBox().setSelected(false);
+        }
+    }
+    
+    /**
+     * Wird aufgerufen, wenn sich die Faktoren für die Vorstellungslänge ändern.
+     */
+    private void aktualisiereFilmauswahl()
+    {
+        List<FilmFormatierer> filmFormatierer = new ArrayList<FilmFormatierer>();
+        JComboBox<FilmFormatierer> filmBox = _ui.getFilmBox();
+        for (Film film : _filme)
+        {
+            if (_kinoService.istFilmZeigenMoeglich(film, _werbeblock,
+                    _reinigungszeit, _kinosaal, _datum, _startzeit))
+            {
+                filmFormatierer.add(new FilmFormatierer(film));
+            }
+        }
+        
+        if (!filmFormatierer.equals(_formatierer))
+        {
+            filmBox.removeAllItems();
+            boolean filmAuswaehlen = true;
+            for (FilmFormatierer formatierer : filmFormatierer)
+            {
+                filmBox.addItem(formatierer);
+                if (formatierer.getFilm().equals(_selectedFilm))
+                {
+                    filmAuswaehlen = false;
+                }
+            }
+            if (filmAuswaehlen)
+            {
+                filmAusgewaehlt();
+            }
+        }
+    }
+    
+    /**
+     * Aktualisiert die maximal erlaubte Anzahl an Werbeblock-Dauer für die
+     * aktuelle Situation.
+     */
+    private void aktualisiereWerbeblockMaxMinuten()
+    {
+        if (_vorstellung != null)
+        {
+            _werbeblockMaxMinuten = _kinoService.getWerbeblockMaximalDauer(
+                    _kinosaal, _datum, _startzeit, _vorstellung);
+        }
+    }
+    
+    /**
+     * Aktualisiert die Vorstellungs-Checkbox.
+     */
+    private void aktualisiereVorstellungsCheckbox()
+    {
+        if (_vorstellung != null)
+        {
+            if (_vorstellung.getAnzahlVerkauftePlaetze() > 0)
+            {
+                _ui.getVorstellungCheckBox().setEnabled(false);
+            }
+            else if (_vorstellung.getAnzahlVerkauftePlaetze() == 0)
+            {
+                _ui.getVorstellungCheckBox().setEnabled(true);
+            }
+        }
+        else
+        {
+            if (!_kinoService.istVorstellungErstellbar(_kinosaal, _datum,
+                    _startzeit))
+            {
+                _ui.getVorstellungCheckBox().setEnabled(false);
+            }
+            else
+            {
+                _ui.getVorstellungCheckBox().setEnabled(true);
+            }
+        }
+    }
+    
+    /**
+     * Aktualisiert die Reinigungszeit-Checkbox.
+     */
+    private void aktualisiereReinigungsCheckbox()
+    {
+        if (_vorstellung != null)
+        {
+            if (!_vorstellung.hatReinigungszeit())
+            {
+                boolean result = _kinoService.istFilmZeigenMoeglich(
+                        _selectedFilm, _werbeblock, _reinigungszeit, _kinosaal,
+                        _datum, _startzeit);
+                if (result)
+                {
+                    result = _kinoService.istFilmZeigenMoeglich(_selectedFilm,
+                            _werbeblock, _kinosaal.getReinigungszeit(),
+                            _kinosaal, _datum, _startzeit);
+                    if (!result)
+                    {
+                        _ui.getReinigungszeitCheckBox().setEnabled(false);
+                    }
+                    else
+                    {
+                        _ui.getReinigungszeitCheckBox().setEnabled(true);
+                    }
+                }
+                else
+                {
+                    throw new RuntimeException(
+                            "Dies hätte nicht passieren dürfen.");
+                }
+            }
+            else
+            {
+                _ui.getReinigungszeitCheckBox().setEnabled(true);
+            }
         }
     }
     
@@ -438,6 +608,9 @@ public class VorstellungWerkzeug extends Observable
     private void reinigungszeitEntfernen()
     {
         _vorstellung.entferneReinigungszeit();
+        _reinigungszeit = null;
+        setChanged();
+        notifyObservers("Vorstellungsanzeige");
     }
     
     /**
@@ -445,6 +618,9 @@ public class VorstellungWerkzeug extends Observable
      */
     private void reinigungszeitEinplanen()
     {
+        _reinigungszeit = _kinosaal.getReinigungszeit();
         _vorstellung.setReinigungszeit(_reinigungszeit);
+        setChanged();
+        notifyObservers("Vorstellungsanzeige");
     }
 }

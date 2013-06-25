@@ -6,7 +6,7 @@ import java.util.Observer;
 
 import javax.swing.JPanel;
 
-import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Film;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
@@ -43,32 +43,34 @@ public class TagWerkzeug implements Observer
      *            Der KinoService, mit dem gearbeitet wird
      * @param kinosaal
      *            Der aktuelle Kinosaal
+     * @param datum
+     *            Das aktuelle Datum
      * 
      * @require kinoService != null
      * @require kinosaal != null
+     * @require datum != null
      */
-    public TagWerkzeug(KinoService kinoService, Kinosaal kinosaal)
+    public TagWerkzeug(KinoService kinoService, Kinosaal kinosaal, Datum datum)
     {
         assert kinoService != null : "Vorbedingung verletzt: kinoService != null";
         assert kinosaal != null : "Vorbedingung verletzt: kinosaal != null";
+        assert datum != null : "Vorbedingung verletzt: datum != null";
         
         _kinoService = kinoService;
         _kinosaal = kinosaal;
-        _tagesplan = null;
-        
-        Reinigungszeit kinosaalReinigungszeit = _kinosaal.getReinigungszeit();
+        _tagesplan = _kinoService.getTagesplan(datum);
         
         // Subwerkzeuge initialisieren
-        _1100werkzeug = new VorstellungWerkzeug(_kinoService,
-                kinosaalReinigungszeit);
-        _1500werkzeug = new VorstellungWerkzeug(_kinoService,
-                kinosaalReinigungszeit);
-        _1730werkzeug = new VorstellungWerkzeug(_kinoService,
-                kinosaalReinigungszeit);
-        _2000werkzeug = new VorstellungWerkzeug(_kinoService,
-                kinosaalReinigungszeit);
-        _2230werkzeug = new VorstellungWerkzeug(_kinoService,
-                kinosaalReinigungszeit);
+        _1100werkzeug = new VorstellungWerkzeug(_kinoService, _kinosaal,
+                new Uhrzeit(11, 00), _tagesplan.getDatum());
+        _1500werkzeug = new VorstellungWerkzeug(_kinoService, _kinosaal,
+                new Uhrzeit(15, 00), _tagesplan.getDatum());
+        _1730werkzeug = new VorstellungWerkzeug(_kinoService, _kinosaal,
+                new Uhrzeit(17, 30), _tagesplan.getDatum());
+        _2000werkzeug = new VorstellungWerkzeug(_kinoService, _kinosaal,
+                new Uhrzeit(20, 00), _tagesplan.getDatum());
+        _2230werkzeug = new VorstellungWerkzeug(_kinoService, _kinosaal,
+                new Uhrzeit(22, 30), _tagesplan.getDatum());
         
         // bei Subwerkzeugen als Beobachter melden
         _1100werkzeug.addObserver(this);
@@ -93,7 +95,7 @@ public class TagWerkzeug implements Observer
     {
         assert kinosaal != null : "Vorbedingung verletzt: kinosaal != null";
         _kinosaal = kinosaal;
-        aktualisiereReinigungszeiten();
+        aktualisiereKinosaele();
     }
     
     /**
@@ -111,6 +113,18 @@ public class TagWerkzeug implements Observer
     }
     
     /**
+     * Aktualisiert die Vorstellungen der Subwerkzeuge.
+     */
+    public void aktualisiereVorstellungen()
+    {
+        _1100werkzeug.aktualisiereVorstellung();
+        _1500werkzeug.aktualisiereVorstellung();
+        _1730werkzeug.aktualisiereVorstellung();
+        _2000werkzeug.aktualisiereVorstellung();
+        _2230werkzeug.aktualisiereVorstellung();
+    }
+    
+    /**
      * Gibt das UI-Panel zurück.
      */
     public JPanel getUIPanel()
@@ -119,15 +133,15 @@ public class TagWerkzeug implements Observer
     }
     
     /**
-     * Aktualisiert die Reinigungszeiten der Subwerkzeuge.
+     * Aktualisiert die Kinosäle der Subwerkzeuge.
      */
-    private void aktualisiereReinigungszeiten()
+    private void aktualisiereKinosaele()
     {
-        _1100werkzeug.setReinigungszeit(_kinosaal.getReinigungszeit());
-        _1500werkzeug.setReinigungszeit(_kinosaal.getReinigungszeit());
-        _1730werkzeug.setReinigungszeit(_kinosaal.getReinigungszeit());
-        _2000werkzeug.setReinigungszeit(_kinosaal.getReinigungszeit());
-        _2230werkzeug.setReinigungszeit(_kinosaal.getReinigungszeit());
+        _1100werkzeug.setKinosaal(_kinosaal);
+        _1500werkzeug.setKinosaal(_kinosaal);
+        _1730werkzeug.setKinosaal(_kinosaal);
+        _2000werkzeug.setKinosaal(_kinosaal);
+        _2230werkzeug.setKinosaal(_kinosaal);
     }
     
     /**
@@ -224,9 +238,13 @@ public class TagWerkzeug implements Observer
                 _kinoService.fuegeVorstellungHinzu(neueVorstellung,
                         _tagesplan.getDatum(), _kinosaal, startZeit);
                 werkzeug.setVorstellung(neueVorstellung);
+                aktualisiereVorstellungen();
                 break;
             case "Vorstellung-remove":
                 _kinoService.entferneVorstellung(werkzeug.getVorstellung());
+                break;
+            case "Vorstellungsanzeige":
+                aktualisiereVorstellungen();
                 break;
         }
     }

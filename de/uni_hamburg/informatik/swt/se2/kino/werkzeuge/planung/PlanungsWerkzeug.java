@@ -68,6 +68,14 @@ public class PlanungsWerkzeug implements Observer
         return _ui.getUIPanel();
     }
     
+    /**
+     * Aktualisiert die Vorstellungen.
+     */
+    public void aktualisiereVorstellungen()
+    {
+        _wochenplanWerkzeug.aktualisiereVorstellungen();
+    }
+    
     @Override
     public void update(Observable o, Object arg)
     {

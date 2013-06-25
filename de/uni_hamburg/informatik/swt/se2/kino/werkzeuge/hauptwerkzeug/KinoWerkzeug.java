@@ -70,6 +70,7 @@ public class KinoWerkzeug
             public void actionPerformed(ActionEvent e)
             {
                 _ui.zeigePlanung();
+                _planungsWerkzeug.aktualisiereVorstellungen();
             }
         });
     }

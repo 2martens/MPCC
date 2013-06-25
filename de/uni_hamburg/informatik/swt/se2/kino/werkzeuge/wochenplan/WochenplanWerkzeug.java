@@ -40,15 +40,19 @@ public class WochenplanWerkzeug
     /**
      * Initialisiert dieses Werkzeug.
      * 
-     * @param kinoService Der KinoService, mit dem gearbeitet wird.
-     * @param kinosaal Der aktuelle Kinosaal
-     * @param woche Die aktuelle Woche
+     * @param kinoService
+     *            Der KinoService, mit dem gearbeitet wird.
+     * @param kinosaal
+     *            Der aktuelle Kinosaal
+     * @param woche
+     *            Die aktuelle Woche
      * 
      * @require kino != null
      * @require kinosaal != null
      * @require woche != null
      */
-    public WochenplanWerkzeug(KinoService kinoService, Kinosaal kinosaal, Woche woche)
+    public WochenplanWerkzeug(KinoService kinoService, Kinosaal kinosaal,
+            Woche woche)
     {
         assert kinoService != null : "Vorbedingung verletzt: kinoService != null";
         assert kinosaal != null : "Vorbedingung verletzt: kinosaal != null";
@@ -59,13 +63,42 @@ public class WochenplanWerkzeug
         _kinosaal = kinosaal;
         
         // Subwerkzeuge initialisieren
-        _donnerstagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal);
-        _freitagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal);
-        _samstagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal);
-        _sonntagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal);
-        _montagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal);
-        _dienstagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal);
-        _mittwochWerkzeug = new TagWerkzeug(_kinoService, _kinosaal);
+        List<Tag> wochentage = _woche.getWochentage();
+        
+        for (Tag tag : wochentage)
+        {
+            switch (tag.getWochentag())
+            {
+                case DONNERSTAG:
+                    _donnerstagWerkzeug = new TagWerkzeug(_kinoService,
+                            _kinosaal, tag.getDatum());
+                    break;
+                case FREITAG:
+                    _freitagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal,
+                            tag.getDatum());
+                    break;
+                case SAMSTAG:
+                    _samstagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal,
+                            tag.getDatum());
+                    break;
+                case SONNTAG:
+                    _sonntagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal,
+                            tag.getDatum());
+                    break;
+                case MONTAG:
+                    _montagWerkzeug = new TagWerkzeug(_kinoService, _kinosaal,
+                            tag.getDatum());
+                    break;
+                case DIENSTAG:
+                    _dienstagWerkzeug = new TagWerkzeug(_kinoService,
+                            _kinosaal, tag.getDatum());
+                    break;
+                case MITTWOCH:
+                    _mittwochWerkzeug = new TagWerkzeug(_kinoService,
+                            _kinosaal, tag.getDatum());
+                    break;
+            }
+        }
         
         _ui = new WochenplanWerkzeugUI(_donnerstagWerkzeug.getUIPanel(),
                 _freitagWerkzeug.getUIPanel(), _samstagWerkzeug.getUIPanel(),
@@ -103,6 +136,20 @@ public class WochenplanWerkzeug
         assert kinosaal != null : "Vorbedingung verletzt: kinosaal != null";
         _kinosaal = kinosaal;
         aktualisiereWochenplan();
+    }
+    
+    /**
+     * Aktualisiert die Vorstellungen.
+     */
+    public void aktualisiereVorstellungen()
+    {
+        _donnerstagWerkzeug.aktualisiereVorstellungen();
+        _freitagWerkzeug.aktualisiereVorstellungen();
+        _samstagWerkzeug.aktualisiereVorstellungen();
+        _sonntagWerkzeug.aktualisiereVorstellungen();
+        _montagWerkzeug.aktualisiereVorstellungen();
+        _dienstagWerkzeug.aktualisiereVorstellungen();
+        _mittwochWerkzeug.aktualisiereVorstellungen();
     }
     
     /**
