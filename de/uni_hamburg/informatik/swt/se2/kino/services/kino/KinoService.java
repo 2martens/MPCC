@@ -253,9 +253,29 @@ public interface KinoService extends ObservableService
     boolean istVorstellungEntfernenMoeglich(Vorstellung vorstellung);
     
     /**
-     * Berechnet die maximale Dauer, die ein Werbeblock einer Vorstellung dauern kann.
+     * Prüft, ob eine Vorstellung erstellbar ist mit den angegebenen Daten.
      * 
-     * @param vorstellung Die Vorstellung, für die die maximale Werbeblocklänge berechnet werden soll.
+     * @param kinosaal
+     *            Der Kinosaal der Vorstellung
+     * @param datum
+     *            Das Datum der Vorstellung
+     * @param startzeit
+     *            Die Startzeit der Vorstellung
+     * 
+     * @require istKinosaalVorhanden(kinosaal)
+     * @require datum != null
+     * @require startzeit != null
+     */
+    boolean istVorstellungErstellbar(Kinosaal kinosaal, Datum datum,
+            Uhrzeit startzeit);
+    
+    /**
+     * Berechnet die maximale Dauer, die ein Werbeblock einer Vorstellung dauern
+     * kann.
+     * 
+     * @param vorstellung
+     *            Die Vorstellung, für die die maximale Werbeblocklänge
+     *            berechnet werden soll.
      * 
      * @require istVorstellungVorhanden(vorstellung)
      * 
