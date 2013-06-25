@@ -1,5 +1,6 @@
 package de.uni_hamburg.informatik.swt.se2.kino.services.kino;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
@@ -211,44 +212,49 @@ public class KinoServiceImpl extends AbstractObservableService implements
     @Override
     public List<Film> getFilme()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new ArrayList<Film>(_kino.getFilme());
     }
     
     @Override
     public Tagesplan getTagesplan(Datum datum)
     {
-        // TODO Auto-generated method stub
-        return null;
+        assert datum != null : "Vorbedingung verletzt: datum != null";
+        return _kino.getTagesplan(datum);
     }
     
     @Override
     public Wochenplan getWochenplan(Kinosaal kinosaal, Woche woche)
     {
-        // TODO Auto-generated method stub
-        return null;
+        assert istKinosaalVorhanden(kinosaal) : "Vorbedingung verletzt: istKinosaalVorhanden(kinosaal)";
+        assert woche != null : "Vorbedingung verletzt: woche != null";
+        
+        return _kino.getWochenplan(kinosaal, woche);
     }
     
     @Override
     public void setWochenplan(Wochenplan wochenplan, Kinosaal kinosaal,
             Woche woche)
     {
-        // TODO Auto-generated method stub
+        assert istKinosaalVorhanden(kinosaal) : "Vorbedingung verletzt: istKinosaalVorhanden(kinosaal)";
+        assert woche != null : "Vorbedingung verletzt: woche != null";
+        assert !istWochenplanVorhanden(kinosaal, woche) : "Vorbedingung verletzt: !istWochenplanVorhanden(kinosaal, woche)";
         
+        _kino.setWochenplan(kinosaal, woche, wochenplan);
     }
     
     @Override
     public boolean istWochenplanVorhanden(Kinosaal kinosaal, Woche woche)
     {
-        // TODO Auto-generated method stub
-        return false;
+        assert istKinosaalVorhanden(kinosaal) : "Vorbedingung verletzt: istKinosaalVorhanden(kinosaal)";
+        assert woche != null : "Vorbedingung verletzt: woche != null";
+        
+        return _kino.istWochenplanVorhanden(kinosaal, woche);
     }
     
     @Override
     public List<Kinosaal> getKinosaele()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new ArrayList<Kinosaal>(_kino.getKinosaele());
     }
     
 }
