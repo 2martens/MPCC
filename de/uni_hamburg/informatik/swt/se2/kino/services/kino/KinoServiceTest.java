@@ -1,5 +1,6 @@
 package de.uni_hamburg.informatik.swt.se2.kino.services.kino;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -11,11 +12,14 @@ import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.FSK;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Woche;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Film;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kino;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
+import de.uni_hamburg.informatik.swt.se2.kino.materialien.Tagesplan;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Werbeblock;
+import de.uni_hamburg.informatik.swt.se2.kino.materialien.Wochenplan;
 
 /**
  * Testklasse für KinoService.
@@ -174,4 +178,52 @@ public class KinoServiceTest
         assertFalse(_kinoService.istFilmVorraetig(_filmNichtVorhanden));
     }
     
+    @Test
+    public void testGetFilme()
+    {
+        assertEquals(_kino.getFilme(), _kinoService.getFilme());
+    }
+    
+    @Test
+    public void testGetTagesplan()
+    {
+        Tagesplan sollPlan = _kino.getTagesplan(_heute);
+        Tagesplan istPlan = _kinoService.getTagesplan(_heute);
+        assertSame(sollPlan, istPlan);
+    }
+    
+    @Test
+    public void testGetWochenplan()
+    {
+        Wochenplan sollPlan = _kino.getWochenplan(_kinosaal1,
+                Woche.dieseWoche());
+        Wochenplan istPlan = _kino
+                .getWochenplan(_kinosaal1, Woche.dieseWoche());
+        assertSame(sollPlan, istPlan);
+    }
+    
+    @Test
+    public void testSetWochenplan()
+    {
+        Woche woche = Woche.dieseWoche().naechsteWoche();
+        assertFalse(_kinoService.istWochenplanVorhanden(_kinosaal1, woche));
+        Wochenplan wochenplan = new Wochenplan(woche, _kinosaal1);
+        _kinoService.setWochenplan(wochenplan, _kinosaal1, woche);
+        assertTrue(_kinoService.istWochenplanVorhanden(_kinosaal1, woche));
+    }
+    
+    @Test
+    public void testIstWochenplanVorhanden()
+    {
+        assertTrue(_kinoService.istWochenplanVorhanden(_kinosaal1,
+                Woche.dieseWoche()));
+        assertFalse(_kinoService.istWochenplanVorhanden(_kinosaal1,
+                Woche.wocheMitDiesemTag(new Datum(1, 1, 1970))));
+    }
+    
+    @Test
+    public void testGetKinosaele()
+    {
+        assertEquals(_kino.getKinosaele(), _kinoService.getKinosaele());
+    }
 }
