@@ -113,15 +113,11 @@ public class TagWerkzeug implements Observer
     }
     
     /**
-     * Aktualisiert die Vorstellungen der Subwerkzeuge.
+     * Aktualisiert die Vorstellungen.
      */
     public void aktualisiereVorstellungen()
     {
-        _1100werkzeug.aktualisiereVorstellung();
-        _1500werkzeug.aktualisiereVorstellung();
-        _1730werkzeug.aktualisiereVorstellung();
-        _2000werkzeug.aktualisiereVorstellung();
-        _2230werkzeug.aktualisiereVorstellung();
+        aktualisiereSubwerkzeugVorstellungen(null);
     }
     
     /**
@@ -238,14 +234,47 @@ public class TagWerkzeug implements Observer
                 _kinoService.fuegeVorstellungHinzu(neueVorstellung,
                         _tagesplan.getDatum(), _kinosaal, startZeit);
                 werkzeug.setVorstellung(neueVorstellung);
-                aktualisiereVorstellungen();
+                aktualisiereSubwerkzeugVorstellungen(werkzeug);
                 break;
             case "Vorstellung-remove":
                 _kinoService.entferneVorstellung(werkzeug.getVorstellung());
                 break;
             case "Vorstellungsanzeige":
-                aktualisiereVorstellungen();
+                aktualisiereSubwerkzeugVorstellungen(werkzeug);
                 break;
+        }
+    }
+    
+    /**
+     * Aktualisiert die Vorstellungen der Subwerkzeuge.
+     * 
+     * @param werkzeug
+     *            Das Subwerkzeug, von dem Änderungen ausgegangen sind (auch
+     *            <code>null</code> wenn die Aktualisierung vom Kontextwerkzeug
+     *            beantragt wurde.)
+     */
+    private void aktualisiereSubwerkzeugVorstellungen(
+            VorstellungWerkzeug werkzeug)
+    {
+        if (werkzeug != _1100werkzeug)
+        {
+            _1100werkzeug.aktualisiereVorstellung();
+        }
+        if (werkzeug != _1500werkzeug)
+        {
+            _1500werkzeug.aktualisiereVorstellung();
+        }
+        if (werkzeug != _1730werkzeug)
+        {
+            _1730werkzeug.aktualisiereVorstellung();
+        }
+        if (werkzeug != _2000werkzeug)
+        {
+            _2000werkzeug.aktualisiereVorstellung();
+        }
+        if (werkzeug != _2230werkzeug)
+        {
+            _2230werkzeug.aktualisiereVorstellung();
         }
     }
 }
