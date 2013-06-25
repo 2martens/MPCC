@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.FSK;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Platz;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Woche;
@@ -225,5 +226,25 @@ public class KinoServiceTest
     public void testGetKinosaele()
     {
         assertEquals(_kino.getKinosaele(), _kinoService.getKinosaele());
+    }
+    
+    @Test
+    public void testIstVorstellungEntfernenMoeglich()
+    {
+        assertTrue(_kinoService.istVorstellungEntfernenMoeglich(_vorstellungVorhanden));
+        _vorstellungVorhanden.verkaufePlatz(new Platz(10, 10));
+        assertFalse(_kinoService.istVorstellungEntfernenMoeglich(_vorstellungVorhanden));
+    }
+    
+    @Test
+    public void testGetWerbeblockMaximalDauer()
+    {
+        int dauer = 0;
+        dauer += _vorstellungVorhanden.getFilm().getLaenge();
+        dauer += _vorstellungVorhanden.getReinigungszeit().getDauer();
+        int maximalZeit = _1730.minutenSeit(_1500);
+        maximalZeit = maximalZeit - dauer;
+        
+        assertEquals(maximalZeit, _kinoService.getWerbeblockMaximalDauer(_vorstellungVorhanden));
     }
 }

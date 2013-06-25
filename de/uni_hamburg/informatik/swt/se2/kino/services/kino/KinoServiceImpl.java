@@ -257,4 +257,49 @@ public class KinoServiceImpl extends AbstractObservableService implements
         return new ArrayList<Kinosaal>(_kino.getKinosaele());
     }
     
+    @Override
+    public boolean istVorstellungEntfernenMoeglich(Vorstellung vorstellung)
+    {
+        assert istVorstellungVorhanden(vorstellung) : "Vorbedingung verletzt: istVorstellungVorhanden(vorstellung)";
+        return vorstellung.getAnzahlVerkauftePlaetze() == 0;
+    }
+    
+    @Override
+    public int getWerbeblockMaximalDauer(Vorstellung vorstellung)
+    {
+        assert istVorstellungVorhanden(vorstellung) : "Vorbedingung verletzt: istVorstellungVorhanden(vorstellung)";
+        Uhrzeit startzeit = vorstellung.getAnfangszeit();
+        
+        int dauer = 0;
+        dauer += vorstellung.getFilm().getLaenge();
+        if (vorstellung.hatReinigungszeit())
+        {
+            dauer += vorstellung.getReinigungszeit().getDauer();
+        }
+        
+        int stunden = startzeit.getStunden();
+        int maximalZeit = 0;
+        
+        Uhrzeit uhrzeit = null;
+        switch (stunden)
+        {
+            case 11:
+                uhrzeit = new Uhrzeit(15, 00);
+                break;
+            case 15:
+                uhrzeit = new Uhrzeit(17, 30);
+                break;
+            case 17:
+                uhrzeit = new Uhrzeit(20, 00);
+                break;
+            case 20:
+                uhrzeit = new Uhrzeit(22, 30);
+                break;
+        }
+        maximalZeit = uhrzeit.minutenSeit(startzeit);
+        maximalZeit = maximalZeit - dauer;
+        
+        return maximalZeit;
+    }
+    
 }
