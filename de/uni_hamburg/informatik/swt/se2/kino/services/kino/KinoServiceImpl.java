@@ -295,13 +295,16 @@ public class KinoServiceImpl extends AbstractObservableService implements
             case 20:
                 uhrzeit = new Uhrzeit(22, 30);
                 break;
+            case 22:
+                uhrzeit = new Uhrzeit(11, 00);
+                break;
         }
         maximalZeit = uhrzeit.minutenSeit(startzeit);
         maximalZeit = maximalZeit - dauer;
         
         return maximalZeit;
     }
-
+    
     @Override
     public boolean istVorstellungErstellbar(Kinosaal kinosaal, Datum datum,
             Uhrzeit startzeit)
@@ -310,7 +313,8 @@ public class KinoServiceImpl extends AbstractObservableService implements
         assert datum != null : "Vorbedingung verletzt: datum != null";
         assert startzeit != null : "Vorbedingung verletzt: startzeit != null";
         
-        Wochenplan wochenplan = getWochenplan(kinosaal, Woche.wocheMitDiesemTag(datum));
+        Wochenplan wochenplan = getWochenplan(kinosaal,
+                Woche.wocheMitDiesemTag(datum));
         Tagesplan tagesplan = wochenplan.getTagesplan(datum);
         
         boolean result = true;
@@ -318,7 +322,8 @@ public class KinoServiceImpl extends AbstractObservableService implements
         List<Vorstellung> vorstellungen = tagesplan.getVorstellungen();
         for (Vorstellung vorstellung : vorstellungen)
         {
-            if (vorstellung.getEndzeit().compareTo(startzeit) > 0)
+            if (vorstellung.getAnfangszeit().compareTo(startzeit) < 0
+                    && vorstellung.getEndzeit().compareTo(startzeit) > 0)
             {
                 result = false;
                 break;
