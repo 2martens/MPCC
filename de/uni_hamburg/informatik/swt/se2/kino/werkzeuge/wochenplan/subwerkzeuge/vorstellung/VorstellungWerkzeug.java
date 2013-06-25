@@ -261,7 +261,10 @@ public class VorstellungWerkzeug extends Observable
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                filmAusgewaehlt();
+                if (_ui.getFilmBox().getItemCount() > 0 && _vorstellung != null)
+                {
+                    filmAusgewaehlt();
+                }
             }
         });
         
@@ -270,7 +273,10 @@ public class VorstellungWerkzeug extends Observable
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                fskAusgewaehlt();
+                if (_ui.getFSKBox().getItemCount() > 0)
+                {
+                    fskAusgewaehlt();
+                }
             }
         });
         
@@ -346,9 +352,9 @@ public class VorstellungWerkzeug extends Observable
         if (_vorstellung != null)
         {
             _vorstellung.setFilm(_selectedFilm);
+            setChanged();
+            notifyObservers("Vorstellungsanzeige");
         }
-        setChanged();
-        notifyObservers("Vorstellungsanzeige");
     }
     
     /**
@@ -356,22 +362,25 @@ public class VorstellungWerkzeug extends Observable
      */
     private void fskAusgewaehlt()
     {
-        JComboBox<FSKFormatierer> fskBox = _ui.getFSKBox();
-        Object selected = fskBox.getSelectedItem();
-        if (selected instanceof FSKFormatierer)
+        if (_vorstellung != null)
         {
-            FSKFormatierer selectedFormatierer = (FSKFormatierer) selected;
-            _werbeblockFSK = selectedFormatierer.getFSK();
-        }
-        if (_werbeblockMinuten == 0 && _vorstellung.hatWerbeblock())
-        {
-            _vorstellung.entferneWerbeblock();
-            _werbeblock = null;
-        }
-        else if (_werbeblockMinuten > 0)
-        {
-            _werbeblock = new Werbeblock(_werbeblockMinuten, _werbeblockFSK);
-            _vorstellung.setWerbeblock(_werbeblock);
+            JComboBox<FSKFormatierer> fskBox = _ui.getFSKBox();
+            Object selected = fskBox.getSelectedItem();
+            if (selected instanceof FSKFormatierer)
+            {
+                FSKFormatierer selectedFormatierer = (FSKFormatierer) selected;
+                _werbeblockFSK = selectedFormatierer.getFSK();
+            }
+            if (_werbeblockMinuten == 0 && _vorstellung.hatWerbeblock())
+            {
+                _vorstellung.entferneWerbeblock();
+                _werbeblock = null;
+            }
+            else if (_werbeblockMinuten > 0)
+            {
+                _werbeblock = new Werbeblock(_werbeblockMinuten, _werbeblockFSK);
+                _vorstellung.setWerbeblock(_werbeblock);
+            }
         }
     }
     
@@ -475,7 +484,8 @@ public class VorstellungWerkzeug extends Observable
             }
         }
         
-        if (!filmFormatierer.equals(_formatierer))
+        if (!filmFormatierer.equals(_formatierer)
+                && filmFormatierer.size() > _formatierer.size())
         {
             filmBox.removeAllItems();
             boolean filmAuswaehlen = true;
@@ -514,11 +524,11 @@ public class VorstellungWerkzeug extends Observable
     {
         if (_vorstellung != null)
         {
-            if (_vorstellung.getAnzahlVerkauftePlaetze() > 0)
+            if (!_kinoService.istVorstellungEntfernenMoeglich(_vorstellung))
             {
                 _ui.getVorstellungCheckBox().setEnabled(false);
             }
-            else if (_vorstellung.getAnzahlVerkauftePlaetze() == 0)
+            else
             {
                 _ui.getVorstellungCheckBox().setEnabled(true);
             }
@@ -547,26 +557,16 @@ public class VorstellungWerkzeug extends Observable
             if (!_vorstellung.hatReinigungszeit())
             {
                 boolean result = _kinoService.istFilmZeigenMoeglich(
-                        _selectedFilm, _werbeblock, _reinigungszeit, _kinosaal,
-                        _datum, _startzeit);
-                if (result)
+                        _selectedFilm, _werbeblock,
+                        _kinosaal.getReinigungszeit(), _kinosaal, _datum,
+                        _startzeit);
+                if (!result)
                 {
-                    result = _kinoService.istFilmZeigenMoeglich(_selectedFilm,
-                            _werbeblock, _kinosaal.getReinigungszeit(),
-                            _kinosaal, _datum, _startzeit);
-                    if (!result)
-                    {
-                        _ui.getReinigungszeitCheckBox().setEnabled(false);
-                    }
-                    else
-                    {
-                        _ui.getReinigungszeitCheckBox().setEnabled(true);
-                    }
+                    _ui.getReinigungszeitCheckBox().setEnabled(false);
                 }
                 else
                 {
-                    throw new RuntimeException(
-                            "Dies hätte nicht passieren dürfen.");
+                    _ui.getReinigungszeitCheckBox().setEnabled(true);
                 }
             }
             else
