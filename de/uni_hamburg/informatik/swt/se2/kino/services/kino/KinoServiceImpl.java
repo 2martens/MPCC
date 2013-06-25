@@ -301,5 +301,31 @@ public class KinoServiceImpl extends AbstractObservableService implements
         
         return maximalZeit;
     }
+
+    @Override
+    public boolean istVorstellungErstellbar(Kinosaal kinosaal, Datum datum,
+            Uhrzeit startzeit)
+    {
+        assert istKinosaalVorhanden(kinosaal) : "Vorbedingung verletzt: istKinosaalVorhanden(kinosaal)";
+        assert datum != null : "Vorbedingung verletzt: datum != null";
+        assert startzeit != null : "Vorbedingung verletzt: startzeit != null";
+        
+        Wochenplan wochenplan = getWochenplan(kinosaal, Woche.wocheMitDiesemTag(datum));
+        Tagesplan tagesplan = wochenplan.getTagesplan(datum);
+        
+        boolean result = true;
+        
+        List<Vorstellung> vorstellungen = tagesplan.getVorstellungen();
+        for (Vorstellung vorstellung : vorstellungen)
+        {
+            if (vorstellung.getEndzeit().compareTo(startzeit) > 0)
+            {
+                result = false;
+                break;
+            }
+        }
+        
+        return result;
+    }
     
 }

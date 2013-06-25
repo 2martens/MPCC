@@ -231,9 +231,11 @@ public class KinoServiceTest
     @Test
     public void testIstVorstellungEntfernenMoeglich()
     {
-        assertTrue(_kinoService.istVorstellungEntfernenMoeglich(_vorstellungVorhanden));
+        assertTrue(_kinoService
+                .istVorstellungEntfernenMoeglich(_vorstellungVorhanden));
         _vorstellungVorhanden.verkaufePlatz(new Platz(10, 10));
-        assertFalse(_kinoService.istVorstellungEntfernenMoeglich(_vorstellungVorhanden));
+        assertFalse(_kinoService
+                .istVorstellungEntfernenMoeglich(_vorstellungVorhanden));
     }
     
     @Test
@@ -245,6 +247,18 @@ public class KinoServiceTest
         int maximalZeit = _1730.minutenSeit(_1500);
         maximalZeit = maximalZeit - dauer;
         
-        assertEquals(maximalZeit, _kinoService.getWerbeblockMaximalDauer(_vorstellungVorhanden));
+        assertEquals(maximalZeit,
+                _kinoService.getWerbeblockMaximalDauer(_vorstellungVorhanden));
+    }
+    
+    @Test
+    public void testIstVorstellungErstellbar()
+    {
+        _vorstellungVorhanden.setFilm(_filmVorhanden2);
+        assertFalse(_kinoService.istVorstellungErstellbar(_kinosaal1, _heute,
+                _1730));
+        _vorstellungVorhanden.setFilm(_filmVorhanden);
+        assertTrue(_kinoService.istVorstellungErstellbar(_kinosaal1, _heute,
+                _1730));
     }
 }
