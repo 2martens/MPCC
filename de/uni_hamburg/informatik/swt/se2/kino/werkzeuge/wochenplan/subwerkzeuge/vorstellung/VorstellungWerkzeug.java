@@ -502,8 +502,8 @@ public class VorstellungWerkzeug extends Observable
     {
         if (_vorstellung != null)
         {
-            _werbeblockMaxMinuten = _kinoService.getWerbeblockMaximalDauer(
-                    _kinosaal, _datum, _startzeit, _vorstellung);
+            _werbeblockMaxMinuten = _kinoService
+                    .getWerbeblockMaximalDauer(_vorstellung);
         }
     }
     
