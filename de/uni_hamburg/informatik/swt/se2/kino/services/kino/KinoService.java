@@ -238,4 +238,28 @@ public interface KinoService extends ObservableService
      * @ensure result != null
      */
     List<Kinosaal> getKinosaele();
+    
+    /**
+     * Prüft, ob eine Vorstellung entfernt werden kann.
+     * 
+     * @param vorstellung
+     *            Die auf Entfernbarkeit zu überprüfende Vorstellung
+     * 
+     * @require istVorstellungVorhanden(Vorstellung vorstellung)
+     * 
+     * @return <code>true</code>, wenn die Vorstellung entfernt werden kann,
+     *         <code>false</code> sonst
+     */
+    boolean istVorstellungEntfernenMoeglich(Vorstellung vorstellung);
+    
+    /**
+     * Berechnet die maximale Dauer, die ein Werbeblock einer Vorstellung dauern kann.
+     * 
+     * @param vorstellung Die Vorstellung, für die die maximale Werbeblocklänge berechnet werden soll.
+     * 
+     * @require istVorstellungVorhanden(vorstellung)
+     * 
+     * @ensure result >= 0
+     */
+    int getWerbeblockMaximalDauer(Vorstellung vorstellung);
 }
