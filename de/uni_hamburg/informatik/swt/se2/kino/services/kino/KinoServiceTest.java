@@ -257,8 +257,12 @@ public class KinoServiceTest
         _vorstellungVorhanden.setFilm(_filmVorhanden2);
         assertFalse(_kinoService.istVorstellungErstellbar(_kinosaal1, _heute,
                 _1730));
+        assertTrue(_kinoService.istVorstellungErstellbar(_kinosaal1, _heute,
+                _1130));
         _vorstellungVorhanden.setFilm(_filmVorhanden);
         assertTrue(_kinoService.istVorstellungErstellbar(_kinosaal1, _heute,
                 _1730));
+        assertTrue(_kinoService.istVorstellungErstellbar(_kinosaal1, _heute,
+                _1130));
     }
 }
