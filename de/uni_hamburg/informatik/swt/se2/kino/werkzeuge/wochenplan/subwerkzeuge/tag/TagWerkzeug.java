@@ -8,10 +8,12 @@ import javax.swing.JPanel;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Woche;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Film;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Tagesplan;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
+import de.uni_hamburg.informatik.swt.se2.kino.materialien.Wochenplan;
 import de.uni_hamburg.informatik.swt.se2.kino.services.kino.KinoService;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.wochenplan.subwerkzeuge.vorstellung.VorstellungWerkzeug;
 
@@ -58,19 +60,51 @@ public class TagWerkzeug implements Observer
         
         _kinoService = kinoService;
         _kinosaal = kinosaal;
-        _tagesplan = _kinoService.getTagesplan(datum);
+        Wochenplan wochenplan = _kinoService.getWochenplan(_kinosaal,
+                Woche.wocheMitDiesemTag(datum));
+        _tagesplan = wochenplan.getTagesplan(datum);
+        
+        List<Vorstellung> vorstellungen = _tagesplan.getVorstellungen();
+        Vorstellung v11 = null;
+        Vorstellung v15 = null;
+        Vorstellung v17 = null;
+        Vorstellung v20 = null;
+        Vorstellung v22 = null;
+        for (Vorstellung vorstellung : vorstellungen)
+        {
+            Uhrzeit anfang = vorstellung.getAnfangszeit();
+            int stunden = anfang.getStunden();
+            switch (stunden)
+            {
+                case 11:
+                    v11 = vorstellung;
+                    break;
+                case 15:
+                    v15 = vorstellung;
+                    break;
+                case 17:
+                    v17 = vorstellung;
+                    break;
+                case 20:
+                    v20 = vorstellung;
+                    break;
+                case 22:
+                    v22 = vorstellung;
+                    break;
+            }
+        }
         
         // Subwerkzeuge initialisieren
         _1100werkzeug = new VorstellungWerkzeug(_kinoService, _kinosaal,
-                new Uhrzeit(11, 00), _tagesplan.getDatum());
+                new Uhrzeit(11, 00), _tagesplan.getDatum(), v11);
         _1500werkzeug = new VorstellungWerkzeug(_kinoService, _kinosaal,
-                new Uhrzeit(15, 00), _tagesplan.getDatum());
+                new Uhrzeit(15, 00), _tagesplan.getDatum(), v15);
         _1730werkzeug = new VorstellungWerkzeug(_kinoService, _kinosaal,
-                new Uhrzeit(17, 30), _tagesplan.getDatum());
+                new Uhrzeit(17, 30), _tagesplan.getDatum(), v17);
         _2000werkzeug = new VorstellungWerkzeug(_kinoService, _kinosaal,
-                new Uhrzeit(20, 00), _tagesplan.getDatum());
+                new Uhrzeit(20, 00), _tagesplan.getDatum(), v20);
         _2230werkzeug = new VorstellungWerkzeug(_kinoService, _kinosaal,
-                new Uhrzeit(22, 30), _tagesplan.getDatum());
+                new Uhrzeit(22, 30), _tagesplan.getDatum(), v22);
         
         // bei Subwerkzeugen als Beobachter melden
         _1100werkzeug.addObserver(this);
@@ -238,6 +272,7 @@ public class TagWerkzeug implements Observer
                 break;
             case "Vorstellung-remove":
                 _kinoService.entferneVorstellung(werkzeug.getVorstellung());
+                aktualisiereSubwerkzeugVorstellungen(werkzeug);
                 break;
             case "Vorstellungsanzeige":
                 aktualisiereSubwerkzeugVorstellungen(werkzeug);
