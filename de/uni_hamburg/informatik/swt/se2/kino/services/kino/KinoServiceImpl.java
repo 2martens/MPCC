@@ -50,8 +50,7 @@ public class KinoServiceImpl extends AbstractObservableService implements
         List<Vorstellung> vorstellungen = tagesplan.getVorstellungen();
         
         Vorstellung testVorstellung = new Vorstellung(kinosaal, film,
-                startzeit, datum, Vorstellung.TICKETPREIS,
-                kinosaal.getReinigungszeit());
+                startzeit, datum, Vorstellung.TICKETPREIS);
         if (werbeblock != null)
         {
             testVorstellung.setWerbeblock(werbeblock);
@@ -66,9 +65,11 @@ public class KinoServiceImpl extends AbstractObservableService implements
         // Check für Überschneidungen mit anderen Vorstellungen
         for (Vorstellung vorstellung : vorstellungen)
         {
-            if (vorstellung.equals(testVorstellung))
+            if (vorstellung.equals(testVorstellung)
+                    && !vorstellung.getAnfangszeit().equals(startzeit))
             {
                 result = false;
+                break;
             }
         }
         
@@ -227,6 +228,7 @@ public class KinoServiceImpl extends AbstractObservableService implements
     {
         assert istKinosaalVorhanden(kinosaal) : "Vorbedingung verletzt: istKinosaalVorhanden(kinosaal)";
         assert woche != null : "Vorbedingung verletzt: woche != null";
+        assert istWochenplanVorhanden(kinosaal, woche) : "Vorbedingung verletzt: istWochenplanVorhanden(kinosaal, woche)";
         
         return _kino.getWochenplan(kinosaal, woche);
     }
@@ -307,30 +309,15 @@ public class KinoServiceImpl extends AbstractObservableService implements
     
     @Override
     public boolean istVorstellungErstellbar(Kinosaal kinosaal, Datum datum,
-            Uhrzeit startzeit)
+            Uhrzeit startzeit, Film film)
     {
         assert istKinosaalVorhanden(kinosaal) : "Vorbedingung verletzt: istKinosaalVorhanden(kinosaal)";
         assert datum != null : "Vorbedingung verletzt: datum != null";
         assert startzeit != null : "Vorbedingung verletzt: startzeit != null";
+        assert film != null : "Vorbedingung verletzt: film != null";
         
-        Wochenplan wochenplan = getWochenplan(kinosaal,
-                Woche.wocheMitDiesemTag(datum));
-        Tagesplan tagesplan = wochenplan.getTagesplan(datum);
-        
-        boolean result = true;
-        
-        List<Vorstellung> vorstellungen = tagesplan.getVorstellungen();
-        for (Vorstellung vorstellung : vorstellungen)
-        {
-            if (vorstellung.getAnfangszeit().compareTo(startzeit) < 0
-                    && vorstellung.getEndzeit().compareTo(startzeit) > 0)
-            {
-                result = false;
-                break;
-            }
-        }
-        
-        return result;
+        return istFilmZeigenMoeglich(film, null, null, kinosaal, datum,
+                startzeit);
     }
     
 }

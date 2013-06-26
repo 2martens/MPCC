@@ -37,12 +37,15 @@ public class KinoServiceTest
     private Film _filmVorhanden;
     private Film _filmVorhanden2;
     private Film _filmVorhanden3;
+    private Film _filmVorhanden4;
     private Film _filmNichtVorhanden;
     private Vorstellung _vorstellungVorhanden;
+    private Vorstellung _vorstellungVorhanden2;
     private Vorstellung _vorstellungNichtVorhanden;
     private Vorstellung _vorstellungNichtHinzufuegbar;
     private Kinosaal _kinosaal1;
     private Kinosaal _kinosaal2;
+    private Kinosaal _kinosaal3;
     private Uhrzeit _1130;
     private Uhrzeit _1500;
     private Uhrzeit _1730;
@@ -68,14 +71,18 @@ public class KinoServiceTest
         
         _kinosaal1 = new Kinosaal("Kino A", 20, 20, _zeitKlein);
         _kinosaal2 = new Kinosaal("Kino B", 30, 30, _zeitGross);
+        _kinosaal3 = new Kinosaal("Kino C", 40, 40, _zeitGross);
         _filmVorhanden = new Film("Wilder Westen", 90, FSK.FSK18, false, false);
         _filmVorhanden2 = new Film("Star Ship", 180, FSK.FSK12, true, false);
         _filmVorhanden3 = new Film("Sommerliebe", 90, FSK.FSK12, false, false);
+        _filmVorhanden4 = new Film("Test", 130, FSK.FSK12, false, false);
         _filmNichtVorhanden = new Film("Lahmer Boden", 120, FSK.FSK6, false,
                 false);
         _vorstellungVorhanden = new Vorstellung(_kinosaal1, _filmVorhanden3,
                 _1500, _heute, Vorstellung.TICKETPREIS,
                 _kinosaal1.getReinigungszeit(), _blockKlein);
+        _vorstellungVorhanden2 = new Vorstellung(_kinosaal3, _filmVorhanden3,
+                _1730, _heute, Vorstellung.TICKETPREIS);
         _vorstellungNichtVorhanden = new Vorstellung(_kinosaal1,
                 _filmVorhanden2, _1730, _heute, Vorstellung.TICKETPREIS,
                 _kinosaal1.getReinigungszeit(), _blockGross);
@@ -83,9 +90,10 @@ public class KinoServiceTest
                 _filmVorhanden2, _1500, _heute, Vorstellung.TICKETPREIS,
                 _kinosaal1.getReinigungszeit(), _blockGross);
         
-        _kino = new Kino(new Kinosaal[] { _kinosaal1 },
-                new Vorstellung[] { _vorstellungVorhanden }, new Film[] {
-                        _filmVorhanden, _filmVorhanden2 });
+        _kino = new Kino(new Kinosaal[] { _kinosaal1, _kinosaal3 },
+                new Vorstellung[] { _vorstellungVorhanden,
+                        _vorstellungVorhanden2 }, new Film[] { _filmVorhanden,
+                        _filmVorhanden2, _filmVorhanden3, _filmVorhanden4 });
         
         _kinoService = new KinoServiceImpl(_kino);
     }
@@ -103,6 +111,18 @@ public class KinoServiceTest
         // Problem
         result = _kinoService.istFilmZeigenMoeglich(_filmVorhanden2,
                 _blockGross, _zeitKlein, _kinosaal1, _heute, _1730);
+        assertTrue(result);
+        
+        // Endzeit ist vor Anfangszeit nachfolgender Vorstellung, daher kein
+        // Problem
+        result = _kinoService.istFilmZeigenMoeglich(_filmVorhanden4, null,
+                null, _kinosaal3, _heute, _1500);
+        assertTrue(result);
+        
+        // gleiche Anfangszeit aber verschiedene Kinosäle müssen problemlos
+        // funktionieren
+        result = _kinoService.istFilmZeigenMoeglich(_filmVorhanden3,
+                _blockGross, _zeitGross, _kinosaal3, _heute, _1500);
         assertTrue(result);
         
         // Filme mit FSK 18 dürfen erst ab 22:00 gezeigt werden
@@ -256,13 +276,13 @@ public class KinoServiceTest
     {
         _vorstellungVorhanden.setFilm(_filmVorhanden2);
         assertFalse(_kinoService.istVorstellungErstellbar(_kinosaal1, _heute,
-                _1730));
+                _1730, _filmVorhanden3));
         assertTrue(_kinoService.istVorstellungErstellbar(_kinosaal1, _heute,
-                _1130));
-        _vorstellungVorhanden.setFilm(_filmVorhanden);
+                _1130, _filmVorhanden3));
+        _vorstellungVorhanden.setFilm(_filmVorhanden3);
         assertTrue(_kinoService.istVorstellungErstellbar(_kinosaal1, _heute,
-                _1730));
+                _1730, _filmVorhanden3));
         assertTrue(_kinoService.istVorstellungErstellbar(_kinosaal1, _heute,
-                _1130));
+                _1130, _filmVorhanden3));
     }
 }
