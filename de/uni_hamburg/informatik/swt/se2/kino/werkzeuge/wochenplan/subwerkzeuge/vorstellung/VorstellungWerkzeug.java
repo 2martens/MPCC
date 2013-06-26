@@ -27,13 +27,9 @@ import de.uni_hamburg.informatik.swt.se2.kino.services.kino.KinoService;
 /**
  * Mit diesem Werkzeug können Vorstellungen bearbeitet werden.
  * 
- * Das Kontextwerkzeug kann sich als Beobachter über Änderungen bezüglich
- * <code>Vorstellungsanzeige</code> (Bedingungen für Vorstellungserstellbarkeit
- * haben sich geändert), <code>Vorstellung-create</code> (Vorstellung erzeugt)
- * und <code>Vorstellung-remove</code> (Vorstellung entfernt) informieren.
- * 
- * Diese Schlüsselwerte werden im zweiten Parameter als String der
- * update-Methode übergeben.
+ * Das Kontextwerkzeug kann sich als Beobachter über Änderungen informieren. Mit
+ * dem Schlüsselwort "Frame" werden Änderungen gekennzeichnet, die an das
+ * KinoWerkzeug weitergeleitet werden müssen.
  * 
  * @author Jim Martens
  * @version 19.06.2013
@@ -58,6 +54,11 @@ public class VorstellungWerkzeug extends Observable
     private Werbeblock _werbeblock;
     
     private List<FilmFormatierer> _formatierer;
+    private boolean _aufVorstellungsCheckboxReagieren;
+    private boolean _aufReinigungsCheckboxReagieren;
+    private boolean _aufFilmauswahlReagieren;
+    private boolean _aufFSKAuswahlReagieren;
+    private boolean _aufWerbeblockEingabeReagieren;
     
     /**
      * Initialisiert das Werkzeug.
@@ -97,23 +98,34 @@ public class VorstellungWerkzeug extends Observable
         _werbeblockMaxMinuten = 0;
         _werbeblockFSK = FSK.FSK0;
         _reinigungszeit = null;
-        if (_vorstellung != null && _vorstellung.hatReinigungszeit())
-        {
-            _reinigungszeit = _vorstellung.getReinigungszeit();
-        }
         _werbeblock = null;
-        if (_vorstellung != null && _vorstellung.hatWerbeblock())
-        {
-            _werbeblock = _vorstellung.getWerbeblock();
-        }
         _filme = _kinoService.getFilme();
         _selectedFilm = _filme.get(0);
         
+        _aufVorstellungsCheckboxReagieren = true;
+        _aufReinigungsCheckboxReagieren = true;
+        _aufFilmauswahlReagieren = true;
+        _aufFSKAuswahlReagieren = true;
+        _aufWerbeblockEingabeReagieren = true;
+        
         registriereUIAktionen();
+        if (_vorstellung != null)
+        {
+            if (_vorstellung.hatReinigungszeit())
+            {
+                _reinigungszeit = _vorstellung.getReinigungszeit();
+            }
+            if (_vorstellung.hatWerbeblock())
+            {
+                _werbeblock = _vorstellung.getWerbeblock();
+            }
+            _selectedFilm = _vorstellung.getFilm();
+        }
         initGUI();
         
         if (_vorstellung != null)
         {
+            aktualisiereVorstellungsCheckbox();
             aktualisiereUI();
         }
     }
@@ -145,6 +157,7 @@ public class VorstellungWerkzeug extends Observable
             _werbeblock = null;
             _reinigungszeit = null;
         }
+        aktualisiereVorstellungsCheckbox();
         aktualisiereUI();
     }
     
@@ -221,7 +234,7 @@ public class VorstellungWerkzeug extends Observable
     private void initGUI()
     {
         initialisiereFilmBox();
-        _ui.getVorstellungGruppe().hide();
+        versteckeVorstellungsdetails();
     }
     
     /**
@@ -237,25 +250,22 @@ public class VorstellungWerkzeug extends Observable
                     .istFilmZeigenMoeglich(film, _werbeblock, _reinigungszeit,
                             _kinosaal, _datum, _startzeit);
             
-            if (_vorstellung == null && result)
-            {
-                filmFormatierer.add(new FilmFormatierer(film));
-            }
-            else if (_vorstellung != null)
+            if (result)
             {
                 filmFormatierer.add(new FilmFormatierer(film));
             }
         }
+        _aufFilmauswahlReagieren = false;
         for (FilmFormatierer formatierer : filmFormatierer)
         {
             filmBox.addItem(formatierer);
             if (_vorstellung != null
-                    && _vorstellung.getFilm().equals(formatierer.getFilm()))
+                    && formatierer.getFilm().equals(_selectedFilm))
             {
                 filmBox.setSelectedItem(formatierer);
             }
         }
-        
+        _aufFilmauswahlReagieren = true;
         _formatierer = filmFormatierer;
         _selectedFilm = ((FilmFormatierer) filmBox.getSelectedItem()).getFilm();
     }
@@ -267,9 +277,6 @@ public class VorstellungWerkzeug extends Observable
     {
         if (_vorstellung != null)
         {
-            _ui.getVorstellungCheckBox().setSelected(true);
-            aktualisiereVorstellungsCheckbox();
-            
             // Film aktualisieren
             JComboBox<FilmFormatierer> filmBox = _ui.getFilmBox();
             for (int i = 0; i < filmBox.getItemCount(); i++)
@@ -278,7 +285,9 @@ public class VorstellungWerkzeug extends Observable
                         .getItemAt(i));
                 if (formatierer.getFilm().equals(_selectedFilm))
                 {
+                    _aufFilmauswahlReagieren = false;
                     filmBox.setSelectedItem(formatierer);
+                    _aufFilmauswahlReagieren = true;
                     break;
                 }
             }
@@ -286,10 +295,6 @@ public class VorstellungWerkzeug extends Observable
             aktualisiereFSKBox();
             aktualisiereWerbeblockMinuten();
             aktualisiereReinigungszeit();
-        }
-        else
-        {
-            aktualisiereVorstellungsCheckbox();
         }
     }
     
@@ -303,9 +308,13 @@ public class VorstellungWerkzeug extends Observable
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                if (_ui.getFilmBox().getItemCount() > 0 && _vorstellung != null)
+                if (_aufFilmauswahlReagieren)
                 {
-                    filmAusgewaehlt();
+                    if (_ui.getFilmBox().getItemCount() > 0
+                            && _vorstellung != null)
+                    {
+                        filmAusgewaehlt();
+                    }
                 }
             }
         });
@@ -315,9 +324,12 @@ public class VorstellungWerkzeug extends Observable
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                if (_ui.getFSKBox().getItemCount() > 0)
+                if (_aufFSKAuswahlReagieren)
                 {
-                    fskAusgewaehlt();
+                    if (_ui.getFSKBox().getItemCount() > 0)
+                    {
+                        fskAusgewaehlt();
+                    }
                 }
             }
         });
@@ -328,7 +340,10 @@ public class VorstellungWerkzeug extends Observable
                     @Override
                     public void insertUpdate(DocumentEvent e)
                     {
-                        werbeblockDauerGeaendert();
+                        if (_aufWerbeblockEingabeReagieren)
+                        {
+                            werbeblockDauerGeaendert();
+                        }
                     }
                     
                     @Override
@@ -347,15 +362,18 @@ public class VorstellungWerkzeug extends Observable
             @Override
             public void itemStateChanged(ItemEvent e)
             {
-                if (e.getStateChange() == ItemEvent.SELECTED)
+                if (_aufVorstellungsCheckboxReagieren)
                 {
-                    _ui.getVorstellungGruppe().show();
-                    erzeugeVorstellung();
-                }
-                else
-                {
-                    _ui.getVorstellungGruppe().hide();
-                    entferneVorstellung();
+                    if (e.getStateChange() == ItemEvent.SELECTED)
+                    {
+                        zeigeVorstellungsdetails();
+                        erzeugeVorstellung();
+                    }
+                    else
+                    {
+                        versteckeVorstellungsdetails();
+                        entferneVorstellung();
+                    }
                 }
             }
         });
@@ -365,13 +383,16 @@ public class VorstellungWerkzeug extends Observable
             @Override
             public void itemStateChanged(ItemEvent e)
             {
-                if (e.getStateChange() == ItemEvent.SELECTED)
+                if (_aufReinigungsCheckboxReagieren)
                 {
-                    reinigungszeitEinplanen();
-                }
-                else
-                {
-                    reinigungszeitEntfernen();
+                    if (e.getStateChange() == ItemEvent.SELECTED)
+                    {
+                        reinigungszeitEinplanen();
+                    }
+                    else
+                    {
+                        reinigungszeitEntfernen();
+                    }
                 }
             }
         });
@@ -392,11 +413,13 @@ public class VorstellungWerkzeug extends Observable
         }
         aktualisiereFSKBox();
         aktualisiereReinigungsCheckbox();
+        aktualisiereWerbeblockMaxMinuten();
         if (_vorstellung != null)
         {
             _vorstellung.setFilm(_selectedFilm);
+            
             setChanged();
-            notifyObservers("Vorstellungsanzeige");
+            notifyObservers();
         }
     }
     
@@ -453,7 +476,7 @@ public class VorstellungWerkzeug extends Observable
             _vorstellung.setWerbeblock(_werbeblock);
         }
         setChanged();
-        notifyObservers("Vorstellungsanzeige");
+        notifyObservers();
     }
     
     /**
@@ -462,6 +485,7 @@ public class VorstellungWerkzeug extends Observable
     private void aktualisiereFSKBox()
     {
         JComboBox<FSKFormatierer> fskBox = _ui.getFSKBox();
+        _aufFSKAuswahlReagieren = false;
         fskBox.removeAllItems();
         FSK filmFSK = _selectedFilm.getFSK();
         switch (filmFSK)
@@ -483,6 +507,7 @@ public class VorstellungWerkzeug extends Observable
                 fskBox.addItem(formatierer0);
                 break;
         }
+        _aufFSKAuswahlReagieren = true;
     }
     
     /**
@@ -493,7 +518,9 @@ public class VorstellungWerkzeug extends Observable
         JTextField werbeblockMinuten = _ui.getWerbeblockMinutenInput();
         if (_vorstellung.hatWerbeblock())
         {
+            _aufWerbeblockEingabeReagieren = false;
             werbeblockMinuten.setText(String.valueOf(_werbeblock.getLaenge()));
+            _aufWerbeblockEingabeReagieren = true;
         }
     }
     
@@ -502,6 +529,7 @@ public class VorstellungWerkzeug extends Observable
      */
     private void aktualisiereReinigungszeit()
     {
+        _aufReinigungsCheckboxReagieren = false;
         if (_vorstellung.hatReinigungszeit())
         {
             _ui.getReinigungszeitCheckBox().setSelected(true);
@@ -510,6 +538,7 @@ public class VorstellungWerkzeug extends Observable
         {
             _ui.getReinigungszeitCheckBox().setSelected(false);
         }
+        _aufReinigungsCheckboxReagieren = true;
     }
     
     /**
@@ -529,7 +558,7 @@ public class VorstellungWerkzeug extends Observable
                     filmFormatierer.add(new FilmFormatierer(film));
                 }
             }
-            
+            _aufFilmauswahlReagieren = false;
             if (!filmFormatierer.equals(_formatierer))
             {
                 filmBox.removeAllItems();
@@ -541,7 +570,9 @@ public class VorstellungWerkzeug extends Observable
                         filmBox.setSelectedItem(formatierer);
                     }
                 }
+                _formatierer = filmFormatierer;
             }
+            _aufFilmauswahlReagieren = true;
         }
     }
     
@@ -565,17 +596,27 @@ public class VorstellungWerkzeug extends Observable
     {
         if (_vorstellung != null)
         {
+            _aufVorstellungsCheckboxReagieren = false;
+            _ui.getVorstellungCheckBox().setSelected(true);
+            zeigeVorstellungsdetails();
+            _aufVorstellungsCheckboxReagieren = true;
             if (!_kinoService.istVorstellungEntfernenMoeglich(_vorstellung))
             {
                 _ui.getVorstellungCheckBox().setEnabled(false);
+                _ui.getFilmBox().setEnabled(false);
             }
             else
             {
                 _ui.getVorstellungCheckBox().setEnabled(true);
+                _ui.getFilmBox().setEnabled(true);
             }
         }
         else
         {
+            _aufVorstellungsCheckboxReagieren = false;
+            versteckeVorstellungsdetails();
+            _ui.getVorstellungCheckBox().setSelected(false);
+            _aufVorstellungsCheckboxReagieren = true;
             if (!_kinoService.istVorstellungErstellbar(_kinosaal, _datum,
                     _startzeit, _selectedFilm))
             {
@@ -627,8 +668,10 @@ public class VorstellungWerkzeug extends Observable
                         _datum, _startzeit);
                 if (!result)
                 {
+                    _aufReinigungsCheckboxReagieren = false;
                     _ui.getReinigungszeitCheckBox().setEnabled(false);
                     _ui.getReinigungszeitCheckBox().setSelected(false);
+                    _aufReinigungsCheckboxReagieren = true;
                 }
                 else
                 {
@@ -645,8 +688,15 @@ public class VorstellungWerkzeug extends Observable
     {
         if (_vorstellung == null)
         {
+            Vorstellung neueVorstellung = new Vorstellung(_kinosaal,
+                    _selectedFilm, _startzeit, _datum, Vorstellung.TICKETPREIS);
+            _kinoService.fuegeVorstellungHinzu(neueVorstellung, _datum,
+                    _kinosaal, _startzeit);
+            _vorstellung = neueVorstellung;
+            aktualisiereUI();
+            
             setChanged();
-            notifyObservers("Vorstellung-create");
+            notifyObservers();
         }
     }
     
@@ -657,10 +707,14 @@ public class VorstellungWerkzeug extends Observable
     {
         if (_vorstellung != null)
         {
-            setChanged();
-            notifyObservers("Vorstellung-remove");
+            _kinoService.entferneVorstellung(_vorstellung);
             _vorstellung = null;
-            aktualisiereVorstellungsCheckbox();
+            _werbeblock = null;
+            _reinigungszeit = null;
+            
+            setChanged();
+            notifyObservers();
+            
             aktualisiereFilmauswahl();
         }
     }
@@ -672,8 +726,9 @@ public class VorstellungWerkzeug extends Observable
     {
         _vorstellung.entferneReinigungszeit();
         _reinigungszeit = null;
+        
         setChanged();
-        notifyObservers("Vorstellungsanzeige");
+        notifyObservers();
     }
     
     /**
@@ -683,7 +738,24 @@ public class VorstellungWerkzeug extends Observable
     {
         _reinigungszeit = _kinosaal.getReinigungszeit();
         _vorstellung.setReinigungszeit(_reinigungszeit);
+        
         setChanged();
-        notifyObservers("Vorstellungsanzeige");
+        notifyObservers();
+    }
+    
+    /**
+     * Zeigt die Vorstellungsdetails.
+     */
+    private void zeigeVorstellungsdetails()
+    {
+        _ui.zeigeVorstellungsdetails();
+    }
+    
+    /**
+     * Versteckt die Vorstellungsdetails.
+     */
+    private void versteckeVorstellungsdetails()
+    {
+        _ui.versteckeVorstellungsdetails();
     }
 }

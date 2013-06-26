@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Woche;
-import de.uni_hamburg.informatik.swt.se2.kino.materialien.Film;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Tagesplan;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
@@ -216,67 +215,7 @@ public class TagWerkzeug implements Observer
         if (o instanceof VorstellungWerkzeug)
         {
             VorstellungWerkzeug vorstellungWerkzeug = (VorstellungWerkzeug) o;
-            String parameter = (String) arg;
-            if (vorstellungWerkzeug == _1100werkzeug)
-            {
-                reagiereAufAenderung(vorstellungWerkzeug, new Uhrzeit(11, 00),
-                        parameter);
-            }
-            else if (vorstellungWerkzeug == _1500werkzeug)
-            {
-                reagiereAufAenderung(vorstellungWerkzeug, new Uhrzeit(15, 00),
-                        parameter);
-            }
-            else if (vorstellungWerkzeug == _1730werkzeug)
-            {
-                reagiereAufAenderung(vorstellungWerkzeug, new Uhrzeit(17, 30),
-                        parameter);
-            }
-            else if (vorstellungWerkzeug == _2000werkzeug)
-            {
-                reagiereAufAenderung(vorstellungWerkzeug, new Uhrzeit(20, 00),
-                        parameter);
-            }
-            else if (vorstellungWerkzeug == _2230werkzeug)
-            {
-                reagiereAufAenderung(vorstellungWerkzeug, new Uhrzeit(22, 30),
-                        parameter);
-            }
-        }
-    }
-    
-    /**
-     * Reagiert auf eine Änderung der Subwerkzeuge.
-     * 
-     * @param werkzeug
-     *            Das Subwerkzeug, von dem die Änderung ausgeht.
-     * @param startZeit
-     *            Die Startzeit für Vorstellungen des Subwerkzeuges.
-     * @param parameter
-     *            Der Eventparameter, der darlegt, was passiert ist.
-     */
-    private void reagiereAufAenderung(VorstellungWerkzeug werkzeug,
-            Uhrzeit startZeit, String parameter)
-    {
-        switch (parameter)
-        {
-            case "Vorstellung-create":
-                Film film = werkzeug.getSelectedFilm();
-                Vorstellung neueVorstellung = new Vorstellung(_kinosaal, film,
-                        startZeit, _tagesplan.getDatum(),
-                        Vorstellung.TICKETPREIS);
-                _kinoService.fuegeVorstellungHinzu(neueVorstellung,
-                        _tagesplan.getDatum(), _kinosaal, startZeit);
-                werkzeug.setVorstellung(neueVorstellung);
-                aktualisiereSubwerkzeugVorstellungen(werkzeug);
-                break;
-            case "Vorstellung-remove":
-                _kinoService.entferneVorstellung(werkzeug.getVorstellung());
-                aktualisiereSubwerkzeugVorstellungen(werkzeug);
-                break;
-            case "Vorstellungsanzeige":
-                aktualisiereSubwerkzeugVorstellungen(werkzeug);
-                break;
+            aktualisiereSubwerkzeugVorstellungen(vorstellungWerkzeug);
         }
     }
     

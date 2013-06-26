@@ -30,7 +30,11 @@ class VorstellungWerkzeugUI
     private JTextField _werbeblockMinuten;
     private JCheckBox _reinigungszeitCheckbox;
     
-    private RowGroup _vorstellungsGruppe;
+    private JLabel _film;
+    private JLabel _minuten;
+    private JLabel _werbeblock;
+    private RowGroup _vorstellungGruppe;
+    private int _hideCount;
     
     /**
      * Initialisiert die GUI.
@@ -81,19 +85,32 @@ class VorstellungWerkzeugUI
     }
     
     /**
-     * Gibt die Vorstellungs-Gruppe zurück.
-     */
-    public RowGroup getVorstellungGruppe()
-    {
-        return _vorstellungsGruppe;
-    }
-    
-    /**
      * Gibt die Reinigungszeit-Checkbox zurück.
      */
     public JCheckBox getReinigungszeitCheckBox()
     {
         return _reinigungszeitCheckbox;
+    }
+    
+    /**
+     * Zeigt die Vorstellungsdetails.
+     */
+    public void zeigeVorstellungsdetails()
+    {
+        for (int i = 0; i < _hideCount; i++)
+        {
+            _vorstellungGruppe.show();
+        }
+        _hideCount = 0;
+    }
+    
+    /**
+     * Versteckt die Vorstellungsdetails.
+     */
+    public void versteckeVorstellungsdetails()
+    {
+        _vorstellungGruppe.hide();
+        _hideCount++;
     }
     
     /**
@@ -106,6 +123,10 @@ class VorstellungWerkzeugUI
         _fskBox = new JComboBox<FSKFormatierer>();
         _vorstellungCheckbox = new JCheckBox("Vorstellung einplanen?");
         _werbeblockMinuten = new JTextField();
+        _film = new JLabel("Film");
+        _minuten = new JLabel("Minuten");
+        _werbeblock = new JLabel("Werbeblock");
+        
         _werbeblockMinuten.setDocument(new PlainDocument()
         {
             private static final long serialVersionUID = 5900453040208923245L;
@@ -174,20 +195,17 @@ class VorstellungWerkzeugUI
             }
         });
         _werbeblockMinuten.setText("0");
-        
         _reinigungszeitCheckbox = new JCheckBox("Reinigungszeit einplanen?");
         
-        _hauptPanel = new JPanel();
-        _vorstellungsGruppe = new RowGroup();
+        _vorstellungGruppe = new RowGroup();
         
+        _hauptPanel = new JPanel();
         DesignGridLayout gridLayout = new DesignGridLayout(_hauptPanel);
         gridLayout.row().grid().add(_vorstellungCheckbox);
-        gridLayout.row().group(_vorstellungsGruppe).grid(new JLabel("Film"))
-                .add(_filmBox);
-        gridLayout.row().group(_vorstellungsGruppe)
-                .grid(new JLabel("Werbeblock"))
-                .add(new JLabel("Minuten"), _werbeblockMinuten, _fskBox);
-        gridLayout.row().group(_vorstellungsGruppe).grid()
+        gridLayout.row().group(_vorstellungGruppe).grid(_film).add(_filmBox);
+        gridLayout.row().group(_vorstellungGruppe).grid(_werbeblock)
+                .add(_minuten, _werbeblockMinuten, _fskBox);
+        gridLayout.row().group(_vorstellungGruppe).grid()
                 .add(_reinigungszeitCheckbox);
     }
 }
