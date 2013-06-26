@@ -1,5 +1,6 @@
 package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.vorstellungsauswaehler;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
@@ -20,19 +21,22 @@ import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
 public class VorstellungsAuswaehlWerkzeug extends Observable
 {
     private VorstellungsAuswaehlWerkzeugUI _ui;
-
+    
     // Das Material dieses Werkzeugs
     private Tagesplan _tagesplan;
-
+    
+    private List<Vorstellung> _vorstellungen;
+    
     /**
      * Initialisiert das Werkzeug.
      */
     public VorstellungsAuswaehlWerkzeug()
     {
         _ui = new VorstellungsAuswaehlWerkzeugUI();
+        _vorstellungen = new ArrayList<Vorstellung>();
         registriereUIAktionen();
     }
-
+    
     /**
      * Diese Methode wird aufgerufen, wenn eine Vorstellung ausgewaehlt wurde.
      */
@@ -41,7 +45,7 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
         setChanged();
         notifyObservers();
     }
-
+    
     /**
      * Gibt das Panel dieses Subwerkzeugs zurück. Das Panel sollte von einem
      * Kontextwerkzeug eingebettet werden.
@@ -52,7 +56,7 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
     {
         return _ui.getUIPanel();
     }
-
+    
     /**
      * Gibt die derzeit ausgewählte Vorstellung zurück. Wenn keine Vorstellung
      * ausgewählt ist, wird <code>null</code> zurückgegeben.
@@ -66,10 +70,23 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
         {
             result = adapter.getVorstellung();
         }
-
+        
         return result;
     }
-
+    
+    /**
+     * Aktualisiert die angezeigten Vorstellungen.
+     */
+    public void aktualisiereVorstellungen()
+    {
+        List<Vorstellung> vorstellungen = _tagesplan.getVorstellungen();
+        if (!vorstellungen.equals(_vorstellungen))
+        {
+            _vorstellungen = vorstellungen;
+            aktualisiereAngezeigteVorstellungsliste(vorstellungen);
+        }
+    }
+    
     /**
      * Setzt den Tagesplan, dessen Vorstellungen zur Auswahl angeboten werden.
      * 
@@ -78,12 +95,11 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
     public void setTagesplan(Tagesplan tagesplan)
     {
         assert tagesplan != null : "Vorbedingung verletzt: tagesplan != null";
-
+        
         _tagesplan = tagesplan;
-        List<Vorstellung> vorstellungen = _tagesplan.getVorstellungen();
-        aktualisiereAngezeigteVorstellungsliste(vorstellungen);
+        aktualisiereVorstellungen();
     }
-
+    
     /**
      * Aktualisiert die Liste der Vorstellungen.
      */
@@ -96,10 +112,11 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
         {
             varray[i] = new VorstellungsFormatierer(vorstellungen.get(i));
         }
+        
         _ui.getVorstellungAuswahlList().setListData(varray);
         _ui.getVorstellungAuswahlList().setSelectedIndex(0);
     }
-
+    
     /**
      * 
      * Verbindet die fachlichen Aktionen mit den Interaktionselementen der
@@ -118,6 +135,7 @@ public class VorstellungsAuswaehlWerkzeug extends Observable
                             vorstellungWurdeAusgewaehlt();
                         }
                     }
-                });
+                }
+        );
     }
 }
