@@ -76,7 +76,9 @@ public class StartupKinoticketverkauf_Blatt07
                 new Film("Fast & Furious Five", 130, FSK.FSK12, true, false),
                 new Film("Rio", 96, FSK.FSK0, false, false),
                 new Film("Wasser für die Elefanten", 120, FSK.FSK12, false,
-                        false), new Film("Thor", 115, FSK.FSK12, false, false) };
+                        false),
+                new Film("Thor", 115, FSK.FSK12, false, false),
+                new Film("Star Trek: Into Darkness", 132, FSK.FSK12, true, true) };
         
         Uhrzeit nachmittag = new Uhrzeit(17, 30);
         Uhrzeit abend = new Uhrzeit(20, 0);
