@@ -41,7 +41,8 @@ public class PlanungsWerkzeug implements Observer
         assert kinoService != null : "Vorbedingung verletzt: kinoService != null";
         
         _wochenAuswaehlWerkzeug = new WochenAuswaehlWerkzeug();
-        _kinosaalAuswaehlWerkzeug = new KinosaalAuswaehlWerkzeug(kinoService.getKinosaele());
+        _kinosaalAuswaehlWerkzeug = new KinosaalAuswaehlWerkzeug(
+                kinoService.getKinosaele());
         
         Woche woche = _wochenAuswaehlWerkzeug.getSelektierteWoche();
         Kinosaal kinosaal = _kinosaalAuswaehlWerkzeug
