@@ -192,6 +192,7 @@ public interface KinoService extends ObservableService
      * 
      * @require istKinosaalVorhanden(kinosaal)
      * @require woche != null
+     * @require istWochenplanVorhanden(kinosaal, woche)
      * 
      * @ensure result != null
      */
@@ -261,13 +262,16 @@ public interface KinoService extends ObservableService
      *            Das Datum der Vorstellung
      * @param startzeit
      *            Die Startzeit der Vorstellung
+     * @param film
+     *            Der Film der Vorstellung
      * 
      * @require istKinosaalVorhanden(kinosaal)
      * @require datum != null
      * @require startzeit != null
+     * @require istFilmVorraetig(film)
      */
     boolean istVorstellungErstellbar(Kinosaal kinosaal, Datum datum,
-            Uhrzeit startzeit);
+            Uhrzeit startzeit, Film film);
     
     /**
      * Berechnet die maximale Dauer, die ein Werbeblock einer Vorstellung dauern
