@@ -2,10 +2,13 @@ package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.platzverkauf;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JPanel;
 
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Geldbetrag;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Kaeufergruppe;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Platz;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
@@ -27,6 +30,9 @@ public class PlatzVerkaufsWerkzeug
     private Vorstellung _vorstellung;
 
     private PlatzVerkaufsWerkzeugUI _ui;
+    
+    private Kaeufergruppe _selectedKaeufergruppe;
+    private Set<Platz> _ausgewaehltePlaetze;
 
     /**
      * Initialisiert das PlatzVerkaufsWerkzeug.
@@ -34,6 +40,9 @@ public class PlatzVerkaufsWerkzeug
     public PlatzVerkaufsWerkzeug()
     {
         _ui = new PlatzVerkaufsWerkzeugUI();
+        _selectedKaeufergruppe = Kaeufergruppe.Erwachsener;
+        _ausgewaehltePlaetze = new HashSet<Platz>();
+        _ui.getErwachsenerButton().setSelected(true);
         registriereUIAktionen();
         // Am Anfang wird keine Vorstellung angezeigt:
         setVorstellung(null);
@@ -72,6 +81,26 @@ public class PlatzVerkaufsWerkzeug
                 stornierePlaetze(_vorstellung);
             }
         });
+        
+        _ui.getSchuelerButton().addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                _selectedKaeufergruppe = Kaeufergruppe.Schueler;
+                aktualisierePreisanzeige(_ausgewaehltePlaetze);
+            }
+        });
+        
+        _ui.getErwachsenerButton().addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                _selectedKaeufergruppe = Kaeufergruppe.Erwachsener;
+                aktualisierePreisanzeige(_ausgewaehltePlaetze);
+            }
+        });
 
         _ui.getPlatzplan().addPlatzSelectionListener(
                 new PlatzSelectionListener()
@@ -93,6 +122,7 @@ public class PlatzVerkaufsWerkzeug
      */
     private void reagiereAufNeuePlatzAuswahl(Set<Platz> plaetze)
     {
+        _ausgewaehltePlaetze = plaetze;
         _ui.getVerkaufenButton().setEnabled(istVerkaufenMoeglich(plaetze));
         _ui.getStornierenButton().setEnabled(istStornierenMoeglich(plaetze));
         aktualisierePreisanzeige(plaetze);
@@ -105,8 +135,8 @@ public class PlatzVerkaufsWerkzeug
     {
         if (istVerkaufenMoeglich(plaetze))
         {
-            int preis = _vorstellung.getPreisFuerPlaetze(plaetze);
-            _ui.getPreisLabel().setText("Gesamtpreis: " + preis + " Eurocent");
+            Geldbetrag preis = _vorstellung.getPreisFuerPlaetze(plaetze, _selectedKaeufergruppe);
+            _ui.getPreisLabel().setText("Gesamtpreis: " + preis.getFormatiertenString() + " Euro");
         }
         else
         {

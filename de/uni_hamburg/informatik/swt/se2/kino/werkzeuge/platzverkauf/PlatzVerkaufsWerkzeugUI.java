@@ -4,9 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 
 /**
@@ -23,6 +25,9 @@ class PlatzVerkaufsWerkzeugUI
     private JButton _verkaufenButton;
     private JButton _stornierenButton;
     private JPlatzplan _platzplan;
+    private JRadioButton _schueler;
+    private JRadioButton _erwachsener;
+    private ButtonGroup _kaeufergruppeGroup;
 
     /**
      * Initialisiert die UI.
@@ -55,8 +60,21 @@ class PlatzVerkaufsWerkzeugUI
         buttonPanel.add(_verkaufenButton);
         _stornierenButton = new JButton("Stornieren");
         buttonPanel.add(_stornierenButton);
-
-        southPanel.add(_preisLabel, BorderLayout.CENTER);
+        
+        _kaeufergruppeGroup = new ButtonGroup();
+        _schueler = new JRadioButton("Schüler?");
+        _erwachsener = new JRadioButton("Erwachsener?");
+        _kaeufergruppeGroup.add(_schueler);
+        _kaeufergruppeGroup.add(_erwachsener);
+        
+        JPanel southWestPanel = new JPanel(new BorderLayout());
+        JPanel buttonGroup = new JPanel();
+        buttonGroup.add(_schueler);
+        buttonGroup.add(_erwachsener);
+        southWestPanel.add(_preisLabel, BorderLayout.CENTER);
+        southWestPanel.add(buttonGroup, BorderLayout.EAST);
+        
+        southPanel.add(southWestPanel, BorderLayout.CENTER);
         southPanel.add(buttonPanel, BorderLayout.EAST);
 
         panel.add(southPanel, BorderLayout.SOUTH);
@@ -94,6 +112,22 @@ class PlatzVerkaufsWerkzeugUI
     public JButton getVerkaufenButton()
     {
         return _verkaufenButton;
+    }
+    
+    /**
+     * Gibt den Schüler-RadioButton zurück.
+     */
+    public JRadioButton getSchuelerButton()
+    {
+        return _schueler;
+    }
+    
+    /**
+     * Gibt den Erwachsener-RadioButton zurück.
+     */
+    public JRadioButton getErwachsenerButton()
+    {
+        return _erwachsener;
     }
 
     /**
