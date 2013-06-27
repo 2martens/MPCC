@@ -3,6 +3,7 @@ package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.hauptwerkzeug;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
@@ -61,6 +62,13 @@ class KinoWerkzeugUI
         
         _hauptPanel = erstellePanel();
         initGUI();
+        Dimension size = new Dimension(1088, 577);
+        _kassenPanel.setSize(size);
+        _kassenPanel.setPreferredSize(size);
+        _kassenPanel.setMinimumSize(size);
+        _planungsPanel.setSize(size);
+        _planungsPanel.setPreferredSize(size);
+        _planungsPanel.setMinimumSize(size);
     }
     
     /**
