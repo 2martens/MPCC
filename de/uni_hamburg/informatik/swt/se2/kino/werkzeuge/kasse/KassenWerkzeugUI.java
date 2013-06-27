@@ -1,6 +1,7 @@
 package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.kasse;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -20,10 +21,10 @@ class KassenWerkzeugUI
      * Project und dürfen frei verwendet werden. Siehe
      * http://tango.freedesktop.org/
      */
-
+    
     // Die Widgets, aus denen das UI sich zusammensetzt
     private JPanel _hauptPanel;
-
+    
     /**
      * Initialisert die Oberfläche. Die Parameter sind die UIs der Subwerkzeuge,
      * die eingebettet werden.
@@ -35,10 +36,21 @@ class KassenWerkzeugUI
         JComponent leftPanel = erstelleVorstellungsauswahlPanel(
                 datumAuswaehlPanel, vorstellungAuswaehlPanel);
         JComponent rightPanel = platzVerkaufsPanel;
-
+        
         JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 leftPanel, rightPanel);
         _hauptPanel.add(splitter, BorderLayout.CENTER);
+        
+        // Panelgröße festlegen
+        Dimension platz = new Dimension(702, 565);
+        platzVerkaufsPanel.setPreferredSize(platz);
+        platzVerkaufsPanel.setMinimumSize(platz);
+        Dimension datum = new Dimension(369, 73);
+        datumAuswaehlPanel.setPreferredSize(datum);
+        datumAuswaehlPanel.setMinimumSize(datum);
+        Dimension vorstellung = new Dimension(369, 492);
+        vorstellungAuswaehlPanel.setPreferredSize(vorstellung);
+        vorstellungAuswaehlPanel.setMinimumSize(vorstellung);
     }
     
     /**
@@ -50,7 +62,7 @@ class KassenWerkzeugUI
     {
         return _hauptPanel;
     }
-
+    
     /**
      * Erzeugt das Panel, in dem das Datum, der Kinosaal und die Vorstellung
      * ausgewählt werden.
@@ -63,15 +75,15 @@ class KassenWerkzeugUI
     {
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BorderLayout());
-
+        
         datumAuswaehlPanel.setBorder(BorderFactory
                 .createEmptyBorder(5, 5, 5, 5));
         vorstellungAuswaehlPanel.setBorder(BorderFactory.createEmptyBorder(5,
                 5, 5, 5));
-
+        
         leftPanel.add(datumAuswaehlPanel, BorderLayout.NORTH);
         leftPanel.add(vorstellungAuswaehlPanel, BorderLayout.CENTER);
-
+        
         return leftPanel;
     }
 }
