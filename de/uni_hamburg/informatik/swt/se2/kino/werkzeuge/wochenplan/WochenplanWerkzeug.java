@@ -108,12 +108,22 @@ public class WochenplanWerkzeug
                     break;
             }
         }
-        
         _ui = new WochenplanWerkzeugUI(_donnerstagWerkzeug.getUIPanel(),
                 _freitagWerkzeug.getUIPanel(), _samstagWerkzeug.getUIPanel(),
                 _sonntagWerkzeug.getUIPanel(), _montagWerkzeug.getUIPanel(),
                 _dienstagWerkzeug.getUIPanel(), _mittwochWerkzeug.getUIPanel());
         
+        // Datumslabel initialisieren
+        List<Tag> tage = _woche.getWochentage();
+        List<String> datumsTexte = new ArrayList<String>(7);
+        datumsTexte.add(tage.get(0).getDatum().getFormatiertenString());
+        datumsTexte.add(tage.get(1).getDatum().getFormatiertenString());
+        datumsTexte.add(tage.get(2).getDatum().getFormatiertenString());
+        datumsTexte.add(tage.get(3).getDatum().getFormatiertenString());
+        datumsTexte.add(tage.get(4).getDatum().getFormatiertenString());
+        datumsTexte.add(tage.get(5).getDatum().getFormatiertenString());
+        datumsTexte.add(tage.get(6).getDatum().getFormatiertenString());
+        _ui.aktualisiereDatumsLabel(datumsTexte);
     }
     
     /**
