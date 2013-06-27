@@ -88,7 +88,7 @@ public class Film
     /**
      * Gibt zurück. ob dieser Film in 3D ist.
      */
-    public boolean is3D()
+    public boolean ist3D()
     {
         return _3D;
     }

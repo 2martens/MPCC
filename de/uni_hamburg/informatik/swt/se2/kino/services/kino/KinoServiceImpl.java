@@ -50,7 +50,7 @@ public class KinoServiceImpl extends AbstractObservableService implements
         List<Vorstellung> vorstellungen = tagesplan.getVorstellungen();
         
         Vorstellung testVorstellung = new Vorstellung(kinosaal, film,
-                startzeit, datum, Vorstellung.TICKETPREIS);
+                startzeit, datum);
         if (werbeblock != null)
         {
             testVorstellung.setWerbeblock(werbeblock);

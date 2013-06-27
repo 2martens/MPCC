@@ -30,7 +30,7 @@ public class WochenplanTest
         Film film = new Film("Hammersmith", 90, FSK.FSK12, false, false);
         Uhrzeit anfang = new Uhrzeit(17, 30);
         Datum datum = _woche.getWochentage().get(0).getDatum();
-        _vorstellung = new Vorstellung(_kinosaal, film, anfang, datum, 750);
+        _vorstellung = new Vorstellung(_kinosaal, film, anfang, datum);
     }
     
     @Test

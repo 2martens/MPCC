@@ -24,11 +24,11 @@ public class TagesplanTest
     private static final Uhrzeit _startzeit = new Uhrzeit(0, 0);
     private static final Uhrzeit _startzeit2 = new Uhrzeit(2, 0);
     private static final Vorstellung _vorstellung = new Vorstellung(_kinosaal,
-            _film, _startzeit, _datum, 0);
+            _film, _startzeit, _datum);
     private static final Vorstellung _vorstellung2 = new Vorstellung(_kinosaal,
-            _film, _startzeit2, _datum, 0);
+            _film, _startzeit2, _datum);
     private static final Vorstellung _vorstellung3 = new Vorstellung(
-            _kinosaal2, _film, _startzeit2, _datum, 0);
+            _kinosaal2, _film, _startzeit2, _datum);
     
     private Tagesplan _t;
     

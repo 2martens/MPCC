@@ -79,16 +79,15 @@ public class KinoServiceTest
         _filmNichtVorhanden = new Film("Lahmer Boden", 120, FSK.FSK6, false,
                 false);
         _vorstellungVorhanden = new Vorstellung(_kinosaal1, _filmVorhanden3,
-                _1500, _heute, Vorstellung.TICKETPREIS,
-                _kinosaal1.getReinigungszeit(), _blockKlein);
+                _1500, _heute, _kinosaal1.getReinigungszeit(), _blockKlein);
         _vorstellungVorhanden2 = new Vorstellung(_kinosaal3, _filmVorhanden3,
-                _1730, _heute, Vorstellung.TICKETPREIS);
+                _1730, _heute);
         _vorstellungNichtVorhanden = new Vorstellung(_kinosaal1,
-                _filmVorhanden2, _1730, _heute, Vorstellung.TICKETPREIS,
-                _kinosaal1.getReinigungszeit(), _blockGross);
+                _filmVorhanden2, _1730, _heute, _kinosaal1.getReinigungszeit(),
+                _blockGross);
         _vorstellungNichtHinzufuegbar = new Vorstellung(_kinosaal1,
-                _filmVorhanden2, _1500, _heute, Vorstellung.TICKETPREIS,
-                _kinosaal1.getReinigungszeit(), _blockGross);
+                _filmVorhanden2, _1500, _heute, _kinosaal1.getReinigungszeit(),
+                _blockGross);
         
         _kino = new Kino(new Kinosaal[] { _kinosaal1, _kinosaal3 },
                 new Vorstellung[] { _vorstellungVorhanden,

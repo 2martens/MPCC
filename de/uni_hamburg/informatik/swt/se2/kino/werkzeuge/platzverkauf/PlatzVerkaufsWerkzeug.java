@@ -103,7 +103,6 @@ public class PlatzVerkaufsWerkzeug
      */
     private void aktualisierePreisanzeige(Set<Platz> plaetze)
     {
-
         if (istVerkaufenMoeglich(plaetze))
         {
             int preis = _vorstellung.getPreisFuerPlaetze(plaetze);
