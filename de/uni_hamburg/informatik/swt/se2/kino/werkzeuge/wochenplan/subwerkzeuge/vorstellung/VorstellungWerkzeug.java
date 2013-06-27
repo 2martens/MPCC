@@ -13,6 +13,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.FSK;
@@ -126,6 +130,7 @@ public class VorstellungWerkzeug extends Observable
         if (_vorstellung != null)
         {
             aktualisiereVorstellungsCheckbox();
+            aktualisiereWerbeblockMaxMinuten();
             aktualisiereUI();
         }
     }
@@ -151,6 +156,7 @@ public class VorstellungWerkzeug extends Observable
             {
                 _reinigungszeit = _vorstellung.getReinigungszeit();
             }
+            aktualisiereWerbeblockMaxMinuten();
         }
         else
         {
@@ -215,9 +221,9 @@ public class VorstellungWerkzeug extends Observable
     public void aktualisiereVorstellung()
     {
         aktualisiereVorstellungsCheckbox();
-        aktualisiereWerbeblockMaxMinuten();
+        // aktualisiereWerbeblockMaxMinuten();
         aktualisiereFilmauswahl();
-        aktualisiereReinigungsCheckbox();
+        // aktualisiereReinigungsCheckbox();
     }
     
     /**
@@ -235,6 +241,44 @@ public class VorstellungWerkzeug extends Observable
     {
         initialisiereFilmBox();
         versteckeVorstellungsdetails();
+        final JTextField werbeblockMinutenInput = _ui
+                .getWerbeblockMinutenInput();
+        ((AbstractDocument) werbeblockMinutenInput.getDocument())
+                .setDocumentFilter(new DocumentFilter()
+                {
+                    @Override
+                    public void insertString(FilterBypass fb, int offset,
+                            String string, AttributeSet attr)
+                            throws BadLocationException
+                    {
+                        String aktuelleMinuten = String
+                                .valueOf(_werbeblockMinuten);
+                        int dauer = 0;
+                        if (offset > 0)
+                        {
+                            // kann hier ohne try-catch Block passieren, da
+                            // darauf bereits im Document geprüft wird (UI-Klasse)
+                            dauer = Integer.parseInt(aktuelleMinuten + string);
+                        }
+                        else if (offset == 0)
+                        {
+                            // siehe oben
+                            dauer = Integer.parseInt(string);
+                        }
+                        if (dauer > _werbeblockMaxMinuten)
+                        {
+                            dauer = _werbeblockMaxMinuten;
+                            string = String.valueOf(dauer);
+                            super.replace(fb, 0, aktuelleMinuten.length(),
+                                    string, attr);
+                        }
+                        else
+                        {
+                            super.insertString(fb, offset, string, attr);
+                        }
+                    }
+                    
+                });
     }
     
     /**
@@ -413,10 +457,10 @@ public class VorstellungWerkzeug extends Observable
         }
         aktualisiereFSKBox();
         aktualisiereReinigungsCheckbox();
-        aktualisiereWerbeblockMaxMinuten();
         if (_vorstellung != null)
         {
             _vorstellung.setFilm(_selectedFilm);
+            aktualisiereWerbeblockMaxMinuten();
             
             setChanged();
             notifyObservers();
@@ -446,7 +490,6 @@ public class VorstellungWerkzeug extends Observable
             {
                 _werbeblock = new Werbeblock(_werbeblockMinuten, _werbeblockFSK);
                 _vorstellung.setWerbeblock(_werbeblock);
-                aktualisiereWerbeblockMinuten();
             }
         }
     }
