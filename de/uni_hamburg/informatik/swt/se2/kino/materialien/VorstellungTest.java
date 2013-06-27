@@ -14,6 +14,8 @@ import org.junit.Test;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.FSK;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Geldbetrag;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Kaeufergruppe;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Platz;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
@@ -23,7 +25,9 @@ public class VorstellungTest
     private Kinosaal _kinoA;
     private Film _hdR1;
     private Film _hdR2;
+    private Film _normal;
     private Uhrzeit _16_45 = new Uhrzeit(16, 45);
+    private Uhrzeit _11_00 = new Uhrzeit(11, 00);
     private Datum _11_07_2008 = new Datum(11, 07, 2008);
     private Reinigungszeit _reinigungszeit = new Reinigungszeit(10);
     private Werbeblock _werbeblock = new Werbeblock(30, FSK.FSK12);
@@ -35,19 +39,19 @@ public class VorstellungTest
         _hdR1 = new Film("Der Herr der Ringe - Die Gefährten", 178, FSK.FSK12,
                 true, false);
         _hdR2 = new Film("Der Hobbit", 178, FSK.FSK12, true, true);
+        _normal = new Film("Tralala", 90, FSK.FSK0, false, false);
     }
     
     @Test
     public void testeKonstruktor()
     {
         Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008,
-                1230, _reinigungszeit, _werbeblock);
+                _reinigungszeit, _werbeblock);
         
         assertSame(_kinoA, v.getKinosaal());
         assertSame(_hdR1, v.getFilm());
         assertEquals(_16_45, v.getAnfangszeit());
         assertEquals(_11_07_2008, v.getDatum());
-        assertEquals(1230, v.getPreis());
         assertSame(_reinigungszeit, v.getReinigungszeit());
         assertSame(_werbeblock, v.getWerbeblock());
         assertNotNull(v.toString());
@@ -56,8 +60,7 @@ public class VorstellungTest
     @Test
     public void testSetFilm()
     {
-        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008,
-                1230);
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008);
         assertSame(_hdR1, v.getFilm());
         Film neuerFilm = new Film("Doof", 90, FSK.FSK12, false, false);
         v.setFilm(neuerFilm);
@@ -67,8 +70,7 @@ public class VorstellungTest
     @Test
     public void testSetReinigungszeit()
     {
-        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008,
-                1230);
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008);
         v.setReinigungszeit(_reinigungszeit);
         assertSame(_reinigungszeit, v.getReinigungszeit());
     }
@@ -76,8 +78,7 @@ public class VorstellungTest
     @Test
     public void testSetWerbeblock()
     {
-        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008,
-                1230);
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008);
         v.setWerbeblock(_werbeblock);
         assertSame(_werbeblock, v.getWerbeblock());
     }
@@ -85,8 +86,7 @@ public class VorstellungTest
     @Test
     public void testHatPlatzHatPlaetze()
     {
-        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008,
-                1230);
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008);
         
         assertTrue(v.hatPlatz(new Platz(0, 0)));
         assertTrue(v.hatPlatz(new Platz(19, 49)));
@@ -108,28 +108,56 @@ public class VorstellungTest
     @Test
     public void testeGibPreisFuerPlaetze()
     {
-        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008,
-                1230);
-        Vorstellung v1 = new Vorstellung(_kinoA, _hdR2, _16_45, _11_07_2008,
-                1230);
+        // Überlänge, kein 3D
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008);
+        // Überlänge und 3D
+        Vorstellung v1 = new Vorstellung(_kinoA, _hdR2, _16_45, _11_07_2008);
+        // Überlänge und 3D und vor 12:00
+        Vorstellung v2 = new Vorstellung(_kinoA, _hdR2, _11_00, _11_07_2008);
+        // keine Überlänge und kein 3D und vor 12:00
+        Vorstellung v3 = new Vorstellung(_kinoA, _normal, _11_00, _11_07_2008);
+        
         Set<Platz> s = new HashSet<Platz>();
         
-        assertEquals(0, v.getPreisFuerPlaetze(s));
-        assertEquals(0, v1.getPreisFuerPlaetze(s));
+        Geldbetrag betrag0 = new Geldbetrag(0);
+        
+        // teste Preis für 0 Plätze
+        assertEquals(betrag0,
+                v.getPreisFuerPlaetze(s, Kaeufergruppe.Erwachsener));
+        assertEquals(betrag0, v1.getPreisFuerPlaetze(s, Kaeufergruppe.Schueler));
+        assertEquals(betrag0, v2.getPreisFuerPlaetze(s, Kaeufergruppe.Schueler));
+        assertEquals(betrag0, v3.getPreisFuerPlaetze(s, Kaeufergruppe.Schueler));
         
         s.add(new Platz(5, 5));
         s.add(new Platz(5, 6));
         s.add(new Platz(5, 7));
         
-        assertEquals(4440, v.getPreisFuerPlaetze(s));
-        assertEquals(5490, v1.getPreisFuerPlaetze(s));
+        // teste Preis für 3 Plätze
+        assertEquals(new Geldbetrag(3000),
+                v.getPreisFuerPlaetze(s, Kaeufergruppe.Erwachsener));
+        assertEquals(new Geldbetrag(3000),
+                v.getPreisFuerPlaetze(s, Kaeufergruppe.Schueler));
+        
+        assertEquals(new Geldbetrag(4050),
+                v1.getPreisFuerPlaetze(s, Kaeufergruppe.Erwachsener));
+        assertEquals(new Geldbetrag(4050),
+                v1.getPreisFuerPlaetze(s, Kaeufergruppe.Schueler));
+        
+        assertEquals(new Geldbetrag(4050),
+                v2.getPreisFuerPlaetze(s, Kaeufergruppe.Erwachsener));
+        assertEquals(new Geldbetrag(3300),
+                v2.getPreisFuerPlaetze(s, Kaeufergruppe.Schueler));
+        
+        assertEquals(new Geldbetrag(2250),
+                v3.getPreisFuerPlaetze(s, Kaeufergruppe.Erwachsener));
+        assertEquals(new Geldbetrag(1500),
+                v3.getPreisFuerPlaetze(s, Kaeufergruppe.Schueler));
     }
     
     @Test
     public void testeVerkaufen()
     {
-        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008,
-                1230);
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008);
         Platz platz = new Platz(5, 5);
         assertFalse(v.istPlatzVerkauft(platz));
         
@@ -143,8 +171,7 @@ public class VorstellungTest
     @Test
     public void testeVerkaufenMehrere()
     {
-        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008,
-                1230);
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008);
         
         Platz platz1 = new Platz(1, 1);
         Platz platz2 = new Platz(1, 2);
@@ -165,8 +192,7 @@ public class VorstellungTest
     @Test
     public void testeSindVerkauft()
     {
-        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008,
-                1230);
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008);
         
         Platz platz1 = new Platz(1, 1);
         Platz platz2 = new Platz(1, 2);
@@ -193,8 +219,7 @@ public class VorstellungTest
     @Test
     public void testeSindNichtVerkauft()
     {
-        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008,
-                1230);
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008);
         
         Platz platz1 = new Platz(1, 1);
         Platz platz2 = new Platz(1, 2);
@@ -229,8 +254,7 @@ public class VorstellungTest
     @Test
     public void testeGibAnzahlVerkauftePlaetze()
     {
-        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008,
-                1230);
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008);
         
         assertEquals(0, v.getAnzahlVerkauftePlaetze());
         for (int i = 1; i <= 5; i++)
@@ -247,12 +271,11 @@ public class VorstellungTest
     @Test
     public void testeEqualsUndHashCode()
     {
-        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008,
-                1230);
+        Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008);
         Vorstellung v1 = new Vorstellung(_kinoA, _hdR1, new Uhrzeit(16, 30),
-                _11_07_2008, 1230);
+                _11_07_2008);
         Vorstellung v2 = new Vorstellung(_kinoA, _hdR1, new Uhrzeit(20, 00),
-                _11_07_2008, 1230);
+                _11_07_2008);
         
         assertTrue(v.equals(v1));
         assertTrue(v.equals(v));

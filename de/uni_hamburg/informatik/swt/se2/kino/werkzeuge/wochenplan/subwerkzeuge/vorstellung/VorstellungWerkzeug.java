@@ -689,7 +689,7 @@ public class VorstellungWerkzeug extends Observable
         if (_vorstellung == null)
         {
             Vorstellung neueVorstellung = new Vorstellung(_kinosaal,
-                    _selectedFilm, _startzeit, _datum, Vorstellung.TICKETPREIS);
+                    _selectedFilm, _startzeit, _datum);
             _kinoService.fuegeVorstellungHinzu(neueVorstellung, _datum,
                     _kinosaal, _startzeit);
             _vorstellung = neueVorstellung;

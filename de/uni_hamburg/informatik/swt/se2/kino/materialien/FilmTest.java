@@ -19,7 +19,7 @@ public class FilmTest
         assertEquals(90, f.getLaenge());
         assertEquals(FSK.FSK16, f.getFSK());
         assertTrue(f.hatUeberlaenge());
-        assertTrue(f.is3D());
+        assertTrue(f.ist3D());
         assertNotNull(f.toString());
     }
 }

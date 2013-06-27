@@ -81,10 +81,10 @@ public class KinoTest
         
         _d1 = new Datum(11, 07, 2008);
         
-        _vorstellungSaal1Film0 = new Vorstellung(_saal1, _film0, _u1, _d1, 900);
-        _vorstellungSaal2Film1 = new Vorstellung(_saal2, _film1, _u1, _d1, 1000);
-        _vorstellungSaal2Film2a = new Vorstellung(_saal2, _film2, _u2, _d1, 900);
-        _vorstellungSaal2Film2b = new Vorstellung(_saal2, _film2, _u3, _d1, 900);
+        _vorstellungSaal1Film0 = new Vorstellung(_saal1, _film0, _u1, _d1);
+        _vorstellungSaal2Film1 = new Vorstellung(_saal2, _film1, _u1, _d1);
+        _vorstellungSaal2Film2a = new Vorstellung(_saal2, _film2, _u2, _d1);
+        _vorstellungSaal2Film2b = new Vorstellung(_saal2, _film2, _u3, _d1);
         
         _alleVorstellungen = new Vorstellung[] { _vorstellungSaal1Film0,
                 _vorstellungSaal2Film1, _vorstellungSaal2Film2a,
@@ -111,7 +111,7 @@ public class KinoTest
     {
         Datum datum = Datum.heute();
         Tagesplan tagesplan = new Tagesplan(datum);
-        Vorstellung v = new Vorstellung(_saal1, _film0, _u1, datum, 900);
+        Vorstellung v = new Vorstellung(_saal1, _film0, _u1, datum);
         tagesplan.fuegeVorstellungHinzu(v);
         assertFalse(tagesplan.equals(_kino.getTagesplan(datum)));
         _kino.setTagesplan(datum, tagesplan);

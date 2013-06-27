@@ -3,15 +3,30 @@ package de.uni_hamburg.informatik.swt.se2.kino.materialien;
 import java.util.Set;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Geldbetrag;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Kaeufergruppe;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Platz;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
 
 /**
+ * <p>
  * Eine Vorstellung, für die Plätze verkauft und storniert werden können. Die
  * Vorstellung speichert zum einen die Daten der eigentlichen Vorstellung (wann
  * und wo läuft welcher Film) und zum anderen, welche Plätze für diese
  * Vorstellung bereits verkauft wurden.
+ * </p>
+ * 
+ * Es sind folgende Preise möglich:
+ * <ul>
+ * <li>7,50 € für normale Filme (kein 3D, keine Überlänge)</li>
+ * <li>10,00 € für Filme mit Überlänge (ohne 3D)</li>
+ * <li>11,00 € für Filme mit 3D (ohne Überlänge)</li>
+ * <li>13,50 € für Filme mit Überlänge und 3D</li>
+ * </ul>
+ * 
+ * Für Schüler gibt es bei Vorstellungen vor 12:00 Uhr eine Ermäßigung von 2,50
+ * € auf alle Arten von Filmen.
  * 
  * @author SE2-Team
  * @version SoSe 2013
@@ -21,17 +36,24 @@ public class Vorstellung
     /**
      * Der Standard-Ticketpreis ohne Zuschlag oder Vergünstigung.
      */
-    public static final int TICKETPREIS = 750;
+    private static final int TICKETPREIS = 750;
     
     /**
      * Der Zuschlag für Überlänge.
      */
-    public static final int UEBERLAENGE_ZUSCHLAG = 250;
+    private static final int UEBERLAENGE_ZUSCHLAG = 250;
     
     /**
      * Der Zuschlag für 3D.
      */
-    public static final int ZUSCHLAG_3D = 350;
+    private static final int ZUSCHLAG_3D = 350;
+    
+    /**
+     * Die Ermäßigung für Schüler.
+     */
+    private static final int ERMAESSIGUNG = 250;
+    
+    private static final Uhrzeit ZWOELF_UHR = new Uhrzeit(12, 00);
     
     private Kinosaal _kinosaal;
     private Film _film;
@@ -55,25 +77,21 @@ public class Vorstellung
      *            die Anfangszeit der Vorstellung.
      * @param datum
      *            das Datum der Vorstellung.
-     * @param preis
-     *            der Verkaufspreis als int für Karten zu dieser Vorstellung.
      * 
      * @require kinosaal != null
      * @require film != null
      * @require anfangszeit != null
      * @require datum != null
-     * @require preis >= 0
      * 
      * @ensure getKinosaal() == kinosaal
      * @ensure getFilm() == film
      * @ensure getAnfangszeit() == anfangszeit
      * @ensure getDatum() == datum
-     * @ensure getPreis() == preis
      */
     public Vorstellung(Kinosaal kinosaal, Film film, Uhrzeit anfangszeit,
-            Datum datum, int preis)
+            Datum datum)
     {
-        this(kinosaal, film, anfangszeit, datum, preis, null, null);
+        this(kinosaal, film, anfangszeit, datum, null, null);
     }
     
     /**
@@ -87,8 +105,6 @@ public class Vorstellung
      *            die Anfangszeit der Vorstellung.
      * @param datum
      *            das Datum der Vorstellung.
-     * @param preis
-     *            der Verkaufspreis als int für Karten zu dieser Vorstellung.
      * @param reinigungszeit
      *            Die Reinigungszeit nach der Veranstaltung.
      * 
@@ -96,7 +112,6 @@ public class Vorstellung
      * @require film != null
      * @require anfangszeit != null
      * @require datum != null
-     * @require preis >= 0
      * @require reinigungszeit != null
      * 
      * @ensure getKinosaal() == kinosaal
@@ -107,9 +122,9 @@ public class Vorstellung
      * @ensure getReinigungszeit() == reinigungszeit
      */
     public Vorstellung(Kinosaal kinosaal, Film film, Uhrzeit anfangszeit,
-            Datum datum, int preis, Reinigungszeit reinigungszeit)
+            Datum datum, Reinigungszeit reinigungszeit)
     {
-        this(kinosaal, film, anfangszeit, datum, preis, reinigungszeit, null);
+        this(kinosaal, film, anfangszeit, datum, reinigungszeit, null);
         assert reinigungszeit != null : "Vorbedingung verletzt: reinigungszeit != null";
     }
     
@@ -124,8 +139,6 @@ public class Vorstellung
      *            die Anfangszeit der Vorstellung.
      * @param datum
      *            das Datum der Vorstellung.
-     * @param preis
-     *            der Verkaufspreis als int für Karten zu dieser Vorstellung.
      * @param werbeblock
      *            Der Werbeblock vor dem Film.
      * 
@@ -133,20 +146,18 @@ public class Vorstellung
      * @require film != null
      * @require anfangszeit != null
      * @require datum != null
-     * @require preis >= 0
      * @require werbeblock != null
      * 
      * @ensure getKinosaal() == kinosaal
      * @ensure getFilm() == film
      * @ensure getAnfangszeit() == anfangszeit
      * @ensure getDatum() == datum
-     * @ensure getPreis() == preis
      * @ensure getReinigungszeit() == reinigungszeit
      */
     public Vorstellung(Kinosaal kinosaal, Film film, Uhrzeit anfangszeit,
-            Datum datum, int preis, Werbeblock werbeblock)
+            Datum datum, Werbeblock werbeblock)
     {
-        this(kinosaal, film, anfangszeit, datum, preis, null, werbeblock);
+        this(kinosaal, film, anfangszeit, datum, null, werbeblock);
         assert werbeblock != null : "Vorbedingung verletzt: werbeblock != null";
     }
     
@@ -161,8 +172,6 @@ public class Vorstellung
      *            die Anfangszeit der Vorstellung.
      * @param datum
      *            das Datum der Vorstellung.
-     * @param preis
-     *            der Verkaufspreis als int für Karten zu dieser Vorstellung.
      * @param reinigungszeit
      *            Die Reinigungszeit nach der Veranstaltung.
      * @param werbeblock
@@ -172,36 +181,32 @@ public class Vorstellung
      * @require film != null
      * @require anfangszeit != null
      * @require datum != null
-     * @require preis >= 0
      * 
      * @ensure getKinosaal() == kinosaal
      * @ensure getFilm() == film
      * @ensure getAnfangszeit() == anfangszeit
      * @ensure getDatum() == datum
-     * @ensure getPreis() == preis
      * @ensure getReinigungszeit() == reinigungszeit
      */
     public Vorstellung(Kinosaal kinosaal, Film film, Uhrzeit anfangszeit,
-            Datum datum, int preis, Reinigungszeit reinigungszeit,
-            Werbeblock werbeblock)
+            Datum datum, Reinigungszeit reinigungszeit, Werbeblock werbeblock)
     {
         assert kinosaal != null : "Vorbedingung verletzt: saal != null";
         assert film != null : "Vorbedingung verletzt: film != null";
         assert anfangszeit != null : "Vorbedingung verletzt: anfangszeit != null";
         assert datum != null : "Vorbedingung verletzt: datum != null";
-        assert preis >= 0 : "Vorbedingung verletzt: preis >= 0";
         
         _kinosaal = kinosaal;
         _film = film;
         _anfangszeit = anfangszeit;
         _datum = datum;
-        _preis = preis;
         _verkauft = new boolean[kinosaal.getAnzahlReihen()][kinosaal
                 .getAnzahlSitzeProReihe()];
         _anzahlVerkauftePlaetze = 0;
         _reinigungszeit = reinigungszeit;
         _werbeblock = werbeblock;
         berechneEndUhrzeit();
+        berechnePreis();
     }
     
     /**
@@ -273,13 +278,13 @@ public class Vorstellung
     }
     
     /**
-     * Gibt den Verkaufspreis als int für Karten zu dieser Vorstellung zurück.
+     * Gibt den Verkaufspreis als Geldbetrag für Karten zu dieser Vorstellung zurück.
      * 
-     * @ensure result > 0
+     * @ensure result != null
      */
-    public int getPreis()
+    public Geldbetrag getPreis()
     {
-        return _preis;
+        return new Geldbetrag(_preis);
     }
     
     /**
@@ -422,28 +427,30 @@ public class Vorstellung
      * 
      * @param plaetze
      *            die Sitzplätze.
+     * @param kaeufergruppe
+     *            die Käufergruppe.
      * 
-     * @return Gesamtpreis als int
+     * @return Gesamtpreis als Geldbetrag
      * 
      * @require plaetze != null
      * @require hatPlaetze(plaetze)
+     * @require kaeufergruppe != null
      */
-    public int getPreisFuerPlaetze(Set<Platz> plaetze)
+    public Geldbetrag getPreisFuerPlaetze(Set<Platz> plaetze,
+            Kaeufergruppe kaeufergruppe)
     {
         assert plaetze != null : "Vorbedingung verletzt: plaetze != null";
         assert hatPlaetze(plaetze) : "Vorbedingung verletzt: hatPlaetze(plaetze)";
+        assert kaeufergruppe != null : "Vorbedingung verletzt: kaeufergruppe != null";
         
         int preis = _preis;
-        if (_film.hatUeberlaenge())
+        if (kaeufergruppe == Kaeufergruppe.Schueler
+                && _anfangszeit.compareTo(ZWOELF_UHR) < 0)
         {
-            preis += UEBERLAENGE_ZUSCHLAG;
-        }
-        if (_film.is3D())
-        {
-            preis += ZUSCHLAG_3D;
+            preis -= ERMAESSIGUNG;
         }
         
-        return preis * plaetze.size();
+        return new Geldbetrag(preis * plaetze.size());
     }
     
     /**
@@ -669,5 +676,22 @@ public class Vorstellung
             dauer += _reinigungszeit.getDauer();
         }
         _endzeit = Uhrzeit.getUhrzeit(_anfangszeit, dauer);
+    }
+    
+    /**
+     * Berechnet den Ticketpreis.
+     */
+    private void berechnePreis()
+    {
+        int preis = TICKETPREIS;
+        if (_film.hatUeberlaenge())
+        {
+            preis += UEBERLAENGE_ZUSCHLAG;
+        }
+        if (_film.ist3D())
+        {
+            preis += ZUSCHLAG_3D;
+        }
+        _preis = preis;
     }
 }
