@@ -99,7 +99,8 @@ public class KassenWerkzeug implements Observer
      */
     private void setzeTagesplanFuerAusgewaehltesDatum()
     {
-        Tagesplan tagesplan = _kinoService.getTagesplan(getAusgewaehltesDatum());
+        Tagesplan tagesplan = _kinoService
+                .getTagesplan(getAusgewaehltesDatum());
         _vorstellungAuswaehlWerkzeug.setTagesplan(tagesplan);
     }
     
