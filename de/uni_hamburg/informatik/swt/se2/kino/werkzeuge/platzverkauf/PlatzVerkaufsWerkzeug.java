@@ -12,6 +12,7 @@ import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Kaeufergruppe;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Platz;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
+import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.zahlvorgang.ZahlvorgangWerkzeug;
 
 /**
  * Mit diesem Werkzeug können Plätze verkauft und storniert werden. Es arbeitet
@@ -28,18 +29,24 @@ public class PlatzVerkaufsWerkzeug
 {
     // Die aktuelle Vorstellung, deren Plätze angezeigt werden. Kann null sein.
     private Vorstellung _vorstellung;
-
+    
     private PlatzVerkaufsWerkzeugUI _ui;
     
     private Kaeufergruppe _selectedKaeufergruppe;
     private Set<Platz> _ausgewaehltePlaetze;
-
+    
+    private ZahlvorgangWerkzeug _zahlvorgangWerkzeug;
+    
+    private Geldbetrag _zuZahlen;
+    
     /**
      * Initialisiert das PlatzVerkaufsWerkzeug.
      */
     public PlatzVerkaufsWerkzeug()
     {
         _ui = new PlatzVerkaufsWerkzeugUI();
+        _zahlvorgangWerkzeug = new ZahlvorgangWerkzeug(_ui.getUIPanel());
+        _zuZahlen = null;
         _selectedKaeufergruppe = Kaeufergruppe.Erwachsener;
         _ausgewaehltePlaetze = new HashSet<Platz>();
         _ui.getErwachsenerButton().setSelected(true);
@@ -47,7 +54,7 @@ public class PlatzVerkaufsWerkzeug
         // Am Anfang wird keine Vorstellung angezeigt:
         setVorstellung(null);
     }
-
+    
     /**
      * Gibt das Panel dieses Subwerkzeugs zurück. Das Panel sollte von einem
      * Kontextwerkzeug eingebettet werden.
@@ -58,7 +65,7 @@ public class PlatzVerkaufsWerkzeug
     {
         return _ui.getUIPanel();
     }
-
+    
     /**
      * Fügt der UI die Funktionalität hinzu mit entsprechenden Listenern.
      */
@@ -69,10 +76,18 @@ public class PlatzVerkaufsWerkzeug
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                verkaufePlaetze(_vorstellung);
+                _zahlvorgangWerkzeug.starteZahlvorgang(_zuZahlen);
+                if (_zahlvorgangWerkzeug.wurdeBezahlt())
+                {
+                    verkaufePlaetze(_vorstellung);
+                }
+                else
+                {
+                    aktualisierePlatzplan();
+                }
             }
         });
-
+        
         _ui.getStornierenButton().addActionListener(new ActionListener()
         {
             @Override
@@ -101,7 +116,7 @@ public class PlatzVerkaufsWerkzeug
                 aktualisierePreisanzeige(_ausgewaehltePlaetze);
             }
         });
-
+        
         _ui.getPlatzplan().addPlatzSelectionListener(
                 new PlatzSelectionListener()
                 {
@@ -113,12 +128,13 @@ public class PlatzVerkaufsWerkzeug
                     }
                 });
     }
-
+    
     /**
      * Reagiert darauf, dass sich die Menge der ausgewählten Plätze geändert
      * hat.
      * 
-     * @param plaetze die jetzt ausgewählten Plätze.
+     * @param plaetze
+     *            die jetzt ausgewählten Plätze.
      */
     private void reagiereAufNeuePlatzAuswahl(Set<Platz> plaetze)
     {
@@ -127,7 +143,7 @@ public class PlatzVerkaufsWerkzeug
         _ui.getStornierenButton().setEnabled(istStornierenMoeglich(plaetze));
         aktualisierePreisanzeige(plaetze);
     }
-
+    
     /**
      * Aktualisiert den anzuzeigenden Gesamtpreis
      */
@@ -135,15 +151,19 @@ public class PlatzVerkaufsWerkzeug
     {
         if (istVerkaufenMoeglich(plaetze))
         {
-            Geldbetrag preis = _vorstellung.getPreisFuerPlaetze(plaetze, _selectedKaeufergruppe);
-            _ui.getPreisLabel().setText("Gesamtpreis: " + preis.getFormatiertenString() + " Euro");
+            _zuZahlen = _vorstellung.getPreisFuerPlaetze(plaetze,
+                    _selectedKaeufergruppe);
+            _ui.getPreisLabel().setText(
+                    "Gesamtpreis: " + _zuZahlen.getFormatiertenString()
+                            + " Euro");
         }
         else
         {
+            _zuZahlen = new Geldbetrag(0);
             _ui.getPreisLabel().setText("Gesamtpreis:");
         }
     }
-
+    
     /**
      * Prüft, ob die angegebenen Plätze alle storniert werden können.
      */
@@ -151,7 +171,7 @@ public class PlatzVerkaufsWerkzeug
     {
         return !plaetze.isEmpty() && _vorstellung.sindStornierbar(plaetze);
     }
-
+    
     /**
      * Prüft, ob die angegebenen Plätze alle verkauft werden können.
      */
@@ -159,7 +179,7 @@ public class PlatzVerkaufsWerkzeug
     {
         return !plaetze.isEmpty() && _vorstellung.sindVerkaufbar(plaetze);
     }
-
+    
     /**
      * Setzt die Vorstellung. Sie ist das Material dieses Werkzeugs. Wenn die
      * Vorstellung gesetzt wird, muss die Anzeige aktualisiert werden. Die
@@ -170,7 +190,7 @@ public class PlatzVerkaufsWerkzeug
         _vorstellung = vorstellung;
         aktualisierePlatzplan();
     }
-
+    
     /**
      * Aktualisiert den Platzplan basierend auf der ausgwählten Vorstellung.
      */
@@ -181,7 +201,7 @@ public class PlatzVerkaufsWerkzeug
             Kinosaal saal = _vorstellung.getKinosaal();
             _ui.getPlatzplan().setAnzahlPlaetze(saal.getAnzahlReihen(),
                     saal.getAnzahlSitzeProReihe());
-
+            
             for (Platz platz : saal.getPlaetze())
             {
                 if (_vorstellung.istPlatzVerkauft(platz))
@@ -195,7 +215,7 @@ public class PlatzVerkaufsWerkzeug
             _ui.getPlatzplan().setAnzahlPlaetze(0, 0);
         }
     }
-
+    
     /**
      * Verkauft die ausgewählten Plaetze.
      */
@@ -205,7 +225,7 @@ public class PlatzVerkaufsWerkzeug
         vorstellung.verkaufePlaetze(plaetze);
         aktualisierePlatzplan();
     }
-
+    
     /**
      * Storniert die ausgewählten Plaetze.
      */

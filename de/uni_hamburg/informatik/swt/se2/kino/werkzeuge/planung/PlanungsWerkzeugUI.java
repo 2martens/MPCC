@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -39,7 +40,7 @@ class PlanungsWerkzeugUI
         assert wochenplanPanel != null : "Vorbedingung verletzt: wochenplanPanel != null";
         assert wochenAuswaehlPanel != null : "Vorbedingung verletzt: wochenAuswaehlPanel != null";
         assert kinosaalAuswaehlPanel != null : "Vorbedingung verletzt: kinosaalAuswaehlPanel != null";
-       
+        
         _wochenplanPanel = wochenplanPanel;
         _wochenAuswaehlPanel = wochenAuswaehlPanel;
         _kinosaalAuswaehlPanel = kinosaalAuswaehlPanel;
@@ -56,7 +57,7 @@ class PlanungsWerkzeugUI
     {
         return _hauptPanel;
     }
-
+    
     /**
      * Erstellt das Panel.
      */
@@ -78,6 +79,7 @@ class PlanungsWerkzeugUI
         panel.add(_wochenAuswaehlPanel, BorderLayout.NORTH);
         JScrollPane wochenplanScrollPane = new JScrollPane(_wochenplanPanel);
         panel.add(wochenplanScrollPane, BorderLayout.CENTER);
+        panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         return panel;
     }
     

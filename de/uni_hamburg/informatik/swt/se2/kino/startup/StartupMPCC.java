@@ -22,7 +22,7 @@ import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.hauptwerkzeug.KinoWerkze
  * @author SE2-Team
  * @version SoSe 2013
  */
-public class StartupKinoticketverkauf_Blatt07
+public class StartupMPCC
 {
     /**
      * Die Main-Methode.

@@ -3,6 +3,8 @@ package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.hauptwerkzeug;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
+
 import de.uni_hamburg.informatik.swt.se2.kino.services.kino.KinoService;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.kasse.KassenWerkzeug;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.planung.PlanungsWerkzeug;
@@ -16,6 +18,11 @@ import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.planung.PlanungsWerkzeug
  */
 public class KinoWerkzeug
 {
+    /**
+     * Enthält das Anwendungsframe.
+     */
+    public static JFrame APP_FRAME; 
+    
     private KinoWerkzeugUI _ui;
     
     private KassenWerkzeug _kassenWerkzeug;
@@ -32,10 +39,13 @@ public class KinoWerkzeug
     {
         assert kinoService != null : "Vorbedingung verletzt: kinoService != null";
         
+        _ui = new KinoWerkzeugUI();
+        APP_FRAME = _ui.getUIFrame();
+        
         _kassenWerkzeug = new KassenWerkzeug(kinoService);
         _planungsWerkzeug = new PlanungsWerkzeug(kinoService);
         
-        _ui = new KinoWerkzeugUI(_kassenWerkzeug.getUIPanel(),
+        _ui.initGUI(_kassenWerkzeug.getUIPanel(),
                 _planungsWerkzeug.getUIPanel());
         
         registriereUIAktionen();

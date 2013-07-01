@@ -159,8 +159,8 @@ class WochenplanWerkzeugUI
         
         _layout.row()
                 .grid()
-                .add(_panelTag1, _panelTag2, _panelTag3,
-                        _panelTag4, _panelTag5, _panelTag6, _panelTag7);
+                .add(_panelTag1, _panelTag2, _panelTag3, _panelTag4,
+                        _panelTag5, _panelTag6, _panelTag7);
         return panel;
     }
     

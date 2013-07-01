@@ -29,7 +29,7 @@ class KinosaalAuswaehlWerkzeugUI
     {
         _hauptPanel = erstellePanel();
     }
-
+    
     /**
      * Erstellt das Panel.
      */
@@ -39,11 +39,12 @@ class KinosaalAuswaehlWerkzeugUI
         panel.setLayout(new BorderLayout(0, 4));
         panel.add(new JLabel("Kinosaal:"), BorderLayout.NORTH);
         _kinosaalAuswahlList = new JList<KinosaalFormatierer>();
-        _kinosaalAuswahlList.setBorder(BorderFactory.createEmptyBorder(2, 2,
-                2, 2));
+        _kinosaalAuswahlList.setBorder(BorderFactory.createEmptyBorder(2, 2, 2,
+                2));
         _kinosaalAuswahlList
                 .setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         panel.add(new JScrollPane(_kinosaalAuswahlList), BorderLayout.CENTER);
+        panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         return panel;
     }
     

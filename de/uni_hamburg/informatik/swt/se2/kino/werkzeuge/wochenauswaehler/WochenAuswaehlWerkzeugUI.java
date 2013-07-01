@@ -4,6 +4,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,43 +29,46 @@ class WochenAuswaehlWerkzeugUI
     /**
      * Initialisiert die Benutzeroberfläche.
      * 
-     * @param startWocheString Der String, der zu Anfang als ausgewählte Woche
-     *            angezeigt wird.
+     * @param startWocheString
+     *            Der String, der zu Anfang als ausgewählte Woche angezeigt
+     *            wird.
      */
     public WochenAuswaehlWerkzeugUI(String startWocheString)
     {
         _hauptPanel = erstellePanel(startWocheString);
     }
-
+    
     /**
      * Erstellt das Panel.
      * 
-     * @param startWocheString Der String, der zu Anfang als ausgewählte Woche
-     *            angezeigt wird.
+     * @param startWocheString
+     *            Der String, der zu Anfang als ausgewählte Woche angezeigt
+     *            wird.
      */
     private JPanel erstellePanel(String startWocheString)
     {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
-
+        
         _wochenLabel = new JLabel(startWocheString, SwingConstants.CENTER);
-
+        
         panel.add(_wochenLabel, new GridBagConstraints(0, 0, 2, 1, 1.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(
                         2, 0, 2, 0), 0, 0));
-
+        
         Icon zurueckIcon = new ImageIcon("images/go-previous.png");
         _zurueckButton = new JButton(zurueckIcon);
         panel.add(_zurueckButton, new GridBagConstraints(0, 1, 1, 1, 1.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(2, 0, 2, 5), 0, 0));
-
+        
         Icon weiterIcon = new ImageIcon("images/go-next.png");
         _weiterButton = new JButton(weiterIcon);
         panel.add(_weiterButton, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(2, 5, 2, 0), 0, 0));
-
+        
+        panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         return panel;
     }
     
@@ -75,7 +79,7 @@ class WochenAuswaehlWerkzeugUI
     {
         return _zurueckButton;
     }
-
+    
     /**
      * Gibt den Button für die Auswahl der nachfolgenden Woche zurück.
      */
@@ -83,7 +87,7 @@ class WochenAuswaehlWerkzeugUI
     {
         return _weiterButton;
     }
-
+    
     /**
      * Gibt das Label zurück, in dem die derzeit ausgewählte Woche angezeigt
      * wird.
@@ -92,7 +96,7 @@ class WochenAuswaehlWerkzeugUI
     {
         return _wochenLabel;
     }
-
+    
     /**
      * Gibt das Panel zurück, in dem die Widgets angeordnet sind.
      */

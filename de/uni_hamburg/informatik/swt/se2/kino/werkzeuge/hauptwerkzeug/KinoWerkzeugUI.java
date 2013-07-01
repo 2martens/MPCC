@@ -37,22 +37,38 @@ class KinoWerkzeugUI
     private JButton _kassenButton;
     private JButton _planungsButton;
     private JPanel _planungsPanel;
-
+    
     private JPanel _spacerPanel;
     private JLabel _titelLabel;
     
     private JFrame _frame;
     
     /**
-     * Initialisiert die Oberfläche des Kinosystems.
+     * Initialisiert die UI.
      * 
-     * @param kassenPanel Das Panel der Kasse.
-     * @param planungsPanel Das Panel der Planung.
+     * @ensure getUIFrame kann aufgerufen werden
+     */
+    public KinoWerkzeugUI()
+    {
+        _frame = new JFrame(NAME);
+        _frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        _frame.setTitle(NAME);
+    }
+    
+    /**
+     * Initialisiert die Oberfläche des Kinosystems. Diese Methode muss nach dem
+     * Konstruktoraufruf aufgerufen werden, bevor irgendeine andere Methode
+     * aufgerufen werden darf.
+     * 
+     * @param kassenPanel
+     *            Das Panel der Kasse.
+     * @param planungsPanel
+     *            Das Panel der Planung.
      * 
      * @require kassenPanel != null
      * @require planungsPanel != null
      */
-    public KinoWerkzeugUI(JPanel kassenPanel, JPanel planungsPanel)
+    public void initGUI(JPanel kassenPanel, JPanel planungsPanel)
     {
         assert kassenPanel != null : "Vorbedingung verletzt: kassenPanel != null";
         assert planungsPanel != null : "Vorbedingung verletzt: planungsPanel != null";
@@ -141,7 +157,7 @@ class KinoWerkzeugUI
     {
         _frame.dispose();
     }
-
+    
     /**
      * Erstellt das Panel.
      */
@@ -199,7 +215,7 @@ class KinoWerkzeugUI
         _menuPanel.add(_spacerPanel);
         _spacerPanel.setPreferredSize(new java.awt.Dimension(100, 10));
         _spacerPanel.setBackground(UIConstants.BACKGROUND_COLOR);
-
+        
         _titelLabel = new JLabel();
         _menuPanel.add(_titelLabel);
         _titelLabel.setText(NAME);
@@ -220,15 +236,12 @@ class KinoWerkzeugUI
         bottomPanel.add(_beendenButton);
         _frame.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
     }
-
+    
     /**
      * Initialisiert die GUI.
      */
     private void initGUI()
     {
-        _frame = new JFrame(NAME);
-        _frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        _frame.setTitle(NAME);
         _frame.getContentPane().add(_hauptPanel, BorderLayout.CENTER);
         erzeugeMenuPanel();
         erstelleBeendenPanel();
@@ -239,7 +252,8 @@ class KinoWerkzeugUI
     /**
      * Zeigt das Werkzeug mit dem angebenen Namen.
      * 
-     * @param werkzeugName Der Name eines Werkzeugs.
+     * @param werkzeugName
+     *            Der Name eines Werkzeugs.
      * 
      * @require werkzeugName != null
      */
@@ -298,8 +312,10 @@ class KinoWerkzeugUI
     /**
      * Initialisiert einen Menü-Button.
      * 
-     * @param button Der Button.
-     * @param buttonText Der Text der auf dem Button stehen soll.
+     * @param button
+     *            Der Button.
+     * @param buttonText
+     *            Der Text der auf dem Button stehen soll.
      */
     private void initialisiereMenuButton(JButton button, String buttonText)
     {
