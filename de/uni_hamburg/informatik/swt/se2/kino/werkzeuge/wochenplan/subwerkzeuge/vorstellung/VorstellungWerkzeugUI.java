@@ -129,7 +129,7 @@ class VorstellungWerkzeugUI
         
         _werbeblockMinuten.setDocument(new PlainDocument()
         {
-            private static final long serialVersionUID = 5900453040208923245L;
+            private static final long serialVersionUID = -4365137424980228216L;
             
             @Override
             public void insertString(int offs, String str, AttributeSet a)
@@ -139,19 +139,82 @@ class VorstellungWerkzeugUI
                 {
                     if (!str.isEmpty())
                     {
+                        // Überprüfen, ob die Eingabe eine gültige Zahl ist
                         Integer.parseInt(str);
-                        if ((getLength() + str.length()) <= 2)
+                        String vorhanden = getText(0, getLength());
+                        if (offs == 1 && vorhanden.startsWith("0")
+                                && !str.equals("0"))
                         {
-                            super.insertString(offs, str, a);
-                            return;
+                            // wenn die vorhandene Zahl mit einer 0 beginnt,
+                            // die
+                            // einzufügende Ziffer ungleich 0 ist und der
+                            // Cursor
+                            // ganz rechts steht, wird die
+                            // vorhandene erste 0 entfernt und durch die
+                            // einzufügende Ziffer ersetzt
+                            super.remove(0, 1);
+                            super.insertString(0, str, a);
+                        }
+                        else if (!vorhanden.startsWith("0"))
+                        {
+                            if (offs == 0 && str.equals("0")
+                                    && !vorhanden.isEmpty())
+                            {
+                                // es können keine führenden Nullen
+                                // eingefügt
+                                // werden
+                                Toolkit.getDefaultToolkit().beep();
+                            }
+                            else if ((getLength() + str.length()) <= 2)
+                            {
+                                // wenn die vorhandene Zahl nicht mit einer
+                                // 0
+                                // beginnt und die fertige Zahl insgesamt nicht
+                                // mehr als zwei Ziffern hat, darf Beliebiges an
+                                // beliebigen
+                                // Stellen
+                                // eingefügt werden
+                                super.insertString(offs, str, a);
+                            }
+                            else
+                            {
+                                // trifft keine der vorigen Fälle zu, wird ein
+                                // Warnton ausgegeben
+                                Toolkit.getDefaultToolkit().beep();
+                            }
+                        }
+                        else if ((getLength() + str.length()) <= 2)
+                        {
+                            if (!str.equals("0"))
+                            {
+                                // wenn die jetzige Länge plus die Länge der
+                                // einzufügenden Ziffer zusammen kleiner gleich
+                                // 2
+                                // ist und die einzufügende Ziffer keine 0 ist,
+                                // darf die Ziffer eingefügt werden
+                                super.insertString(offs, str, a);
+                            }
+                            else
+                            {
+                                // trifft keine der vorigen Fälle zu, wird ein
+                                // Warnton ausgegeben
+                                Toolkit.getDefaultToolkit().beep();
+                            }
+                        }
+                        else
+                        {
+                            // trifft keine der vorigen Fälle zu, wird ein
+                            // Warnton ausgegeben
+                            Toolkit.getDefaultToolkit().beep();
                         }
                     }
                 }
                 catch (NumberFormatException nfe)
                 {
+                    // wenn die Eingabe eine ungültige Zahl ist, wird ein
+                    // Warnton ausgegeben
                     Toolkit.getDefaultToolkit().beep();
                 }
-                Toolkit.getDefaultToolkit().beep();
             }
             
             @Override
@@ -162,39 +225,60 @@ class VorstellungWerkzeugUI
                 {
                     if (!text.isEmpty())
                     {
+                        // Überprüfung auf valide Zahl
                         Integer.parseInt(text);
+                        // wenn dem so ist (keine Exception geworfen) wird der
+                        // zu ersetzende Text gelöscht und durch den neuen Text
+                        // ersetzt
                         super.remove(offset, length);
                         insertString(offset, text, attrs);
-                        return;
+                    }
+                    else
+                    {
+                        // wenn vorhandene Zahl gegen leere Eingabe ersetzt
+                        // werden soll, wird ein Warnton ausgegeben
+                        Toolkit.getDefaultToolkit().beep();
                     }
                 }
                 catch (NumberFormatException nfe)
                 {
+                    // wenn die vorhandene Zahl durch eine ungültige Eingabe
+                    // ersetzt werden soll, wird ein Warnton ausgegeben
                     Toolkit.getDefaultToolkit().beep();
                 }
-                Toolkit.getDefaultToolkit().beep();
             }
             
             @Override
             public void remove(int offset, int length)
                     throws BadLocationException
             {
-                if ((this.getLength() - length) > 0)
+                String vorhanden = getText(0, getLength());
+                if ((getLength() - length) > 0)
                 {
+                    // nur wenn die Länge der jetzigen Zahl abzüglich der zu
+                    // löschenden Ziffern größer 0 ist, darf bedenkenlos
+                    // gelöscht werden
                     super.remove(offset, length);
                 }
-                else if ((this.getLength() - length) == 0)
+                else if ((getLength() - length) == 0 && !vorhanden.equals("0"))
                 {
+                    // ist die verbleibende Zahl nach dem Löschen von der Länge
+                    // 0 und ist die vorhandene Zahl ungleich 0, wird eine 0
+                    // eingefügt
                     super.remove(offset, length);
                     super.insertString(offset, "0", null);
                 }
                 else
                 {
+                    // soll mehr gelöscht werden als vorhanden ist, wird ein
+                    // Warnton ausgegeben
                     Toolkit.getDefaultToolkit().beep();
                 }
             }
         });
         _werbeblockMinuten.setText("0");
+        _werbeblockMinuten.setColumns(2);
+        _werbeblockMinuten.setHorizontalAlignment(JTextField.RIGHT);
         _reinigungszeitCheckbox = new JCheckBox("Reinigungszeit einplanen?");
         
         _vorstellungGruppe = new RowGroup();
