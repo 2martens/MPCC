@@ -254,15 +254,25 @@ public class VorstellungWerkzeug extends Observable
                         String aktuelleMinuten = String
                                 .valueOf(_werbeblockMinuten);
                         int dauer = 0;
-                        if (offset > 0)
+                        if (!aktuelleMinuten.equals("0"))
                         {
-                            // kann hier ohne try-catch Block passieren, da
-                            // darauf bereits im Document geprüft wird (UI-Klasse)
-                            dauer = Integer.parseInt(aktuelleMinuten + string);
+                            if (aktuelleMinuten.length() == 1)
+                            {
+                                if (offset == 0)
+                                {
+                                    dauer = Integer.parseInt(string
+                                            + aktuelleMinuten);
+                                }
+                                else if (offset == 1)
+                                {
+                                    dauer = Integer.parseInt(aktuelleMinuten
+                                            + string);
+                                }
+                            }
                         }
-                        else if (offset == 0)
+                        else
                         {
-                            // siehe oben
+                            // wie oben
                             dauer = Integer.parseInt(string);
                         }
                         if (dauer > _werbeblockMaxMinuten)
@@ -393,6 +403,10 @@ public class VorstellungWerkzeug extends Observable
                     @Override
                     public void removeUpdate(DocumentEvent e)
                     {
+                        if (_aufWerbeblockEingabeReagieren)
+                        {
+                            werbeblockDauerGeaendert();
+                        }
                     }
                     
                     @Override
@@ -501,6 +515,14 @@ public class VorstellungWerkzeug extends Observable
     {
         JTextField werbeblockMinuten = _ui.getWerbeblockMinutenInput();
         String input = werbeblockMinuten.getText();
+        
+        // Diese Methode wird manchmal aufgerufen nachdem Ziffern entfernt und
+        // bevor die neuen eingefügt wurden. Es kann daher zu leeren "Eingaben"
+        // kommen. Dies verhindert damit zusammenhängende Fehler.
+        if (input.isEmpty())
+        {
+            input = "0";
+        }
         int werbeblockMinutenInt = Integer.parseInt(input);
         if (werbeblockMinutenInt > _werbeblockMaxMinuten)
         {
