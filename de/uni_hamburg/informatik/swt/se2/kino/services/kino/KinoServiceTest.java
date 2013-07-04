@@ -170,6 +170,20 @@ public class KinoServiceTest
     }
     
     @Test
+    public void testAktualisiereVorstellung()
+    {
+        Vorstellung neueVorstellung = new Vorstellung(_kinosaal3,
+                _filmVorhanden3, _1500, _heute, _kinosaal1.getReinigungszeit(),
+                _blockKlein);
+        assertTrue(_kinoService.istVorstellungVorhanden(_vorstellungVorhanden));
+        assertFalse(_kinoService.istVorstellungVorhanden(neueVorstellung));
+        _kinoService.aktualisiereVorstellung(_vorstellungVorhanden,
+                neueVorstellung);
+        assertFalse(_kinoService.istVorstellungVorhanden(_vorstellungVorhanden));
+        assertTrue(_kinoService.istVorstellungVorhanden(neueVorstellung));
+    }
+    
+    @Test
     public void testEntferneVorstellung()
     {
         assertTrue(_kinoService.istVorstellungVorhanden(_vorstellungVorhanden));
@@ -283,5 +297,8 @@ public class KinoServiceTest
                 _1730, _filmVorhanden3));
         assertTrue(_kinoService.istVorstellungErstellbar(_kinosaal1, _heute,
                 _1130, _filmVorhanden3));
+        
+        assertFalse(_kinoService.istVorstellungErstellbar(_kinosaal3, _heute,
+                _1730, _filmVorhanden3));
     }
 }
