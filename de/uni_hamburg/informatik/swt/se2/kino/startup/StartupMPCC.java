@@ -78,8 +78,27 @@ public class StartupMPCC
                 new Film("Wasser für die Elefanten", 120, FSK.FSK12, false,
                         false),
                 new Film("Thor", 115, FSK.FSK12, false, false),
-                new Film("Star Trek: Into Darkness", 132, FSK.FSK12, true, true) };
+                new Film("Star Trek: Into Darkness", 132, FSK.FSK12, true, true),
+                new Film("The Last Stand", 107, FSK.FSK18, false, false) };
         
+        Vorstellung[] vorstellungen = erzeugeVorstellungen(saele, filme);
+        
+        return new Kino(saele, vorstellungen, filme);
+    }
+    
+    /**
+     * Erzeugt die Vorstellungen.
+     * 
+     * @param saele
+     *            Ein Array mit den Kinosälen.
+     * @param filme
+     *            Ein Array der zur Verfügung stehenden Filme.
+     * 
+     * @return ein Array der erzeugten Vorstellungen
+     */
+    private static Vorstellung[] erzeugeVorstellungen(Kinosaal[] saele,
+            Film[] filme)
+    {
         Uhrzeit nachmittag = new Uhrzeit(17, 30);
         Uhrzeit abend = new Uhrzeit(20, 0);
         Uhrzeit spaet = new Uhrzeit(22, 30);
@@ -88,7 +107,7 @@ public class StartupMPCC
         Datum d2 = d1.naechsterTag();
         Datum d3 = d2.naechsterTag();
         
-        final Vorstellung[] vorstellungen = {
+        Vorstellung[] vorstellungen = {
                 // Heute
                 new Vorstellung(saele[0], filme[2], nachmittag, d1),
                 new Vorstellung(saele[0], filme[0], abend, d1),
@@ -120,6 +139,6 @@ public class StartupMPCC
                 new Vorstellung(saele[2], filme[3], abend, d3),
                 new Vorstellung(saele[2], filme[4], spaet, d3) };
         
-        return new Kino(saele, vorstellungen, filme);
+        return vorstellungen;
     }
 }
