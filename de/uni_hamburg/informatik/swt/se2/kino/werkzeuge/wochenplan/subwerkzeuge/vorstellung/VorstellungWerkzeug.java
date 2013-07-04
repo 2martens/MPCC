@@ -130,6 +130,7 @@ public class VorstellungWerkzeug extends Observable
         if (_vorstellung != null)
         {
             aktualisiereVorstellungsCheckbox();
+            aktualisiereReinigungsCheckbox();
             aktualisiereWerbeblockMaxMinuten();
             aktualisiereUI();
         }
@@ -140,7 +141,6 @@ public class VorstellungWerkzeug extends Observable
      * 
      * @param vorstellung
      *            Die zu setzende Vorstellung (auch <code>null</code>).
-     * 
      */
     public void setVorstellung(Vorstellung vorstellung)
     {
@@ -156,14 +156,13 @@ public class VorstellungWerkzeug extends Observable
             {
                 _reinigungszeit = _vorstellung.getReinigungszeit();
             }
-            aktualisiereWerbeblockMaxMinuten();
         }
         else
         {
             _werbeblock = null;
             _reinigungszeit = null;
         }
-        aktualisiereVorstellungsCheckbox();
+        aktualisiereMetadaten();
         aktualisiereUI();
     }
     
@@ -221,9 +220,7 @@ public class VorstellungWerkzeug extends Observable
     public void aktualisiereVorstellung()
     {
         aktualisiereVorstellungsCheckbox();
-        // aktualisiereWerbeblockMaxMinuten();
         aktualisiereFilmauswahl();
-        // aktualisiereReinigungsCheckbox();
     }
     
     /**
@@ -353,6 +350,46 @@ public class VorstellungWerkzeug extends Observable
     }
     
     /**
+     * Aktualisiert die Metadaten.
+     */
+    private void aktualisiereMetadaten()
+    {
+        aktualisiereMetadaten(true, true, true);
+    }
+    
+    /**
+     * Aktualisiert die Metadaten.
+     * 
+     * @param aktualisiereVorstellungCheckbox
+     *            Wenn <code>true</code> wird die Vorstellungscheckbox
+     *            aktualisiert, sonst nicht.
+     * 
+     * @param aktualisiereReinigungsCheckbox
+     *            Wenn <code>true</code> wird die Reinigungscheckbox
+     *            aktualisiert, sonst nicht.
+     * @param aktualisiereWerbeblockMaxMinuten
+     *            Wenn <code>true</code> werden die Werbeblock-Max-Minuten
+     *            aktualisiert.
+     */
+    private void aktualisiereMetadaten(boolean aktualisiereVorstellungCheckbox,
+            boolean aktualisiereReinigungsCheckbox,
+            boolean aktualisiereWerbeblockMaxMinuten)
+    {
+        if (aktualisiereVorstellungCheckbox)
+        {
+            aktualisiereVorstellungsCheckbox();
+        }
+        if (aktualisiereReinigungsCheckbox)
+        {
+            aktualisiereReinigungsCheckbox();
+        }
+        if (aktualisiereWerbeblockMaxMinuten)
+        {
+            aktualisiereWerbeblockMaxMinuten();
+        }
+    }
+    
+    /**
      * Registriert die UI-Aktionen.
      */
     private void registriereUIAktionen()
@@ -470,11 +507,10 @@ public class VorstellungWerkzeug extends Observable
             _selectedFilm = selectedFormatierer.getFilm();
         }
         aktualisiereFSKBox();
-        aktualisiereReinigungsCheckbox();
         if (_vorstellung != null)
         {
             _vorstellung.setFilm(_selectedFilm);
-            aktualisiereWerbeblockMaxMinuten();
+            aktualisiereMetadaten(false, true, true);
             
             setChanged();
             notifyObservers();
@@ -540,6 +576,7 @@ public class VorstellungWerkzeug extends Observable
             _werbeblock = new Werbeblock(_werbeblockMinuten, _werbeblockFSK);
             _vorstellung.setWerbeblock(_werbeblock);
         }
+        aktualisiereMetadaten(false, true, false);
         setChanged();
         notifyObservers();
     }
@@ -758,6 +795,8 @@ public class VorstellungWerkzeug extends Observable
             _kinoService.fuegeVorstellungHinzu(neueVorstellung, _datum,
                     _kinosaal, _startzeit);
             _vorstellung = neueVorstellung;
+            
+            aktualisiereMetadaten(false, true, true);
             aktualisiereUI();
             
             setChanged();
