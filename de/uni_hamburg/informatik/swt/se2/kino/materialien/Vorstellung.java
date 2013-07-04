@@ -245,6 +245,7 @@ public class Vorstellung
         assert film != null : "Vorbedingung verletzt: film != null";
         _film = film;
         berechneEndUhrzeit();
+        berechnePreis();
     }
     
     /**
