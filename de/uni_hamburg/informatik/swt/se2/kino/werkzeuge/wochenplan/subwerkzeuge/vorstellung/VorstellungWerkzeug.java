@@ -20,6 +20,7 @@ import javax.swing.text.DocumentFilter;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.FSK;
+import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Platz;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Reinigungszeit;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Uhrzeit;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Film;
@@ -45,6 +46,7 @@ public class VorstellungWerkzeug extends Observable
     private VorstellungWerkzeugUI _ui;
     private Uhrzeit _startzeit;
     private List<Film> _filme;
+    private List<Kinosaal> _kinosaele;
     
     private Datum _datum;
     private Kinosaal _kinosaal;
@@ -104,6 +106,7 @@ public class VorstellungWerkzeug extends Observable
         _reinigungszeit = null;
         _werbeblock = null;
         _filme = _kinoService.getFilme();
+        _kinosaele = _kinoService.getKinosaele();
         _selectedFilm = _filme.get(0);
         
         _aufVorstellungsCheckboxReagieren = true;
@@ -163,6 +166,7 @@ public class VorstellungWerkzeug extends Observable
             _reinigungszeit = null;
         }
         aktualisiereMetadaten();
+        aktualisiereKinosaalBox();
         aktualisiereUI();
     }
     
@@ -220,6 +224,7 @@ public class VorstellungWerkzeug extends Observable
     public void aktualisiereVorstellung()
     {
         aktualisiereVorstellungsCheckbox();
+        aktualisiereKinosaalBox();
         aktualisiereFilmauswahl();
     }
     
@@ -237,6 +242,7 @@ public class VorstellungWerkzeug extends Observable
     private void initGUI()
     {
         initialisiereFilmBox();
+        initialisiereKinosaalBox();
         versteckeVorstellungsdetails();
         final JTextField werbeblockMinutenInput = _ui
                 .getWerbeblockMinutenInput();
@@ -322,6 +328,35 @@ public class VorstellungWerkzeug extends Observable
     }
     
     /**
+     * Initialisiert die Kinosaal-Box.
+     */
+    private void initialisiereKinosaalBox()
+    {
+        if (_vorstellung != null)
+        {
+            List<KinosaalFormatierer> kinosaalFormatierer = new ArrayList<KinosaalFormatierer>();
+            JComboBox<KinosaalFormatierer> kinosaalBox = _ui.getKinosaalBox();
+            for (Kinosaal kinosaal : _kinosaele)
+            {
+                boolean result = _vorstellung.getAnzahlVerkauftePlaetze() <= (kinosaal
+                        .getPlaetze().size())
+                        && !kinosaal.equals(_kinosaal)
+                        && _kinoService.istVorstellungErstellbar(kinosaal,
+                                _datum, _startzeit, _selectedFilm);
+                if (result)
+                {
+                    kinosaalFormatierer.add(new KinosaalFormatierer(kinosaal));
+                }
+            }
+            
+            for (KinosaalFormatierer formatierer : kinosaalFormatierer)
+            {
+                kinosaalBox.addItem(formatierer);
+            }
+        }
+    }
+    
+    /**
      * Aktualisiert die UI.
      */
     private void aktualisiereUI()
@@ -346,6 +381,7 @@ public class VorstellungWerkzeug extends Observable
             aktualisiereFSKBox();
             aktualisiereWerbeblockMinuten();
             aktualisiereReinigungszeit();
+            aktualisiereVerschieben();
         }
     }
     
@@ -492,6 +528,15 @@ public class VorstellungWerkzeug extends Observable
             }
         });
         
+        _ui.getVerschiebenButton().addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                verschiebeVorstellung();
+                aktualisiereVorstellungsCheckbox();
+            }
+        });
     }
     
     /**
@@ -644,6 +689,37 @@ public class VorstellungWerkzeug extends Observable
     }
     
     /**
+     * Aktualisiert die mit dem Verschieben verknüpften Elemente.
+     */
+    private void aktualisiereVerschieben()
+    {
+        if (_vorstellung != null)
+        {
+            boolean verschiebenMoeglich = _ui.getKinosaalBox().getItemCount() > 0;
+            
+            if (verschiebenMoeglich)
+            {
+                KinosaalFormatierer kinosaalFormatierer = (KinosaalFormatierer) _ui
+                        .getKinosaalBox().getSelectedItem();
+                Kinosaal kinosaal = kinosaalFormatierer.getKinosaal();
+                verschiebenMoeglich = _kinoService.istVorstellungErstellbar(
+                        kinosaal, _datum, _startzeit, _selectedFilm);
+            }
+            
+            if (verschiebenMoeglich)
+            {
+                _ui.getKinosaalBox().setEnabled(true);
+                _ui.getVerschiebenButton().setEnabled(true);
+            }
+            else
+            {
+                _ui.getKinosaalBox().setEnabled(false);
+                _ui.getVerschiebenButton().setEnabled(false);
+            }
+        }
+    }
+    
+    /**
      * Aktualisiert die Filmauswahl.
      */
     private void aktualisiereFilmauswahl()
@@ -675,6 +751,35 @@ public class VorstellungWerkzeug extends Observable
                 _formatierer = filmFormatierer;
             }
             _aufFilmauswahlReagieren = true;
+        }
+    }
+    
+    /**
+     * Aktualisiert die Kinosaal-Box.
+     */
+    private void aktualisiereKinosaalBox()
+    {
+        if (_vorstellung != null)
+        {
+            List<KinosaalFormatierer> kinosaalFormatierer = new ArrayList<KinosaalFormatierer>();
+            JComboBox<KinosaalFormatierer> kinosaalBox = _ui.getKinosaalBox();
+            for (Kinosaal kinosaal : _kinosaele)
+            {
+                boolean result = _vorstellung.getAnzahlVerkauftePlaetze() <= kinosaal
+                        .getPlaetze().size()
+                        && !kinosaal.equals(_kinosaal)
+                        && _kinoService.istVorstellungErstellbar(kinosaal,
+                                _datum, _startzeit, _selectedFilm);
+                if (result)
+                {
+                    kinosaalFormatierer.add(new KinosaalFormatierer(kinosaal));
+                }
+            }
+            kinosaalBox.removeAllItems();
+            for (KinosaalFormatierer formatierer : kinosaalFormatierer)
+            {
+                kinosaalBox.addItem(formatierer);
+            }
         }
     }
     
@@ -797,6 +902,7 @@ public class VorstellungWerkzeug extends Observable
             _vorstellung = neueVorstellung;
             
             aktualisiereMetadaten(false, true, true);
+            aktualisiereKinosaalBox();
             aktualisiereUI();
             
             setChanged();
@@ -821,6 +927,87 @@ public class VorstellungWerkzeug extends Observable
             
             aktualisiereFilmauswahl();
         }
+    }
+    
+    /**
+     * Verschiebt die Vorstellung.
+     */
+    private void verschiebeVorstellung()
+    {
+        KinosaalFormatierer kinosaalFormatierer = (KinosaalFormatierer) _ui
+                .getKinosaalBox().getSelectedItem();
+        Kinosaal zielsaal = kinosaalFormatierer.getKinosaal();
+        
+        Vorstellung neueVorstellung = new Vorstellung(zielsaal, _selectedFilm,
+                _startzeit, _datum, _reinigungszeit, _werbeblock);
+        
+        if (_vorstellung.getAnzahlVerkauftePlaetze() > 0)
+        {
+            for (Platz platz : _kinosaal.getPlaetze())
+            {
+                if (_vorstellung.istPlatzVerkauft(platz))
+                {
+                    Platz verkaufsPlatz = findeVerkaufbarenPlatz(
+                            neueVorstellung, platz);
+                    neueVorstellung.verkaufePlatz(verkaufsPlatz);
+                }
+            }
+        }
+        
+        _kinoService.aktualisiereVorstellung(_vorstellung, neueVorstellung);
+        
+        _vorstellung = null;
+        _werbeblock = null;
+        _reinigungszeit = null;
+    }
+    
+    /**
+     * Findet einen verkaufbaren Platz.
+     * 
+     * @param vorstellung
+     *            Die Vorstellung für die ein Platz gefunden werden soll.
+     * @param wunschplatz
+     *            Der Wunschplatz.
+     * 
+     * @require vorstellung != null
+     * @require wunschplatz != null
+     */
+    private Platz findeVerkaufbarenPlatz(Vorstellung vorstellung,
+            Platz wunschplatz)
+    {
+        assert vorstellung != null : "Vorbedingung verletzt: vorstellung != null";
+        assert wunschplatz != null : "Vorbedingung verletzt: wunschplatz != null";
+        
+        Platz returnPlatz = null;
+        if (vorstellung.hatPlatz(wunschplatz)
+                && !vorstellung.istPlatzVerkauft(wunschplatz))
+        {
+            returnPlatz = wunschplatz;
+        }
+        else
+        {
+            for (int reihe = wunschplatz.getReihe(); reihe >= 0; reihe--)
+            {
+                if (returnPlatz == null)
+                {
+                    for (int sitznummer = wunschplatz.getSitz(); sitznummer >= 0; sitznummer--)
+                    {
+                        Platz testPlatz = new Platz(reihe, sitznummer);
+                        if (vorstellung.hatPlatz(testPlatz)
+                                && !vorstellung.istPlatzVerkauft(testPlatz))
+                        {
+                            returnPlatz = testPlatz;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        return returnPlatz;
     }
     
     /**

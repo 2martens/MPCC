@@ -56,13 +56,15 @@ class WochenAuswaehlWerkzeugUI
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(
                         2, 0, 2, 0), 0, 0));
         
-        Icon zurueckIcon = new ImageIcon("images/go-previous.png");
+        Icon zurueckIcon = new ImageIcon(getClass().getResource(
+                "/images/go-previous.png"));
         _zurueckButton = new JButton(zurueckIcon);
         panel.add(_zurueckButton, new GridBagConstraints(0, 1, 1, 1, 1.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(2, 0, 2, 5), 0, 0));
         
-        Icon weiterIcon = new ImageIcon("images/go-next.png");
+        Icon weiterIcon = new ImageIcon(getClass().getResource(
+                "/images/go-next.png"));
         _weiterButton = new JButton(weiterIcon);
         panel.add(_weiterButton, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,

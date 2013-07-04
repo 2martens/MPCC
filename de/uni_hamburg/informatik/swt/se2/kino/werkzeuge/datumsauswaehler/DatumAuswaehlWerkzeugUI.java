@@ -23,18 +23,19 @@ class DatumAuswaehlWerkzeugUI
     private JButton _weiterButton;
     private JButton _zurueckButton;
     private JLabel _datumLabel;
-
+    
     /**
      * Initialisiert die Benutzeroberfläche.
      * 
-     * @param startDatumString der String, der zu Anfang als ausgewähltes Datum
-     *            angezeigt wird.
+     * @param startDatumString
+     *            der String, der zu Anfang als ausgewähltes Datum angezeigt
+     *            wird.
      */
     public DatumAuswaehlWerkzeugUI(String startDatumString)
     {
         _hauptPanel = erstellePanel(startDatumString);
     }
-
+    
     /**
      * Erstellt das Panel.
      */
@@ -42,28 +43,30 @@ class DatumAuswaehlWerkzeugUI
     {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
-
+        
         _datumLabel = new JLabel(startDatumString, SwingConstants.CENTER);
-
+        
         panel.add(_datumLabel, new GridBagConstraints(0, 0, 2, 1, 1.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(
                         2, 0, 2, 0), 0, 0));
-
-        Icon zurueckIcon = new ImageIcon("images/go-previous.png");
+        
+        Icon zurueckIcon = new ImageIcon(getClass().getResource(
+                "/images/go-previous.png"));
         _zurueckButton = new JButton(zurueckIcon);
         panel.add(_zurueckButton, new GridBagConstraints(0, 1, 1, 1, 1.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(2, 0, 2, 5), 0, 0));
-
-        Icon weiterIcon = new ImageIcon("images/go-next.png");
+        
+        Icon weiterIcon = new ImageIcon(getClass().getResource(
+                "/images/go-next.png"));
         _weiterButton = new JButton(weiterIcon);
         panel.add(_weiterButton, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(2, 5, 2, 0), 0, 0));
-
+        
         return panel;
     }
-
+    
     /**
      * Gibt den Button für die Auswahl des vorherigen Tages zurück.
      */
@@ -71,7 +74,7 @@ class DatumAuswaehlWerkzeugUI
     {
         return _zurueckButton;
     }
-
+    
     /**
      * Gibt den Button für die Auswahl des nachfolgenden Tages zurück.
      */
@@ -79,7 +82,7 @@ class DatumAuswaehlWerkzeugUI
     {
         return _weiterButton;
     }
-
+    
     /**
      * Gibt das Label zurück, in dem das derzeit ausgewählte Datum angezeigt
      * wird.
@@ -88,7 +91,7 @@ class DatumAuswaehlWerkzeugUI
     {
         return _datumLabel;
     }
-
+    
     /**
      * Gibt das Panel zurück, in dem die Widgets angeordnet sind.
      */
@@ -96,5 +99,5 @@ class DatumAuswaehlWerkzeugUI
     {
         return _hauptPanel;
     }
-
+    
 }

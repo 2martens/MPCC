@@ -45,7 +45,7 @@ class JPlatzButton extends JButton
      */
     public JPlatzButton(Platz platz)
     {
-        super("" + platz.getSitz());
+        super("" + (platz.getSitz() + 1));
         _platz = platz;
         _verkauft = false;
         _ausgewaehlt = false;
