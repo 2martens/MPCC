@@ -215,7 +215,10 @@ public class TagWerkzeug implements Observer
         if (o instanceof VorstellungWerkzeug)
         {
             VorstellungWerkzeug vorstellungWerkzeug = (VorstellungWerkzeug) o;
-            aktualisiereSubwerkzeugVorstellungen(vorstellungWerkzeug);
+            if (arg == null)
+            {
+                aktualisiereSubwerkzeugVorstellungen(vorstellungWerkzeug);
+            }
         }
     }
     

@@ -2,6 +2,7 @@ package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.wochenplan.subwerkzeuge
 
 import java.awt.Toolkit;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -29,10 +30,13 @@ class VorstellungWerkzeugUI
     private JComboBox<FSKFormatierer> _fskBox;
     private JTextField _werbeblockMinuten;
     private JCheckBox _reinigungszeitCheckbox;
+    private JComboBox<KinosaalFormatierer> _kinosaalBox;
+    private JButton _verschiebeButton;
     
     private JLabel _film;
     private JLabel _minuten;
     private JLabel _werbeblock;
+    private JLabel _verschieben;
     private RowGroup _vorstellungGruppe;
     private int _hideCount;
     
@@ -69,6 +73,14 @@ class VorstellungWerkzeugUI
     }
     
     /**
+     * Gibt die Kinosaal-Box zurück.
+     */
+    public JComboBox<KinosaalFormatierer> getKinosaalBox()
+    {
+        return _kinosaalBox;
+    }
+    
+    /**
      * Gibt das Werbeblock-Minuten-Textfeld zurück.
      */
     public JTextField getWerbeblockMinutenInput()
@@ -90,6 +102,14 @@ class VorstellungWerkzeugUI
     public JCheckBox getReinigungszeitCheckBox()
     {
         return _reinigungszeitCheckbox;
+    }
+    
+    /**
+     * Gibt den Verschiebe-Button zurück.
+     */
+    public JButton getVerschiebenButton()
+    {
+        return _verschiebeButton;
     }
     
     /**
@@ -121,11 +141,14 @@ class VorstellungWerkzeugUI
         // initialisieren der Exemplarvariablen
         _filmBox = new JComboBox<FilmFormatierer>();
         _fskBox = new JComboBox<FSKFormatierer>();
+        _kinosaalBox = new JComboBox<KinosaalFormatierer>();
         _vorstellungCheckbox = new JCheckBox("Vorstellung einplanen?");
         _werbeblockMinuten = new JTextField();
         _film = new JLabel("Film");
         _minuten = new JLabel("Minuten");
         _werbeblock = new JLabel("Werbeblock");
+        _verschieben = new JLabel("Verschieben nach");
+        _verschiebeButton = new JButton("Verschieben");
         
         _werbeblockMinuten.setDocument(new PlainDocument()
         {
@@ -291,5 +314,7 @@ class VorstellungWerkzeugUI
                 .add(_minuten, _werbeblockMinuten, _fskBox);
         gridLayout.row().group(_vorstellungGruppe).grid()
                 .add(_reinigungszeitCheckbox);
+        gridLayout.row().group(_vorstellungGruppe).grid(_verschieben)
+                .add(_kinosaalBox, _verschiebeButton);
     }
 }
