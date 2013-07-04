@@ -279,7 +279,8 @@ public class Vorstellung
     }
     
     /**
-     * Gibt den Verkaufspreis als Geldbetrag für Karten zu dieser Vorstellung zurück.
+     * Gibt den Verkaufspreis als Geldbetrag für Karten zu dieser Vorstellung
+     * zurück.
      * 
      * @ensure result != null
      */
