@@ -107,6 +107,32 @@ public class KinoServiceImpl extends AbstractObservableService implements
     }
     
     @Override
+    public void aktualisiereVorstellung(Vorstellung alteVorstellung,
+            Vorstellung neueVorstellung)
+    {
+        assert istVorstellungVorhanden(alteVorstellung) : "Vorbedingung verletzt: istVorstellungVorhanden(alteVorstellung)";
+        assert !istVorstellungVorhanden(neueVorstellung) : "Vorbedingung verletzt: !istVorstellungVorhanden(neueVorstellung)";
+        
+        boolean gleich = alteVorstellung.getAnfangszeit().equals(
+                neueVorstellung.getAnfangszeit())
+                && alteVorstellung.getDatum()
+                        .equals(neueVorstellung.getDatum())
+                && alteVorstellung.getFilm().equals(neueVorstellung.getFilm())
+                && alteVorstellung.getEndzeit().equals(
+                        neueVorstellung.getEndzeit())
+                && !alteVorstellung.getKinosaal().equals(
+                        neueVorstellung.getKinosaal());
+        assert gleich : "Vorbedingung verletzt: bis auf den Kinosaal müssen beide Vorstellungen gleich sein";
+        
+        Kinosaal neuerKinosaal = neueVorstellung.getKinosaal();
+        Datum datum = neueVorstellung.getDatum();
+        Uhrzeit startzeit = neueVorstellung.getAnfangszeit();
+        
+        entferneVorstellung(alteVorstellung);
+        fuegeVorstellungHinzu(neueVorstellung, datum, neuerKinosaal, startzeit);
+    }
+    
+    @Override
     public boolean istHinzufuegenMoeglich(Vorstellung vorstellung)
     {
         assert vorstellung != null : "Vorbedingung verletzt: vorstellung != null";
@@ -316,8 +342,11 @@ public class KinoServiceImpl extends AbstractObservableService implements
         assert startzeit != null : "Vorbedingung verletzt: startzeit != null";
         assert film != null : "Vorbedingung verletzt: film != null";
         
+        Vorstellung testVorstellung = new Vorstellung(kinosaal, film,
+                startzeit, datum);
+        
         return istFilmZeigenMoeglich(film, null, null, kinosaal, datum,
-                startzeit);
+                startzeit) && !istVorstellungVorhanden(testVorstellung);
     }
     
 }

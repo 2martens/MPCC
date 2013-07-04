@@ -81,6 +81,24 @@ public interface KinoService extends ObservableService
             Kinosaal kinosaal, Uhrzeit startzeit);
     
     /**
+     * Aktualisiert die Vorstellung im Kinosystem. Sollte aufgerufen werden,
+     * wenn sich der Kinosaal der Vorstellung geändert hat.
+     * 
+     * @param alteVorstellung
+     *            Alte Vorstellung.
+     * @param neueVorstellung
+     *            Neue Vorstellung.
+     * 
+     * @require istVorstellungVorhanden(alteVorstellung)
+     * @require !istVorstellungVorhanden(neueVorstellung)
+     * @require bis auf den Kinosaal müssen beide Vorstellungen gleich sein
+     * 
+     * @ensure !istVorstellungVorhanden(alteVorstellung)
+     * @ensure istVorstellungVorhanden(neueVorstellung)
+     */
+    void aktualisiereVorstellung(Vorstellung alteVorstellung, Vorstellung neueVorstellung);
+    
+    /**
      * Prüft, ob das Hinzufügen der Vorstellung möglich ist.
      * 
      * @param vorstellung
