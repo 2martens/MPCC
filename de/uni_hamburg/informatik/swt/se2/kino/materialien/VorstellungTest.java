@@ -62,9 +62,11 @@ public class VorstellungTest
     {
         Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _11_07_2008);
         assertSame(_hdR1, v.getFilm());
+        assertEquals(new Geldbetrag(1000), v.getPreis());
         Film neuerFilm = new Film("Doof", 90, FSK.FSK12, false, false);
         v.setFilm(neuerFilm);
         assertSame(neuerFilm, v.getFilm());
+        assertEquals(new Geldbetrag(750), v.getPreis());
     }
     
     @Test
