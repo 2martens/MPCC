@@ -192,6 +192,10 @@ class ZahlvorgangWerkzeugUI
                             }
                             else
                             {
+                                
+                                // sorgt dafür, dass die größtmögliche
+                                // Integerzahl nicht überschritten wird
+                                Integer.parseInt(vorhanden + str);
                                 // wenn die vorhandene Zahl nicht mit einer 0
                                 // beginnt, darf Beliebiges an beliebigen
                                 // Stellen
